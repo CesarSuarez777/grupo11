@@ -1,0 +1,66 @@
+* {
+    box-sizing: border-box;
+}
+
+body{
+    margin:0;
+    font-family: sans-serif;
+    background:white;
+}
+
+h1 {
+    color: #f87678;
+    text-align: center;
+    
+}
+
+.form-register{
+    width: 95%;
+    max-width: 500px;
+    margin: auto;
+    background: wheat;
+    border-radius: 7px;
+}
+
+.form_titulo{
+    background: #f17376;
+    color: white;
+    padding: 20px;
+    text-align: left;
+    font-weight: 100;
+    font-size:30px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.imagen_centrada{
+    margin: 150px auto;
+    display:block;
+}
+.contenedor-inputs{
+    padding: 10px 30px;
+    display: flex;
+    flex-wrap: wrap;
+    background: whitesmoke;
+    justify-content: space-between;
+}
+
+.boton_registro{
+    background:#f17376;
+    color:white;
+}
+
+input{
+    margin-bottom: 15px;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 3px;
+    border: 1px solid gray;
+}
+.input-50{
+    width:48%;
+}
+
+.input-100{
+    width:100%;
+}
