@@ -7,6 +7,23 @@
         <link rel="stylesheet" href="css/estilosRegistro.css">
     </head>
     <body>
+
+        <?php
+        if (!isset($_POST["registro"])) {
+            $nombre="pedo";
+            $apellido=NULL; 
+            $email=NULL;
+            $fecha=NULL;
+        }
+
+            if (isset($_POST["registro"])){
+              $nombre=$_POST["nombre"];
+              $apellido = $_POST["apellidos"];
+              $email = $_POST["correo"];
+              $fecha = $_POST["nacimiento"]; 
+            }
+        ?>
+
         <div class="row">
             <div class="col-6">
                 <h1></h1>
@@ -19,12 +36,12 @@
                 <form action="registrar.php" method="post" class="form-register">
                     <h2 class="form_titulo"><font size="6" face="Univers-Light-Normal">Crear una cuenta</font></h2>
                     <div class="contenedor-inputs">
-                        <input type="text" name="nombre" placeholder="Nombre" class="input-50" required>
-                        <input type="text" name="apellidos" placeholder="Apellidos" class="input-50" required>
-                        <input type="email" name="correo" placeholder="Correo electrónico" required class="input-100">
+                        <input type="text" name="nombre" placeholder="Nombre" class="input-50" required value="<?php echo "$nombre" ?>">
+                        <input type="text" name="apellidos" placeholder="Apellidos" class="input-50" value="<?php echo "$apellido" ?>"required>
+                        <input type="email" name="correo" placeholder="Correo electrónico" value="<?php echo $email ?>"required class="input-100">
                         <input type="password" name="clave" placeholder="Contraseña" required class="input-50">
                         <input type="password" name="clave_confirmacion" placeholder="Confirmar contraseña" required class="input-50">
-                        <input type="date" class="input-100" name="nacimiento" placeholder="Fecha de nacimiento" required>
+                        <input type="date" class="input-100" name="nacimiento" placeholder="Fecha de nacimiento" value="<?php echo $fecha ?>" required>
                         <div class="container" align="center">
                             <div class="row">
                                 <div class="col-3">
