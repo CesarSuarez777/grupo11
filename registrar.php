@@ -15,7 +15,7 @@
                             $errors[] = "Las contraseñas no coinciden";
                         }
                         
-                        if (mysqli_query($link, "SELECT nombre FROM usuarios where nombre='$nombre'">0)){
+                        if (mysqli_query($link, "SELECT nombre FROM usuarios where nombre='$nombre'>0")){
                            $errors[] = "El email ya se encuentra registrado"; 
                         }    
                         
