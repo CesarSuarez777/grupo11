@@ -11,12 +11,27 @@
       
   </head>
   <body>
+        <?php
+          session_start();
+
+          if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true){
+          }else{
+            $inhabilitado=true;
+            header("Location: index.php?inicio=$inhabilitado");
+
+            exit;
+          }
+        ?>
         <header>
             <nav>
-		<ul>
+		          <ul>
                     <div class="row" position="fixed">
                         <div class="col-2">
-                            <img src="Logo.jpg" alt="Imagen no disponible"  class="rounded mx-auto d-block" height="120x120">
+                             <p>
+                                <a href="PaginaPrincipal.php">
+                                <img href="PaginaPrincipal.php" src="Logo.jpg" alt="Imagen no disponible"  class="rounded mx-auto d-block" height="120x120">
+                                </a>
+                            </p>
                         </div>
                         <div class="col-8">
                             <div class="row" position="fixed">
@@ -41,21 +56,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-2 bg-light">
+                        <div class="col-2">
                             <br>
-                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Usuario.png" height="15x15"><font size="3" color="red" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
-                            <a class="btn btn-outline-danger btn-block"><img src="MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
+                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
+                            <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
-		</ul>
+		          </ul>
             </nav>
         </header>
         <br><br><br><br><br><br>
           <div class="row">
               <div class="col-2 bg-white">
                   <br>
-                  <div> 
-                      <div class="btn-group">
+                  <div class="container-fluid" align="center"> 
+                      <div class="btn-lg">
                         <button type="button" class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <font size="3" face="Univers-Light-Normal">
                                 Ordenar por:

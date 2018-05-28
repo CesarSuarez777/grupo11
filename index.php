@@ -8,14 +8,19 @@
     </head>
     <body>
         <?php
+                    $inhab=false;
                     if (isset($_POST['registro'])) {
                         require("registrar.php");
                         if (!$error4){
-                            header("Location: inicio_sesion.php?error=$error4");
+                            header("Location: inicio_sesion.php?error=$error");
                         }
                     }
+                    if (!empty($_GET)){
+                        $inhab = $_GET['inicio'];
+                    }
                 ?>
-            <font size="4"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error4) {echo "Error al registrar, intente nuevamente";}} ?></font>   
+            <font size="4"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error4) {echo "Error al registrar, intente nuevamente";}} ?></font>  
+            <div class="container" align="center"><font size="4"  color="red" face="Univers-Light-Normal"><?php if($inhab){echo "<br>Debe ser un usuario registrado para acceder a la página";} ?></font></div>  
             <div class="row">
             <div class="col-6">
                 <h1></h1>

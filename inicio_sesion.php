@@ -8,11 +8,17 @@
     </head>
     <body class="bg">
         <br>
+            <?php
+                if (!empty($_GET)){
+                    $error = $_GET['error'];
+                    }
+            ?>
             <h1><img src="Logo.jpg" alt="imagen no disponible" height="55"><font size="8" face="Univers-Light-Normal">   Aventon</font></h1>
                 <br>
-                <div class="container" align="center"><font size="4" color="green" face="Univers-Light-Normal"> <?php if(!empty($_GET)){ echo "¡Usted se ha registrado exitosamente!"; } ?></font></div>
-                <br>
-                <form action="registrar.php" method="post" class="form-register">
+                <div class="container" align="center"><font size="4" color="green" face="Univers-Light-Normal"> 
+                    <?php if(!empty($_GET)){ 
+                        if(!$error){ echo "¡Usted se ha registrado exitosamente!"; } else {echo "Usuario o contraseña incorrectos";}} ?></font></div>
+                <form action="validar.php" method="post" class="form-register">
                     <h2 class="form_titulo"><font size="6" face="Univers-Light-Normal">Iniciar sesión</font></h2>
                     <div class="contenedor-inputs">
                         <input type="email" name="correo" placeholder="Correo electrónico" required class="input-100">

@@ -10,7 +10,7 @@
                   $error1=false;
                   $error2=false;
                   $error3=false;
-                  $error4=false;
+                  $error4=true;
 
                                   
                   if($contrasena != $contrasena2){
@@ -30,8 +30,8 @@
                          $token = md5(uniqid(mt_rand(),false));
                          $exito = mysqli_query($link, "INSERT INTO usuarios (nombre,apellido,email,clave,fecha,foto,token)
                          VALUES ('$nombre','$apellido', '$email', '$contrasena', '$fecha_nacimiento', '$foto', '$token');");
-                         if (!$exito) {
-                          $error4=true;
+                         if ($exito) {
+                          $error4=false;
                          }    
                   } 
     ?>
