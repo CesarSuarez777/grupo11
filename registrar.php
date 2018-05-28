@@ -10,6 +10,8 @@
                   $error1=false;
                   $error2=false;
                   $error3=false;
+                  $error4=false;
+
                                   
                   if($contrasena != $contrasena2){
                      $error1 = true;
@@ -28,10 +30,8 @@
                          $token = md5(uniqid(mt_rand(),false));
                          $exito = mysqli_query($link, "INSERT INTO usuarios (nombre,apellido,email,clave,fecha,foto,token)
                          VALUES ('$nombre','$apellido', '$email', '$contrasena', '$fecha_nacimiento', '$foto', '$token');");
-                         if ($exito) {
-                          header('Location:inicio_sesion.php');
-                         } else {
-                          header('Location:index.php');
-                         }
+                         if (!$exito) {
+                          $error4=true;
+                         }    
                   } 
     ?>

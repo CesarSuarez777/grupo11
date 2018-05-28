@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>registro</title>
+        <title>Registro</title>
         <link rel="stylesheet" href="css/bootstrap.css">
         <link rel="stylesheet" href="css/estilosRegistro.css">
     </head>
@@ -10,8 +10,12 @@
         <?php
                     if (isset($_POST['registro'])) {
                         require("registrar.php");
+                        if (!$error4){
+                            header("Location: inicio_sesion.php?error=$error4");
+                        }
                     }
                 ?>
+            <font size="4"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error4) {echo "Error al registrar, intente nuevamente";}} ?></font>   
             <div class="row">
             <div class="col-6">
                 <h1></h1>

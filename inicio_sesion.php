@@ -2,13 +2,15 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>inicio_sesion</title>
+        <title>Iniciar sesión</title>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/estilosRegistro.css">
     </head>
     <body class="bg">
         <br>
             <h1><img src="Logo.jpg" alt="imagen no disponible" height="55"><font size="8" face="Univers-Light-Normal">   Aventon</font></h1>
+                <br>
+                <div class="container" align="center"><font size="4" color="green" face="Univers-Light-Normal"> <?php if(!empty($_GET)){ echo "¡Usted se ha registrado exitosamente!"; } ?></font></div>
                 <br>
                 <form action="registrar.php" method="post" class="form-register">
                     <h2 class="form_titulo"><font size="6" face="Univers-Light-Normal">Iniciar sesión</font></h2>
