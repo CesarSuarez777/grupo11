@@ -1,4 +1,12 @@
 <!doctype html>
+<?php 
+    require('funciones.php');
+    $errors = array();
+
+    if(!empty($_POST)){
+        $email=$_POST['email']
+    }
+?>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -10,7 +18,7 @@
         <br>
             <h1><img src="Logo.jpg" alt="imagen no disponible" height="55"><font size="8" face="Univers-Light-Normal">   Aventon</font></h1>
                 <br>
-                <form action="inicio_sesion.php" method="post" class="form-register">
+                <form action="olvide_contraseña.php" method="post" class="form-register">
                     <h2 class="form_titulo"><font size="6" face="Univers-Light-Normal">Recuperación de contraseña</font></h2>
                     <div class="contenedor-inputs">
                         <input type="email" name="correo" placeholder="Correo electrónico" required class="input-100">

@@ -11,6 +11,18 @@
     	echo $annos->y;
 
 	}
+
+	function usuarioExiste($email){
+		$link = conectarABase();
+		$buscarUsuario = mysqli_query($link,"SELECT COUNT(email) FROM usuarios WHERE email='$email'");
+        $row = mysqli_fetch_array($buscarUsuario);
+        if ($row[0]>0){
+        	return true;
+      	} else {
+      		return false;
+      	}
+ 	}
+	
 ?>
 
 

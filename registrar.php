@@ -15,11 +15,9 @@
                                $errors[] = "Las contraseñas no coinciden";
                             }
 
-                            $buscarUsuario = mysqli_query($link,"SELECT COUNT(email) FROM usuarios WHERE email='$email'");
-                            $row = mysqli_fetch_array($buscarUsuario);
-                            if ($row[0]>0){
-                               $errors[] = "El email ya se encuentra registrado"; 
-                            }   
+                            if(emailExiste($email)){
+                               $errors[] = "El email ya existe";
+                            }
 
                             if (calcularEdad($fecha_nacimiento)<18){
                                 $errors[] = "Es menor de 18 años";
