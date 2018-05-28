@@ -7,24 +7,12 @@
         <link rel="stylesheet" href="css/estilosRegistro.css">
     </head>
     <body>
-
         <?php
-        if (!isset($_POST["registro"])) {
-            $nombre="pedo";
-            $apellido=NULL; 
-            $email=NULL;
-            $fecha=NULL;
-        }
-
-            if (isset($_POST["registro"])){
-              $nombre=$_POST["nombre"];
-              $apellido = $_POST["apellidos"];
-              $email = $_POST["correo"];
-              $fecha = $_POST["nacimiento"]; 
-            }
-        ?>
-
-        <div class="row">
+                    if (isset($_POST['registro'])) {
+                        require("registrar.php");
+                    }
+                ?>
+            <div class="row">
             <div class="col-6">
                 <h1></h1>
                 <center><img  src="Video.jpg" class="imagen_centrada" height="300" alt="Imagen no disponible"></center>
@@ -33,15 +21,18 @@
                 <br>
                 <h1><img src="Logo.jpg" alt="imagen no disponible" height="55"><font size="8" face="Univers-Light-Normal">   Aventon</font></h1>
                 <br>
-                <form action="registrar.php" method="post" class="form-register">
+                <form id="signupform" action="" method="POST" class="form-register">
                     <h2 class="form_titulo"><font size="6" face="Univers-Light-Normal">Crear una cuenta</font></h2>
                     <div class="contenedor-inputs">
-                        <input type="text" name="nombre" placeholder="Nombre" class="input-50" required value="<?php echo "$nombre" ?>">
-                        <input type="text" name="apellidos" placeholder="Apellidos" class="input-50" value="<?php echo "$apellido" ?>"required>
-                        <input type="email" name="correo" placeholder="Correo electrónico" value="<?php echo $email ?>"required class="input-100">
+                        <input type="text" name="nombre" value="<?php if (isset($_POST['registro'])) {echo $nombre;} ?>" placeholder="Nombre" class="input-50" required  >
+                        <input type="text" name="apellidos" value="<?php if (isset($_POST['registro'])) {echo $apellido;} ?>" placeholder="Apellidos" class="input-50" required>
+                        <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error2) {echo "El correo ya se encuentra registrado";}} ?></font>
+                        <input type="email" name="correo" value="<?php if (isset($_POST['registro'])) {if (!$error2) {echo $email;}} ?>" placeholder="Correo electrónico" required class="input-100">
+                        <font size="2"  class="input-100" color="red"face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error1) {echo "Las contraseñas no coinciden";}} ?></font>
                         <input type="password" name="clave" placeholder="Contraseña" required class="input-50">
                         <input type="password" name="clave_confirmacion" placeholder="Confirmar contraseña" required class="input-50">
-                        <input type="date" class="input-100" name="nacimiento" placeholder="Fecha de nacimiento" value="<?php echo $fecha ?>" required>
+                        <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){ if ($error3) {echo "No posee la edad suficiente para utilizar aventon";}} ?></font>
+                        <input type="date" class="input-100" name="nacimiento" value="<?php if (isset($_POST['registro'])) {if (!$error3) {echo $fecha_nacimiento;}} ?>" placeholder="Fecha de nacimiento" required>
                         <div class="container" align="center">
                             <div class="row">
                                 <div class="col-3">
@@ -59,6 +50,7 @@
                         </div>
                     </div>
                 </form>
+                
            </div>
         </div>
          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

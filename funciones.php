@@ -8,8 +8,7 @@
 		$cumpleanos = new DateTime($miCumpleanos);
     	$hoy = new DateTime();
    	 	$annos = $hoy->diff($cumpleanos);
-    	echo $annos->y;
-
+    	return $annos->y;
 	}
 
 	function usuarioExiste($email){
@@ -21,6 +20,7 @@
       	} else {
       		return false;
       	}
+    mysql_close($link);
  	}
 	
 ?>

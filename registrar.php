@@ -1,39 +1,37 @@
  <?php
-                  require('funciones.php');
-                    $link=conectarABase();
-                    $errors = array();
-                        if(!empty($_POST)){
-                            $nombre = $_POST['nombre'];
-                            $apellido = $_POST['apellidos'];
-                            $email = $_POST['correo'];
-                            $contrasena = $_POST['clave'];
-                            $contrasena2 = $_POST['clave_confirmacion'];
-                            $fecha_nacimiento = $_POST['nacimiento'];
-                            $foto = $_POST['foto'];
-                                            
-                            if($contrasena != $contrasena2){
-                               $errors[] = "Las contraseñas no coinciden";
-                            }
+                  require('funciones.php');      
+                  $nombre = $_POST['nombre'];
+                  $apellido = $_POST['apellidos'];
+                  $email = $_POST['correo'];
+                  $contrasena = $_POST['clave'];
+                  $contrasena2 = $_POST['clave_confirmacion'];
+                  $fecha_nacimiento = $_POST['nacimiento'];
+                  $foto = $_POST['foto'];
+                  $error1=false;
+                  $error2=false;
+                  $error3=false;
+                                  
+                  if($contrasena != $contrasena2){
+                     $error1 = true;
+                  }
 
-                            if(emailExiste($email)){
-                               $errors[] = "El email ya existe";
-                            }
+                  if(usuarioExiste($email)){
+                     $error2 = true;
+                  }
 
-                            if (calcularEdad($fecha_nacimiento)<18){
-                                $errors[] = "Es menor de 18 años";
-                            }                           
+                  if (calcularEdad($fecha_nacimiento)<18){
+                      $error3 =true;
+                  }                           
 
-                            if(count($errors) == 0) {
-                                   $token = md5(uniqid(mt_rand(),false));
-                                   $exito = mysqli_query($link, "INSERT INTO usuarios (nombre,apellido,email,clave,fecha,foto,token)
-                                   VALUES ('$nombre','$apellido', '$email', '$contrasena', '$fecha_nacimiento', '$foto', '$token');");
-                                   if ($exito) {
-                                    header('Location:inicio_sesion.php');
-                                   } else {
-                                   header('Location:index.php');
-                                    }
-                            } else {
-                                header('Location:index.php');
-                            }
-                      }
-        ?>
+                  if(!$error1 && !$error2 && !$error3) {
+                         $link = conectarABase();
+                         $token = md5(uniqid(mt_rand(),false));
+                         $exito = mysqli_query($link, "INSERT INTO usuarios (nombre,apellido,email,clave,fecha,foto,token)
+                         VALUES ('$nombre','$apellido', '$email', '$contrasena', '$fecha_nacimiento', '$foto', '$token');");
+                         if ($exito) {
+                          header('Location:inicio_sesion.php');
+                         } else {
+                          header('Location:index.php');
+                         }
+                  } 
+    ?>

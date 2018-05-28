@@ -4,9 +4,25 @@
     $errors = array();
 
     if(!empty($_POST)){
-        $email=$_POST['email']
+        $email=$_POST['email'];
+
+        $link=conectarABase();
+
+        if (usuarioExiste($email)){
+            $token = mysqli_query($link, "SELECT token FROM usuarios where email='$email'");
+            $row = mysqli_fetch_array($tokenes);
+            $token = row[0];
+
+            $url = 'http://localhost/grupo11/cambiar_contraseña.php?' . $token; 
+            $asunto = 'Recuperar Password';
+            $cuerpo ="Etimado usuario ingrese al siguiente url para cambiar la contraseña <a href='$url'>Ingrese aqui</a>";
+
+        }else {
+            errors[] = "No existe el correo electrónico"
+        }
     }
 ?>
+
 <html lang="en">
     <head>
         <meta charset="UTF-8">
