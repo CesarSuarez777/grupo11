@@ -3,10 +3,10 @@
 ?>
 
 <?php
-
+        require 'funciones.php';
 	$tbl_name = "usuarios";
 
-	$conexion = mysqli_connect("localhost","root","","aventon");
+	$conexion = conectarABase();
    
 	$username = $_POST['correo'];
 	$pass = $_POST['contraseña'];

@@ -9,11 +9,12 @@
     <body>
         <?php
                     session_start();
-
                     if (isset($_POST['registro'])) {
                         require("registrar.php");
                         if (!$error4){
-                            header("Location: inicio_sesion.php?error=$error");
+                            $exito=true;;
+                            header("Location: inicio_sesion.php?exito=$exito");
+                            exit;
                         }
                     }
                     if (!empty($_GET)){
@@ -22,12 +23,9 @@
                         $inhab = true;
                     }
                     
-                    require 'funciones.php';
-                    
-                    if (inicioSesion()){
-                        header("Location: PaginaPrincipal.php");
-                    exit;
-                }
+                    if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true){
+                        header('Location: PaginaPrincipal.php');
+                    }
                 ?>
             <font size="4"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error4) {echo "Error al registrar, intente nuevamente";}} ?></font>  
             <div class="container" align="center"><font size="4"  color="red" face="Univers-Light-Normal"><?php if(!$inhab){echo "<br>Debe ser un usuario registrado para acceder a la página";} ?></font></div>  
@@ -47,7 +45,7 @@
                         <input type="text" name="apellidos" value="<?php if (isset($_POST['registro'])) {echo $apellido;} ?>" placeholder="Apellidos" class="input-50" required>
                         <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error2) {echo "El correo ya se encuentra registrado";}} ?></font>
                         <input type="email" name="correo" value="<?php if (isset($_POST['registro'])) {if (!$error2) {echo $email;}} ?>" placeholder="Correo electrónico" required class="input-100">
-                        <font size="2"  class="input-100" color="red"face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error1) {echo "Las contraseñas no coinciden";}} ?></font>
+                        <font size="2"  class="input-100" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){if ($error1) {echo "Las contraseñas no coinciden";}} ?></font>
                         <input type="password" name="clave" placeholder="Contraseña" required class="input-50">
                         <input type="password" name="clave_confirmacion" placeholder="Confirmar contraseña" required class="input-50">
                         <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){ if ($error3) {echo "No posee la edad suficiente para utilizar aventon";}} ?></font>

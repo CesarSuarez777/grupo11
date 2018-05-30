@@ -10,7 +10,7 @@
         <br>
             <?php
                 session_start();
-                if (!empty($_GET)){
+                if (!empty($_GET['error'])){
                     $error = $_GET['error'];
                 }
                 
@@ -24,9 +24,15 @@
                         
             <h1><img src="Logo.jpg" alt="imagen no disponible" height="55"><font size="8" face="Univers-Light-Normal">   Aventon</font></h1>
                 <br>
+                <div class="container" align="center">
+                    <font size="3" color="green"> 
+                        <?php if(!empty($_GET['cambio'])){echo "¡Cambio de contraseña realizado con exito!";} ?> 
+                    </font>
+                </div>
                 <div class="container" align="center"><font size="4" color="green" face="Univers-Light-Normal"> 
-                    <?php if(!empty($_GET)){ 
-                        if(!$error){ echo "¡Usted se ha registrado exitosamente!"; } else {echo "Usuario o contraseña incorrectos";}} ?></font></div>
+                    <?php if(!empty($_GET['exito'])){ echo "¡Usted se ha registrado exitosamente!"; } 
+                    if (!empty($_GET['error'])) {echo "Usuario o contraseña incorrectos";} ?>
+                </font></div>
                 <form action="validar.php" method="post" class="form-register">
                     <h2 class="form_titulo"><font size="6" face="Univers-Light-Normal">Iniciar sesión</font></h2>
                     <div class="contenedor-inputs">

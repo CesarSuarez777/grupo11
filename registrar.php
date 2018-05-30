@@ -1,5 +1,5 @@
  <?php
-                  require('funciones.php');      
+                  require 'funciones.php';     
                   $nombre = $_POST['nombre'];
                   $apellido = $_POST['apellidos'];
                   $email = $_POST['correo'];
@@ -28,10 +28,11 @@
                   if(!$error1 && !$error2 && !$error3) {
                          $link = conectarABase();
                          $token = md5(uniqid(mt_rand(),false));
-                         $exito = mysqli_query($link, "INSERT INTO usuarios (nombre,apellido,email,clave,fecha,foto,token)
-                         VALUES ('$nombre','$apellido', '$email', '$contrasena', '$fecha_nacimiento', '$foto', '$token');");
+                         $sql = "INSERT INTO usuarios (nombre,apellido,email,clave,fecha,foto,token)
+                         VALUES ('$nombre','$apellido', '$email', '$contrasena', '$fecha_nacimiento','$foto','$token')";
+                         $exito = mysqli_query($link, $sql);
                          if ($exito) {
                           $error4=false;
-                         }    
-                  } 
-    ?>
+                         }     
+                  }
+?>

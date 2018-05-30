@@ -24,7 +24,7 @@
           }
           
         ?>
-          <header style="position: fixed; position:absolute; z-index:1;">
+          <header style="position: fixed">
             <nav>
                     <div class="row">
                         <div class="col-2">
