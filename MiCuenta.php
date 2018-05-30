@@ -84,32 +84,35 @@
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
 				  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"><br>
-                      <div class="container-fluid">
-                      <div class="row">               
-                          <div class="panel panel-info">
-                            <div class="panel-heading">
-                              <h3 class="panel-title"><?php echo $row['apellido'] . ", " . $row['nombre']; ?></h3>
-                            </div>
-                            <div class="panel-body">
-                              <div class="row">
-                                <div class="col-md-3 col-lg-3 " align="center"> <img src="imageView.php?image_id=<?php echo $row["foto"]; ?>" class="img-circle img-responsive"> </div>
-                                <div class=" col-md-9 col-lg-9 "> 
-                                  <table class="table table-user-information">
-                                    <tbody>
-                                      <tr>
-                                        <td>Fecha de nacimiento</td>
-                                        <td><?php echo $row['fecha'];?></td>
-                                      </tr>
-                                      <tr>
-                                        <td>Email</td>
-                                        <td><?php echo $row['email'];?></td>
-                                      </tr>                       
-                                    </tbody>
-                                  </table>
-                                </div>
-                            </div>
-                        </div>                            
-                  </div>
+                                    <div class="container-fluid">
+                                    <div class="row">               
+                                        <div class="panel panel-info">
+                                          <div class="panel-heading">
+                                            <h3 class="panel-title"><?php echo $row['apellido'] . ", " . $row['nombre']; ?></h3>
+                                          </div>
+                                          <div class="panel-body">
+                                            <div class="row">
+                                              <div class="col-md-3 col-lg-3 " align="center"> <img src="imageView.php?image_id=<?php echo $row["foto"]; ?>" class="img-circle img-responsive"> </div>
+                                              <div class=" col-md-9 col-lg-9 "> 
+                                                <table class="table table-user-information">
+                                                  <tbody>
+                                                    <tr>
+                                                      <td>Fecha de nacimiento</td>
+                                                      <td><?php echo $row['fecha'];?></td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td>Email</td>
+                                                      <td><?php echo $row['email'];?></td>
+                                                    </tr>                       
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                               </div>
+                                          </div>           
+                                        </div>
+                                    </div>
+                                    </div>
+                                  </div>
 
 				  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
 				  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>

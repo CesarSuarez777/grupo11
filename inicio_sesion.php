@@ -9,10 +9,19 @@
     <body class="bg">
         <br>
             <?php
+                session_start();
                 if (!empty($_GET)){
                     $error = $_GET['error'];
-                    }
+                }
+                
+                require 'funciones.php';
+                
+                if (inicioSesion()){
+                    header("Location: PaginaPrincipal.php");
+                    exit;
+                }
             ?>
+                        
             <h1><img src="Logo.jpg" alt="imagen no disponible" height="55"><font size="8" face="Univers-Light-Normal">   Aventon</font></h1>
                 <br>
                 <div class="container" align="center"><font size="4" color="green" face="Univers-Light-Normal"> 

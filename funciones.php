@@ -10,6 +10,15 @@
    	 	$annos = $hoy->diff($cumpleanos);
     	return $annos->y;
 	}
+        
+        function inicioSesion(){
+            if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true){
+                return true;
+            } else{
+                return false;
+            }
+          }
+        
 
 	function usuarioExiste($email){
 		$link = conectarABase();
@@ -20,7 +29,7 @@
       	} else {
       		return false;
       	}
-    mysql_close($link);
+            mysql_close($link);
  	}
 	
 ?>

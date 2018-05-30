@@ -11,21 +11,22 @@
       
   </head>
   <body>
-        <?php
+          <?php
+          include 'funciones.php';
           session_start();
 
-          if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true){
-          }else{
-            $inhabilitado=true;
-            header("Location: index.php?inicio=$inhabilitado");
-
+          $incioSesion = inicioSesion();
+          if (!$incioSesion){
+            
+            header("Location: index.php?inicio=$incioSesion");
+            
             exit;
           }
+          
         ?>
-        <header>
+          <header style="position: fixed; position:absolute; z-index:1;">
             <nav>
-		          <ul>
-                    <div class="row" position="fixed">
+                    <div class="row">
                         <div class="col-2">
                              <p>
                                 <a href="PaginaPrincipal.php">
@@ -62,10 +63,9 @@
                             <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
-		          </ul>
             </nav>
         </header>
-        <br><br><br><br><br><br>
+      <br><br><br><br><br><br>
           <div class="row">
               <div class="col-2 bg-white">
                   <br>
@@ -130,7 +130,8 @@
                   </div>       
               </div>
           </div>
-    </div>
+
+   
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
