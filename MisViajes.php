@@ -13,7 +13,7 @@
   <body>
         <header>
             <nav>
-		          <ul>
+		<ul>
                     <div class="row" position="fixed">
                         <div class="col-2">
                             <p>

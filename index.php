@@ -17,10 +17,19 @@
                             exit;
                         }
                     }
-                    if (!empty($_GET)){
-                        $inhab = $_GET['inicio'];
+                    if (!empty($_GET['inicio'])){
+                        $inhab = $_GET['inicio'];           
                     } else{
                         $inhab = true;
+                        if (!empty($_GET['eliminado'])) {
+                            ?>
+                            <br>
+                            <div class="container" align='center'>
+                            <font size="5"  color="red" face="Univers-Light-Normal"><?php echo "¡Su cuenta ha sido eliminada con éxito!"; ?></font>
+                            </div>
+                            <br>
+                            <?php                   
+                        }
                     }
                     
                     if(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true){

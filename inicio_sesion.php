@@ -30,8 +30,9 @@
                     </font>
                 </div>
                 <div class="container" align="center"><font size="4" color="green" face="Univers-Light-Normal"> 
-                    <?php if(!empty($_GET['exito'])){ echo "¡Usted se ha registrado exitosamente!"; } 
-                    if (!empty($_GET['error'])) {echo "Usuario o contraseña incorrectos";} ?>
+                    <?php if(!empty($_GET['exito'])){ echo "¡Usted se ha registrado exitosamente!"; } ?> 
+                    </font>
+                    <font size='4' color='red' face='Univers-Light-Normal'><?php if (!empty($_GET['error'])) {echo "Usuario o contraseña incorrectos";} ?>
                 </font></div>
                 <form action="validar.php" method="post" class="form-register">
                     <h2 class="form_titulo"><font size="6" face="Univers-Light-Normal">Iniciar sesión</font></h2>

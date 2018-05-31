@@ -29,7 +29,7 @@
   	?>
         <header>
             <nav>
-		          <ul>
+		 <ul>
                     <div class="row" position="fixed">
                         <div class="col-2">
                             <p>
@@ -68,7 +68,7 @@
                             <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
-		          </ul>
+                 </ul>
             </nav>        
         </header>
 		<div class="row" position="fixed">
@@ -88,7 +88,7 @@
                                       <div class="jumbotron">
                                         <div class="row">
                                             <div class="col-md-4 col-xs-12 col-sm-4 col-lg-3">
-                                                <img src="<?php file_put_contents('/path/to/new/file_name', $row['foto'])?>" alt='NO PUEDO MOSTRARLAAAAA'>
+                                                <!-- <img src="<?php file_put_contents('/path/to/new/file_name', $row['foto'])?>" alt='NO PUEDO MOSTRARLAAAAA'> -->
                                             </div>
                                             <div class="col-md-8 col-xs-12 col-sm-8 col-lg-9">
                                                 <div class="container" style="border-bottom:1px solid black">
@@ -96,20 +96,21 @@
                                                 </div>
                                                   <hr>
                                                 <ul class="container details">
-                                                  <li><p><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span><?php echo $row['email']; ?></p></li>
-                                                  <li><p><span class="glyphicon glyphicon-map-marker one" style="width:50px;"></span><?php echo calcularEdad($row['fecha']) . " años"; ?></p></li>
-                                                  <li><p><span class="glyphicon glyphicon-new-window one" style="width:50px;"></span>Calificación: </p></a>
+                                                  <p><img height="18" src="Imagenes/email.png"><?php echo " " . $row['email']; ?></p>
+                                                  <p><img height="18" src="Imagenes/Edad.png"><?php echo " " . calcularEdad($row['fecha']) . " años"; ?></p>
+                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación: </p>
                                                 </ul>
                                                   <div class="container" align="right">
                                                       <a href="modificarPerfil.php">Modificar perfil</a><span> | </span>
-                                                      <a href="eliminarCuenta.php">Eliminar cuenta</a><span > | </span>
+                                                      <a href="eliminarCuenta.php" onclick="return confirm('¿Estás seguro?');">Eliminar cuenta</a><span > | </span>
                                                       <a href="logout.php">Cerrar Sesion </a>
                                                   </div>
                                             </div>
                                         </div>
                                       </div>
+                                    </div>
                                   </div>
-				  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">...</div>
+				  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"> EN ESTA SECCION SE LISTARAN LOS VEHICULOS DEL USUARIO <?php echo $email ?></div>
 				  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 				</div>
 			</div>
