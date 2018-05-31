@@ -33,6 +33,7 @@
                         $nuevaFoto = $_POST['nuevaFoto']; 
                         $existeUsuario= false;
                         
+                     
                         if ($nuevoApellido != $row['apellido']){
                             mysqli_query($link, "UPDATE usuarios SET apellido='$nuevoApellido' where email='$email'");
                         }
@@ -41,29 +42,22 @@
                             mysqli_query($link, "UPDATE usuarios SET nombre='$nuevoNombre' where email='$email'");
                         }
                         
-                        if ($nuevaFecha != $row['nuevaFecha']){
+                        if ($nuevaFecha != $row['fecha']){
                             mysqli_query($link, "UPDATE usuarios SET fecha='$nuevaFecha' where email='$email'");
                         }
-                        
-                        if ($nuevoEmail != $row['nuevoEmail']){
+                                  
+                        if ($nuevoEmail != $row['email']){
                             if (!usuarioExiste($nuevoEmail)){
                                 mysqli_query($link, "UPDATE usuarios SET email='$nuevoEmail' where email='$email'");
-                                $_SESSION['email'] = $nuevoEmail;
-                            } else{
-                                $existeElUsuario=true;
+                                $_SESSION['email']=$nuevoEmail;
+                            } else {
+                                header('Location: modificarPerfil.php?mailError=true');
+                                exit;
                             }
                         }
                         
-                        if ($nuevoEmail != $row['nuevoEmail']){
-                            if (!usuarioExiste($nuevoEmail)){
-                                mysqli_query($link, "UPDATE usuarios SET email='$nuevoEmail' where email='$email'");
-                                $_SESSION['email'] = $nuevoEmail;
-                            }
-                        }
-                        
-                        if (!existeElUsuario){
-                            header("Location: MiCuenta.php");
-                        }       
+                        header("Location: MiCuenta.php");
+                        exit;
                     }
             ?>
         <header>
@@ -103,8 +97,8 @@
                         </div>
                         <div class="col-2">
                             <br>
-                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
-                            <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
+                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
+                            <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
                  </ul>
@@ -139,6 +133,12 @@
                                             </div> 
                                             <div class="form-group">
                                                 <label for="amount" class="col-sm-3 control-label">Email</label>
+                                                <?php if(!empty($_GET['mailError'])){
+                                                    ?>
+                                                <font color="red" size="2">El email ya se encuentra registrado, intente otro.</font>
+                                                <?php
+                                                }
+                                                    ?>
                                                 <div class="col-sm-9">
                                                     <input required type="email" class="form-control" value="<?php echo $row['email']; ?>" id="amount" name="nuevoEmail">
                                                 </div>
@@ -158,7 +158,8 @@
                                               <br>
                                             <div class="form-group">
                                                 <div class="col-sm-12 text-left">
-                                                    <input type="submit" name="apreto_modificar" class="btn btn-outline-danger preview-add-button btn-lg" value="Modificar">                       
+                                                    <a class="btn btn-outline-danger btn-lg" href="MiCuenta.php" role="button">Volver</a>
+                                                    <input type="submit" name="apreto_modificar" class="btn btn-outline-danger preview-add-button btn-lg" value="Modificar" style="margin-left: 10px">                       
                                                  </div>
                                             </div>
                                          </div>
