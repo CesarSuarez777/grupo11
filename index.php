@@ -40,7 +40,6 @@
             <div class="container" align="center"><font size="4"  color="red" face="Univers-Light-Normal"><?php if(!$inhab){echo "<br>Debe ser un usuario registrado para acceder a la página";} ?></font></div>  
             <div class="row">
             <div class="col-6">
-                <h1></h1>
                 <center><img  src="Video.jpg" class="imagen_centrada" height="300" alt="Imagen no disponible"></center>
             </div>
             <div class="col-6">

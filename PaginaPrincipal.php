@@ -68,7 +68,7 @@
       <br><br><br><br><br><br>
           <div class="row">
               <div class="col-2 bg-white">
-                  <br>
+                  <!--<br>
                   <div class="container-fluid" align="center"> 
                       <div class="btn-lg">
                         <button type="button" class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -93,7 +93,7 @@
                           </a>
                         </div>
                       </div>
-                  </div>
+                  </div> -->
               </div>
               <div class="col-10 ">
                <div class="container-fluid">
@@ -115,7 +115,7 @@
                                         <div class="media">                                           
                                             <div class="media-body">
                                                 <img src="Imagenes/VIAJE.png" height="20"><font size='6' color='black'> Necochea - La Plata</font>&nbsp;<img src="Imagenes/reloj.png" height="15"><strong style="font-size: 13px"> 4.5hs</strong><br>
-                                                <img src="Imagenes/CONDUCTOR.png" height="28"><font size='4'><a href="verPefil.php?id="> Maria Lujan Andersen</a></font><font size='2' color='Green'><strong color='green'>&nbsp;&nbsp;200</strong> puntos</font><br>  
+                                                <img src="Imagenes/CONDUCTOR.png" height="28"><font size='4'><a href="verPerfil.php?id=99"> Maria Lujan Andersen</a></font><font size='2' color='Green'><strong color='green'>&nbsp;&nbsp;200</strong> puntos</font><br>  
                                             </div>
                                         </div></td>
                                         <td class="col-sm-1 col-md-1" style="text-align: center">                                    
@@ -133,7 +133,7 @@
                                         <div class="media">                                           
                                             <div class="media-body">
                                                 <img src="Imagenes/VIAJE.png" height="20"><font size='6' color='black'> La Plata - Ensenada</font>&nbsp;<img src="Imagenes/reloj.png" height="15"><strong style="font-size: 13px"> 20min</strong><br>
-                                                <img src="Imagenes/CONDUCTOR.png" height="28"><font size='4'><a href="verPefil.php?id="> Patricio Estevez</a></font><font size='2' color='green'><strong>&nbsp;&nbsp;15</strong> puntos</font><br>
+                                                <img src="Imagenes/CONDUCTOR.png" height="28"><font size='4'><a href="verPerfil.php?id=100"> Patricio Estevez</a></font><font size='2' color='green'><strong>&nbsp;&nbsp;15</strong> puntos</font><br>
                                                 </div>
                                         </div></td>
                                         <td class="col-sm-1 col-md-1" style="text-align: center">                                    

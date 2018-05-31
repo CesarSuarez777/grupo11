@@ -25,40 +25,27 @@
             $resultado = mysqli_query($link, "SELECT * FROM usuarios where email='$email'");
             $row = $resultado->fetch_array(MYSQLI_ASSOC);        
                 
-                    if (isset($_POST['apreto_modificar'])){
-                        $nuevoNombre = $_POST['nuevoNombre'];
-                        $nuevoApellido = $_POST['nuevoApellido'];
-                        $nuevoEmail = $_POST['nuevoEmail'];
-                        $nuevaFecha = $_POST['nuevaFecha'];
-                        $nuevaFoto = $_POST['nuevaFoto']; 
-                        $existeUsuario= false;
-                        
+                    if (isset($_POST['cambio_contrasena'])){
+                        $claveActual = $_POST['cActual'];
+                        $claveNueva = $_POST['cNueva'];
+                        $claveNueva2 = $_POST['cNueva2'];                
                      
-                        if ($nuevoApellido != $row['apellido']){
-                            mysqli_query($link, "UPDATE usuarios SET apellido='$nuevoApellido' where email='$email'");
-                        }
-                        
-                        if ($nuevoNombre != $row['nombre']){
-                            mysqli_query($link, "UPDATE usuarios SET nombre='$nuevoNombre' where email='$email'");
-                        }
-                        
-                        if ($nuevaFecha != $row['fecha']){
-                            mysqli_query($link, "UPDATE usuarios SET fecha='$nuevaFecha' where email='$email'");
-                        }
-                                  
-                        if ($nuevoEmail != $row['email']){
-                            if (!usuarioExiste($nuevoEmail)){
-                                mysqli_query($link, "UPDATE usuarios SET email='$nuevoEmail' where email='$email'");
-                                $_SESSION['email']=$nuevoEmail;
-                            } else {
-                                header('Location: modificarPerfil.php?mailError=true');
-                                exit;
+                        if ($claveActual === $row['clave']){
+                            if ($claveNueva === $claveNueva2){
+                                mysqli_query($link, "UPDATE usuarios SET clave='$claveNueva' where email='$email'");
+                            } else{
+                              header("Location: modificarContrasena.php?c=1"); 
+                              exit;
                             }
-                        }
-                        
-                        header("Location: MiCuenta.php");
+                        }else{
+                           header("Location: modificarContrasena.php?c=2");
+                           exit;
+                        }                        
+                         
+                        header("Location: MiCuenta.php?nuevaClave=true");
                         exit;
                     }
+                    
             ?>
         <header>
             <nav>
@@ -120,46 +107,45 @@
                                           <div class="panel-body form-horizontal payment-form">
                                             <div class="form-group">
                                                 <br>
-                                                <label for="concept" class="col-sm-3 control-label">Nombres</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="concept" value="<?php echo $row['nombre']; ?>" name="nuevoNombre">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="description" class="col-sm-3 control-label">Apellidos</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $row['apellido']; ?>" id="description" name="nuevoApellido">
-                                                </div>
-                                            </div> 
-                                            <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Email</label>
-                                                <?php if(!empty($_GET['mailError'])){
+                                                
+                                                <label for="concept" class="col-sm-3 control-label">Contraseña actual</label>
+                                                <?php if(!empty($_GET['c'])){
+                                                    if ($_GET['c'] == 2){
                                                     ?>
-                                                <font color="red" size="2">El email ya se encuentra registrado, intente otro.</font>
+                                                <font color="red" size="2">Contraseña actual incorrecta</font>
                                                 <?php
+                                                    }
                                                 }
                                                     ?>
                                                 <div class="col-sm-9">
-                                                    <input required type="email" class="form-control" value="<?php echo $row['email']; ?>" id="amount" name="nuevoEmail">
+                                                    <input type="password" class="form-control" id="cAc" name="cActual">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="date" class="col-sm-3 control-label">Fecha de nacimiento</label>
+                                                <label for="description" class="col-sm-3 control-label">Nueva Contraseña</label>
+                                                 <?php if(!empty($_GET['c'])){
+                                                    if ($_GET['c'] == 1){
+                                                    ?>
+                                                <font color="red" size="2">Las contraseñas no coinciden</font>
+                                                <?php
+                                                    }
+                                                }
+                                                    ?>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" value="<?php echo $row['fecha']; ?>" id="date" name="nuevaFecha">
+                                                    <input required type="password" class="form-control" id="description" name="cNueva">
                                                 </div>
-                                            </div>   
+                                            </div> 
                                             <div class="form-group">
-                                                <label for="date" class="col-sm-3 control-label">Foto de perfil</label>
+                                                <label for="amount" class="col-sm-3 control-label">Confirme nueva Contraseña</label>
                                                 <div class="col-sm-9">
-                                                    <input type="file" class="form-control" value="<?php echo $row['foto']; ?>" id="date" name="nuevaFoto">
+                                                    <input required type="password" class="form-control"  id="amount" name="cNueva2">
                                                 </div>
                                             </div>
                                               <br>
                                             <div class="form-group">
                                                 <div class="col-sm-12 text-left">
                                                     <a class="btn btn-outline-danger btn-lg" href="MiCuenta.php" role="button">Volver</a>
-                                                    <input type="submit" name="apreto_modificar" class="btn btn-outline-danger preview-add-button btn-lg" value="Modificar" style="margin-left: 10px">                       
+                                                    <input type="submit" name="cambio_contrasena" class="btn btn-outline-danger preview-add-button btn-lg" value="Modificar" style="margin-left: 10px">                       
                                                  </div>
                                             </div>
                                          </div>
