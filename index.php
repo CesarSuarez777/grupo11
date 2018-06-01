@@ -58,8 +58,15 @@
                         <input type="password" name="clave_confirmacion" placeholder="Confirmar contraseña" required class="input-50">
                         <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){ if ($error3) {echo "No posee la edad suficiente para utilizar aventon";}} ?></font>
                         <input placeholder="Fecha de nacimiento" class="input-100" type="text" name="nacimiento" onfocus="(this.type='date')"  id="date" value="<?php if (isset($_POST['registro'])) {if (!$error3) {echo $fecha_nacimiento;}} ?>" required>
-                        <input type="file" id="files" name="foto" style="visibility: hidden;display: none">
-                        <label for="files" class="btn btn-outline-secondary btn-lg input-100" style="text-align: left"><font size="3" align="right">Foto de perfil</font><font size="2"> *no obligatoria</font></label>
+                        <div class="input-group mb-3" style="widht:100%;border-color: grey">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">Foto de perfil</span>
+                            </div>
+                            <div class="custom-file">
+                              <input type="file" class="custom-file-input" name="foto" id="foto">
+                              <label class="custom-file-label" for="inputGroupFile01">Elige tu foto</label>
+                            </div>
+                          </div>
                         <input type="submit" name="registro" value="Registrar" font-color="#f17376" class="boton_registro btn-block">
                         <div class="container" align="center">
                             <p 
