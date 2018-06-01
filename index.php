@@ -57,17 +57,9 @@
                         <input type="password" name="clave" placeholder="Contraseña" required class="input-50">
                         <input type="password" name="clave_confirmacion" placeholder="Confirmar contraseña" required class="input-50">
                         <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['registro'])){ if ($error3) {echo "No posee la edad suficiente para utilizar aventon";}} ?></font>
-                        <input type="date" class="input-100" name="nacimiento" value="<?php if (isset($_POST['registro'])) {if (!$error3) {echo $fecha_nacimiento;}} ?>" placeholder="Fecha de nacimiento" required>
-                        <div class="container" align="center">
-                            <div class="row">
-                                <div class="col-3">
-                                    <span>Foto de perfil</span>
-                                </div>
-                                <div class="col-9">
-                                     <input id="foto" type="file" class="input-100" name="foto" placeholder="Foto de perfil">
-                                </div>
-                            </div>
-                        </div>
+                        <input placeholder="Fecha de nacimiento" class="input-100" type="text" name="nacimiento" onfocus="(this.type='date')"  id="date" value="<?php if (isset($_POST['registro'])) {if (!$error3) {echo $fecha_nacimiento;}} ?>" required>
+                        <input type="file" id="files" name="foto" style="visibility: hidden;display: none">
+                        <label for="files" class="btn btn-outline-secondary btn-lg input-100" style="text-align: left"><font size="3" align="right">Foto de perfil</font><font size="2"> *no obligatoria</font></label>
                         <input type="submit" name="registro" value="Registrar" font-color="#f17376" class="boton_registro btn-block">
                         <div class="container" align="center">
                             <p 
