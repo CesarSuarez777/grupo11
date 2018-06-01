@@ -14,13 +14,12 @@
 	$sql = "SELECT * FROM $tbl_name WHERE email='$username' and clave='$pass'";
 
 	$result = mysqli_query($conexion, $sql);
-
+        $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 	if ($result->num_rows > 0 ){
 		$_SESSION['loggedin'] = true;
 		$_SESSION['email'] = $username;
-		$_SESSION['start'] = time();
-		$_SESSION['expire'] = $_SESSION['start'] + (5*60);
+                $_SESSION['id'] = $row['ID'];
 
 
 		header("Location: PaginaPrincipal.php?inicio=$username");

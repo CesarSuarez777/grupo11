@@ -10,10 +10,10 @@
                   $error1=false;
                   $error2=false;
                   $error3=false;
-                  $error4=true;
-
+                  $error4=true; 
+                          
                                   
-                  if($contrasena != $contrasena2){
+                  if($contrasena != $contrasena2){    
                      $error1 = true;
                   }
 

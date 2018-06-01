@@ -64,7 +64,7 @@
                                     <span>Foto de perfil</span>
                                 </div>
                                 <div class="col-9">
-                                     <input type="file" class="input-100" name="foto" placeholder="Foto de perfil">
+                                     <input id="foto" type="file" class="input-100" name="foto" placeholder="Foto de perfil">
                                 </div>
                             </div>
                         </div>

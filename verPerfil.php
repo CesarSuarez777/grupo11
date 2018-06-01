@@ -80,7 +80,7 @@
                                       <div class="jumbotron">
                                         <div class="row">
                                             <div class="col-md-4 col-xs-12 col-sm-4 col-lg-3">
-                                                <!-- <img src="<?php file_put_contents('/path/to/new/file_name', $row['foto'])?>" alt='NO PUEDO MOSTRARLAAAAA'> -->
+                                                <img src="Imagenes/profile.png" height="250">
                                             </div>
                                             <div class="col-md-8 col-xs-12 col-sm-8 col-lg-9">
                                                 <div class="container" style="border-bottom:1px solid black">

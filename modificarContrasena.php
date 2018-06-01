@@ -97,7 +97,7 @@
 			<div class="col-10">
 				<nav>
 				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Modificar perfil</font></a>  
+				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Cambio de contraseña</font></a>  
 				  </div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">

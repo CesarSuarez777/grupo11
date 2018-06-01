@@ -1,14 +1,18 @@
 <?php
     session_start();
-    $email=$_SESSION['email'];
+    $id=$_SESSION['id'];
     require('funciones.php');
     $link= conectarABase();
-    $query="DELETE FROM usuarios WHERE email='$email'";
+    $sql= "DELETE FROM vehiculos WHERE IDuser='$id'";
+    $query="DELETE FROM usuarios WHERE ID='$id'";
+    
     $exito = mysqli_query($link, $query);
-    if ($exito) {
+    $exito2 = mysqli_query($link, $sql);
+    if ($exito && $exito2) {
 
         header("Location: index.php?eliminado=$exito");
         unset ($SESSION['email']);
+        unset ($SESSION['id']);
         session_destroy();
         exit();
     }

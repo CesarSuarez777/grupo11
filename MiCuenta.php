@@ -25,6 +25,9 @@
 
             $resultado = mysqli_query($link, "SELECT * FROM usuarios where email='$email'");
             $row = $resultado->fetch_array(MYSQLI_ASSOC);
+            
+            $IDusuario= $row['ID'];
+            $vehiculos= mysqli_query($link, "SELECT * FROM vehiculos where IDuser='$IDusuario'");
 
   	?>
         <header>
@@ -81,11 +84,14 @@
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
 				  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                     <div class="container-fluid">    
+                                     <div class="container-fluid">
+                                     <?php if (!empty($_GET['nuevaClave'])) {
+                                         ?><br><h5 align="center" style="color: green">¡Contraseña modificada con éxito!</h5><?php
+                                      } ?>
                                       <div class="jumbotron">
                                         <div class="row">
                                             <div class="col-md-4 col-xs-12 col-sm-4 col-lg-3">
-                                                <!-- <img src="<?php file_put_contents('/path/to/new/file_name', $row['foto'])?>" alt='NO PUEDO MOSTRARLAAAAA'> -->
+                                                <img src="Imagenes/profile.png" height="250">
                                             </div>
                                             <div class="col-md-8 col-xs-12 col-sm-8 col-lg-9">
                                                 <div class="container" style="border-bottom:1px solid black">
@@ -108,7 +114,47 @@
                                       </div>
                                     </div>
                                   </div>
-				  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"> EN ESTA SECCION SE LISTARAN LOS VEHICULOS DEL USUARIO <?php echo $email ?></div>
+				  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"> 
+                                      <br>
+                                      <?php if (!empty($_GET['veliminado'])) {
+                                          ?><h5 align="center" style="color: red">¡Vehículo eliminado con éxito!</h5><?php
+                                      } 
+                                      if($vehiculos->num_rows > 0 ){ ?>
+                                      <table class="table table-sm table-borderless">
+                                          <thead class='thead-light'>
+                                          <tr style='border-bottom: 2px solid #f17376'>
+                                            <th scope="col"><font size='5'>Marca</font></th>
+                                            <th scope="col"><font size='5'>Modelo</font></th>
+                                            <th scope="col"><font size='5'>Patente</font></th>
+                                            <th scope="col"><font size='5'>Asientos</font></th>
+                                            <th scope='col'></th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <?php while($fila = $vehiculos->fetch_array(MYSQL_NUM)) {
+                                              $id = $fila[4];
+                                          ?>
+                                          <tr style='margin-top: 30px'>
+                                            <td><font face='georgia'><?php echo $fila[0]; ?></font></td>
+                                            <td><font face='georgia'><?php echo $fila[1]; ?></font></td>
+                                            <td><font face='georgia'><?php echo $fila[2]; ?></font></td>
+                                            <td><font face='georgia'><?php echo $fila[3]; ?></font></td>
+                                            <td><a href='<?php echo "editarVehiculo.php?id=$id"; ?>'>Editar</a><span> | </span>
+                                                <a onclick="return confirm('¿Estás seguro?');" href='<?php echo "eliminarVehiculo.php?id=$id"; ?>'>Eliminar</a></td>   
+                                          </tr>
+                                          <?php
+                                          
+                                          }?>
+                                        </tbody>
+                                      </table>
+                                      <?php }else{
+                                          ?> <h2 align='center'>Usted no posee vehiculos registrados.</h2>
+                                      <?php
+                                      }
+                                      ?>
+                                          <br>
+                                          <a style="margin-left: 470px" class="btn btn-outline-danger btn-lg" href="agregarVehiculo.php" role="button">Agregar nuevo vehículo</a>
+                                  </div>
 				  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
 				</div>
 			</div>

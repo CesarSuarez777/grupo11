@@ -1,4 +1,3 @@
-
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -22,49 +21,37 @@
             
             $email=$_SESSION['email'];
             $link=conectarABase();
-            $resultado = mysqli_query($link, "SELECT * FROM usuarios where email='$email'");
-            $row = $resultado->fetch_array(MYSQLI_ASSOC);        
-                
-                    if (isset($_POST['apreto_modificar'])){
-                        $nuevoNombre = $_POST['nuevoNombre'];
-                        $nuevoApellido = $_POST['nuevoApellido'];
-                        $nuevoEmail = $_POST['nuevoEmail'];
-                        $nuevaFecha = $_POST['nuevaFecha'];
-                        $nuevaFoto = $_POST['nuevaFoto']; 
-                        $existeUsuario= false;
+            
+            $idvehiculo= $_GET['id'];
+            $vehiculo = mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
+            $veh = $vehiculo->fetch_array(MYSQLI_NUM);
+            
+                    if (isset($_POST['apreto_editar'])){
+                        $nuevaMarca = $_POST['marca'];
+                        $nuevoModelo = $_POST['modelo'];
+                        $nuevaPatente = $_POST['patente'];
+                        $nuevoAsientos = $_POST['asientos'];
                         
-                     
-                        if ($nuevoApellido != $row['apellido']){
-                            mysqli_query($link, "UPDATE usuarios SET apellido='$nuevoApellido' where email='$email'");
+                        if($nuevaMarca != $veh[0]){
+                            mysqli_query($link, "UPDATE vehiculos SET marca='$nuevaMarca' where IDvehiculo='$idvehiculo'");
                         }
                         
-                        if ($nuevoNombre != $row['nombre']){
-                            mysqli_query($link, "UPDATE usuarios SET nombre='$nuevoNombre' where email='$email'");
+                        if($nuevaMarca != $veh[1]){
+                            mysqli_query($link, "UPDATE vehiculos SET modelo='$nuevoModelo' where IDvehiculo='$idvehiculo'");
                         }
                         
-                        if ($nuevaFecha != $row['fecha']){
-                            if (calcularEdad($nuevaFecha)>=18){
-                                mysqli_query($link, "UPDATE usuarios SET fech}a='$nuevaFecha' where email='$email'");
-                            }else{
-                                header('Location: modificarPerfil.php?menor=true');
-                                exit;
-                            }
-                        }
-                                  
-                        if ($nuevoEmail != $row['email']){
-                            if (!usuarioExiste($nuevoEmail)){
-                                mysqli_query($link, "UPDATE usuarios SET email='$nuevoEmail' where email='$email'");
-                                $_SESSION['email']=$nuevoEmail;
-                            } else {
-                                header('Location: modificarPerfil.php?mailError=true');
-                                exit;
-                            }
+                        if($nuevaMarca != $veh[2]){
+                            mysqli_query($link, "UPDATE vehiculos SET patente='$nuevaPatente' where IDvehiculo='$idvehiculo'");
                         }
                         
-                        header("Location: MiCuenta.php");
-                        exit;
+                        if($nuevaMarca != $veh[3]){
+                            mysqli_query($link, "UPDATE vehiculos SET asientos='$nuevoAsientos' where IDvehiculo='$idvehiculo'");
+                        }
+                        
+                        header('Location: MiCuenta.php?vEditado=true');
                     }
             ?>
+      
         <header>
             <nav>
 		 <ul>
@@ -115,7 +102,7 @@
 			<div class="col-10">
 				<nav>
 				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Modificar perfil</font></a>  
+				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Editar vehículo</font></a>  
 				  </div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
@@ -125,52 +112,34 @@
                                           <div class="panel-body form-horizontal payment-form">
                                             <div class="form-group">
                                                 <br>
-                                                <label for="concept" class="col-sm-3 control-label">Nombres</label>
+                                                <label for="concept" class="col-sm-3 control-label">Marca</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" id="concept" value="<?php echo $row['nombre']; ?>" name="nuevoNombre">
+                                                    <input type="text" class="form-control" value="<?php echo $veh[0];?>" name="marca" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="description" class="col-sm-3 control-label">Apellidos</label>
+                                                <label for="description" class="col-sm-3 control-label">Modelo</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $row['apellido']; ?>" id="description" name="nuevoApellido">
+                                                    <input type="text" class="form-control" value="<?php echo $veh[1];?>" name="modelo" required>
                                                 </div>
                                             </div> 
                                             <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Email</label>
-                                                <?php if(!empty($_GET['mailError'])){
-                                                    ?>
-                                                <font color="red" size="2">El email ya se encuentra registrado, intente otro.</font>
-                                                <?php
-                                                }
-                                                    ?>
+                                                <label for="amount" class="col-sm-3 control-label">Patente (sin espacios)</label>
                                                 <div class="col-sm-9">
-                                                    <input required type="email" class="form-control" value="<?php echo $row['email']; ?>" id="amount" name="nuevoEmail">
+                                                    <input required type="text" value="<?php echo $veh[2];?>" class="form-control" name="patente">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="date" class="col-sm-3 control-label">Fecha de nacimiento</label>
-                                                <?php if(!empty($_GET['menor'])){
-                                                    ?>
-                                                <font color="red" size="2">Debe ser mayor de edad para utilizar el sistema.</font>
-                                                <?php
-                                                }
-                                                    ?>
+                                                <label for="text" class="col-sm-3 control-label">Asientos (sin incluir el del conductor)</label> 
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" value="<?php echo $row['fecha']; ?>" id="date" name="nuevaFecha">
+                                                    <input type="number" class="form-control" value="<?php echo $veh[3];?>" name="asientos" required>
                                                 </div>
                                             </div>   
-                                            <div class="form-group">
-                                                <label for="date" class="col-sm-3 control-label">Foto de perfil</label>
-                                                <div class="col-sm-9">
-                                                    <input type="file" class="form-control" value="<?php echo $row['foto']; ?>" id="date" name="nuevaFoto">
-                                                </div>
-                                            </div>
-                                              <br>
+                                            <br>
                                             <div class="form-group">
                                                 <div class="col-sm-12 text-left">
                                                     <a class="btn btn-outline-danger btn-lg" href="MiCuenta.php" role="button">Volver</a>
-                                                    <input type="submit" name="apreto_modificar" class="btn btn-outline-danger preview-add-button btn-lg" value="Modificar" style="margin-left: 10px">                       
+                                                    <input type="submit" name="apreto_editar" class="btn btn-outline-danger preview-add-button btn-lg" value="Editar" style="margin-left: 10px">                       
                                                  </div>
                                             </div>
                                          </div>
