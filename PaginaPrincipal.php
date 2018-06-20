@@ -59,7 +59,7 @@
                         </div>
                         <div class="col-2">
                             <br>
-                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
+                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     <?php echo $_SESSION['nombre']; ?></font></a><br>
                             <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
@@ -68,32 +68,9 @@
       <br><br><br><br><br><br>
           <div class="row">
               <div class="col-2 bg-white">
-                  <!--<br>
-                  <div class="container-fluid" align="center"> 
-                      <div class="btn-lg">
-                        <button type="button" class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <font size="3" face="Univers-Light-Normal">
-                                Ordenar por:
-                            </font>
-                        </button>
-                        <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#"> 
-                            <font size="3" face="Univers-Light-Normal">
-                                Calificación del conductor
-                            </font></a>
-                          <a class="dropdown-item" href="#">
-                           <font size="3" face="Univers-Light-Normal">
-                               Precio
-                           </font>
-                          </a>
-                          <a class="dropdown-item" href="#">
-                            <font size="3" face="Univers-Light-Normal">
-                                Duración
-                            </font>
-                          </a>
-                        </div>
-                      </div>
-                  </div> -->
+                  <div class="container-fluid">
+                      <a href='crear_viaje.php' class="btn btn-block btn-outline-danger btn-lg"><font size='5'>Crear viaje</font></a> 
+                  </div>
               </div>
               <div class="col-10 ">
                <div class="container-fluid">

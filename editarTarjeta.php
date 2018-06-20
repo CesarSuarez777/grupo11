@@ -22,33 +22,29 @@
             $email=$_SESSION['email'];
             $link=conectarABase();
             
-            $idvehiculo= $_GET['id'];
-            $vehiculo = mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
-            $veh = $vehiculo->fetch_array(MYSQLI_NUM);
+            $idtarjeta= $_GET['id'];
             
-                    if (isset($_POST['apreto_editar'])){
+            $tarjeta = mysqli_query($link, "SELECT * FROM tarjetas where IDtarjeta='$idtarjeta'");
+            $tar = $tarjeta->fetch_array(MYSQLI_NUM);
+            
+                    if (isset($_POST['apreto_editarT'])){
                         $nuevaMarca = $_POST['marca'];
-                        $nuevoModelo = $_POST['modelo'];
-                        $nuevaPatente = $_POST['patente'];
-                        $nuevoAsientos = $_POST['asientos'];
+                        $nuevoNumero = $_POST['numero'];
+                        $nuevaFecha = $_POST['fecha_vencimiento'];
                         
-                        if($nuevaMarca != $veh[0]){
-                            mysqli_query($link, "UPDATE vehiculos SET marca='$nuevaMarca' where IDvehiculo='$idvehiculo'");
+                        if($nuevaMarca != $tar[0]){
+                            mysqli_query($link, "UPDATE tarjeta SET marca='$nuevaMarca' where IDtarjeta='$idtarjeta'");
                         }
                         
-                        if($nuevaModelo != $veh[1]){
-                            mysqli_query($link, "UPDATE vehiculos SET modelo='$nuevoModelo' where IDvehiculo='$idvehiculo'");
+                        if($nuevoNumero != $tar[1]){
+                            mysqli_query($link, "UPDATE tarjetas SET numero=$nuevoNumero where IDtarjeta='$idtarjeta'");
                         }
                         
-                        if($nuevaPatente != $veh[2]){
-                            mysqli_query($link, "UPDATE vehiculos SET patente='$nuevaPatente' where IDvehiculo='$idvehiculo'");
+                        if($nuevaFecha != $tar[2]){
+                            mysqli_query($link, "UPDATE tarjetas SET fecha_vencimiento='$nuevaFecha' where IDtarjeta='$idtarjeta'");
                         }
-                        
-                        if($nuevoAsientos != $veh[3]){
-                            mysqli_query($link, "UPDATE vehiculos SET asientos='$nuevoAsientos' where IDvehiculo='$idvehiculo'");
-                        }
-                        
-                        header('Location: MiCuenta.php?vEditado=true');
+
+                        header('Location: MiCuenta.php?tEditada=true');
                     }
             ?>
       
@@ -102,44 +98,42 @@
 			<div class="col-10">
 				<nav>
 				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Editar vehículo</font></a>  
+				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Editar tarjeta</font></a>  
 				  </div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
 				  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                       <div class="panel panel-default">
                                         <form id="modificar" method="POST">
+                                            <br>
                                           <div class="panel-body form-horizontal payment-form">
-                                            <div class="form-group">
-                                                <br>
-                                                <label for="concept" class="col-sm-3 control-label">Marca</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $veh[0];?>" name="marca" required>
+                                            <div class="input-group mb-3" style="width: 72.5%;margin-left:12px ">
+                                                <div class="input-group-prepend">
+                                                  <label class="input-group-text" for="inputGroupSelect01">Marca</label>
                                                 </div>
+                                                <select class="custom-select" name='marca' id="inputGroupSelect01">
+                                                  <option selected value="Visa">Visa</option>
+                                                  <option value="Mastercard">Mastercard</option>
+                                                  <option value="American Express">American Express</option>
+                                                </select>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="description" class="col-sm-3 control-label">Modelo</label>
+                                         <div class="form-group">
+                                                <label for="description" class="col-sm-3 control-label">Numero</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $veh[1];?>" name="modelo" required>
+                                                    <input type="number" value="<?php echo $tar[0];?>" class="form-control" name="numero" required>
                                                 </div>
                                             </div> 
                                             <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Patente (sin espacios)</label>
+                                                <label for="amount" class="col-sm-3 control-label">Fecha de vencimiento (MM/AA)</label>
                                                 <div class="col-sm-9">
-                                                    <input required type="text" value="<?php echo $veh[2];?>" class="form-control" name="patente">
+                                                    <input required type="text" value="<?php echo $tar[2];?>" class="form-control" name="fecha_vencimiento">
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="text" class="col-sm-3 control-label">Asientos (sin incluir el del conductor)</label> 
-                                                <div class="col-sm-9">
-                                                    <input type="number" class="form-control" value="<?php echo $veh[3];?>" name="asientos" required>
-                                                </div>
-                                            </div>   
+                                            </div> 
                                             <br>
                                             <div class="form-group">
                                                 <div class="col-sm-12 text-left">
                                                     <a class="btn btn-outline-danger btn-lg" href="MiCuenta.php" role="button">Volver</a>
-                                                    <input type="submit" name="apreto_editar" class="btn btn-outline-danger preview-add-button btn-lg" value="Editar" style="margin-left: 10px" onclick="return confirm('¿Estás seguro?');">                       
+                                                    <input type="submit" name="apreto_editarT" class="btn btn-outline-danger preview-add-button btn-lg" value="Editar" style="margin-left: 10px" onclick="return confirm('¿Estás seguro?');">                       
                                                  </div>
                                             </div>
                                          </div>

@@ -92,7 +92,13 @@
                                      <div class="container-fluid">
                                      <?php if (!empty($_GET['nuevaClave'])) {
                                          ?><br><h5 align="center" style="color: green">¡Contraseña modificada con éxito!</h5><?php
-                                      } ?>
+                                      } if (!empty($_GET['tarjeta'])) {
+                                         ?><br><h5 align="center" style="color: green">¡Tarjeta agregada con éxito!</h5><?php
+                                      } if (!empty($_GET['teliminada'])){
+                                         ?><br><h5 align="center" style="color: green">¡Tarjeta eliminada con éxito!</h5><?php
+                                      }
+                                        
+                                      ?>
                                       <div class="jumbotron">
                                         <div class="row">
                                             <div class="col-md-4 col-xs-12 col-sm-4 col-lg-3">
@@ -153,7 +159,7 @@
                                                </tbody>
                                              </table>
                                              <?php }else{
-                                                 ?> <h2 align='center'>Usted no posee tarjeta registrados.</h2>
+                                                 ?> <h2 align='center'>Usted no posee vehiculos registrados.</h2>
                                              <?php
                                              }
                                              ?>

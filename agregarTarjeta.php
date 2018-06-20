@@ -34,7 +34,7 @@
                         $sql = "INSERT INTO tarjetas(numero,marca,fecha_vencimiento,IDtarjeta) VALUES($numero,'$marca','$fecha_vencimiento',$IDusuario)";
                         
                         if (mysqli_query($link, $sql)){
-                            header("Location: MiCuenta.php?tarjeta='$numero'");
+                            header("Location: MiCuenta.php?tarjeta=true");
                         } else { 
                             header("Location: MiCuenta.php?tarjeta=false");
                         }
@@ -105,8 +105,7 @@
                                                   <label class="input-group-text" for="inputGroupSelect01">Marca</label>
                                                 </div>
                                                 <select class="custom-select" name='marca' id="inputGroupSelect01">
-                                                  <option selected>Marca</option>
-                                                  <option value="Visa">Visa</option>
+                                                  <option selected value="Visa">Visa</option>
                                                   <option value="Mastercard">Mastercard</option>
                                                   <option value="American Express">American Express</option>
                                                 </select>

@@ -19,6 +19,7 @@
 	if ($result->num_rows > 0 ){
 		$_SESSION['loggedin'] = true;
 		$_SESSION['email'] = $username;
+                $_SESSION['nombre'] = $row['nombre'];
                 $_SESSION['id'] = $row['ID'];
 
 

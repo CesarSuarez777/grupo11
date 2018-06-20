@@ -20,38 +20,29 @@
             }
             
             $email=$_SESSION['email'];
+            $IDusuario=$_SESSION['id'];
             $link=conectarABase();
+            $resultado = mysqli_query($link, "SELECT * FROM usuarios where email='$email'");
+            $row = $resultado->fetch_array(MYSQLI_ASSOC);
             
-            $idvehiculo= $_GET['id'];
-            $vehiculo = mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
-            $veh = $vehiculo->fetch_array(MYSQLI_NUM);
+            $vehiculos = mysqli_query($link, "SELECT * FROM vehiculos where IDuser='$IDusuario'");
             
-                    if (isset($_POST['apreto_editar'])){
-                        $nuevaMarca = $_POST['marca'];
-                        $nuevoModelo = $_POST['modelo'];
-                        $nuevaPatente = $_POST['patente'];
-                        $nuevoAsientos = $_POST['asientos'];
+                    if (isset($_POST['apreto_agregar'])){
+                        $marca = $_POST['marca'];
+                        $modelo = $_POST['modelo'];
+                        $patente = $_POST['patente'];
+                        $asientos = $_POST['asientos'];
+                        $IDusuario = $row['ID'];                                         
+                     
+                        $sql = "INSERT INTO vehiculos(marca,modelo,patente,asientos,IDuser) VALUES('$marca','$modelo','$patente',$asientos,$IDusuario)";
                         
-                        if($nuevaMarca != $veh[0]){
-                            mysqli_query($link, "UPDATE vehiculos SET marca='$nuevaMarca' where IDvehiculo='$idvehiculo'");
+                        if (mysqli_query($link, $sql)){
+                            header("Location: MiCuenta.php?vehiculo=true");
+                        } else { 
+                            header("Location: MiCuenta.php?vehiculo=false");
                         }
-                        
-                        if($nuevaModelo != $veh[1]){
-                            mysqli_query($link, "UPDATE vehiculos SET modelo='$nuevoModelo' where IDvehiculo='$idvehiculo'");
-                        }
-                        
-                        if($nuevaPatente != $veh[2]){
-                            mysqli_query($link, "UPDATE vehiculos SET patente='$nuevaPatente' where IDvehiculo='$idvehiculo'");
-                        }
-                        
-                        if($nuevoAsientos != $veh[3]){
-                            mysqli_query($link, "UPDATE vehiculos SET asientos='$nuevoAsientos' where IDvehiculo='$idvehiculo'");
-                        }
-                        
-                        header('Location: MiCuenta.php?vEditado=true');
                     }
             ?>
-      
         <header>
             <nav>
 		 <ul>
@@ -102,7 +93,7 @@
 			<div class="col-10">
 				<nav>
 				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Editar vehículo</font></a>  
+				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Crear viaje</font></a>  
 				  </div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
@@ -112,34 +103,46 @@
                                           <div class="panel-body form-horizontal payment-form">
                                             <div class="form-group">
                                                 <br>
-                                                <label for="concept" class="col-sm-3 control-label">Marca</label>
+                                                <label for="concept" class="col-sm-3 control-label">Dia y horario</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $veh[0];?>" name="marca" required>
+                                                    <input type="datetime-local" class="form-control" name="marca" required>
+                                                </div>
+                                            </div>                
+                                            <div class="form-group">
+                                                <label for="amount" class="col-sm-3 control-label">Precio por asiento</label>
+                                                <div class="col-sm-9">
+                                                    <input required type="text" class="form-control" name="patente">
                                                 </div>
                                             </div>
+                                              <br>
                                             <div class="form-group">
-                                                <label for="description" class="col-sm-3 control-label">Modelo</label>
-                                                <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $veh[1];?>" name="modelo" required>
+                                                <div class="input-group mb-3" style="width: 72.8%;margin-left:14px ">
+                                                <div class="input-group-prepend">
+                                                  <label class="input-group-text" for="inputGroupSelect01">Vehiculo</label>
                                                 </div>
-                                            </div> 
-                                            <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Patente (sin espacios)</label>
-                                                <div class="col-sm-9">
-                                                    <input required type="text" value="<?php echo $veh[2];?>" class="form-control" name="patente">
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="text" class="col-sm-3 control-label">Asientos (sin incluir el del conductor)</label> 
-                                                <div class="col-sm-9">
-                                                    <input type="number" class="form-control" value="<?php echo $veh[3];?>" name="asientos" required>
+                                                <select class="custom-select" placeholder='vehiculo' name='marca' id="inputGroupSelect01">
+                                                  <?php while($fila = $vehiculos->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila[4]?>"><?php echo $fila[0] . ' ' . $fila[1] . ' ' . $fila[2]?></option>
+                                                  <?php }?>
+                                                </select>
                                                 </div>
                                             </div>   
+                                              <br>
+                                            <div class="input-group mb-3" style="width: 72.5%;margin-left:14px ">
+                                                <div class="input-group-prepend">
+                                                  <label class="input-group-text" for="inputGroupSelect01">Tipo</label>
+                                                </div>
+                                                <select class="custom-select" name='marca' id="inputGroupSelect01">
+                                                  <option selected value="OC">Ocasional</option>
+                                                  <option value="DI">Diario</option>
+                                                  <option value="SE">Semanal</option>
+                                                </select>
+                                            </div>
                                             <br>
                                             <div class="form-group">
                                                 <div class="col-sm-12 text-left">
-                                                    <a class="btn btn-outline-danger btn-lg" href="MiCuenta.php" role="button">Volver</a>
-                                                    <input type="submit" name="apreto_editar" class="btn btn-outline-danger preview-add-button btn-lg" value="Editar" style="margin-left: 10px" onclick="return confirm('¿Estás seguro?');">                       
+                                                    <a class="btn btn-outline-danger btn-lg" href="PaginaPrincipal.php" role="button">Volver</a>
+                                                    <input type="submit" name="apreto_agregar" class="btn btn-outline-danger preview-add-button btn-lg" value="Agregar" style="margin-left: 10px">                       
                                                  </div>
                                             </div>
                                          </div>
@@ -154,3 +157,5 @@
         	<script src="js/bootstrap.min.js"></script>
     	</body>
     </html>
+
+
