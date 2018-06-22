@@ -31,6 +31,12 @@
                 }
                 mysql_close($link);
  	}
+        
+        function acreditarPasajero($IDorigen,$IDdestino,$IDviaje){
+            $link = conectarABase();
+            $usuario = mysqli_query($link,"SELECT * FROM usuarios WHERE ID='$IDorigen'");
+            $usuario = mysqli_query($link,"SELECT * FROM usuarios WHERE ID='$IDorigen'");
+        }
 	
 ?>
 

@@ -26,15 +26,20 @@
             $row = $resultado->fetch_array(MYSQLI_ASSOC);
             
             $vehiculos = mysqli_query($link, "SELECT * FROM vehiculos where IDuser='$IDusuario'");
+            $ciudades = mysqli_query($link,"SELECT * FROM ciudades");
             
-                    if (isset($_POST['apreto_agregar'])){
-                        $marca = $_POST['marca'];
-                        $modelo = $_POST['modelo'];
-                        $patente = $_POST['patente'];
-                        $asientos = $_POST['asientos'];
-                        $IDusuario = $row['ID'];                                         
+            if (isset($_POST['apreto_agregar'])){
+                        $fecha = $_POST['horario'];
+                        $IDOrigen = $_POST['IDorigen'];
+                        $IDDestino = $_POST['IDDestino'];
+                        $IDConductor = $_SESSION['id'];
+                        $tipo = $_POST['tipo'];
+                        $IDVehiculo = $_POST['IDvehiculo'];
+                        $precio = $_POST['precio'];
+                        $duracion = $_POST['duracion'];
+                                                                
                      
-                        $sql = "INSERT INTO vehiculos(marca,modelo,patente,asientos,IDuser) VALUES('$marca','$modelo','$patente',$asientos,$IDusuario)";
+                        $sql = "INSERT INTO viajes(fecha,IDVehiculo,tipo,IDConductor,Duracion,IDOrigen,IDDestino,Precio) VALUES('$fecha',$IDVehiculo,'$tipo',$IDConductor,$duracion,$IDOrigen,$IDDestino,$precio)";
                         
                         if (mysqli_query($link, $sql)){
                             header("Location: MiCuenta.php?vehiculo=true");
@@ -100,18 +105,50 @@
 				  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                       <div class="panel panel-default">
                                         <form id="modificar" method="POST">
-                                          <div class="panel-body form-horizontal payment-form">
+                                            <br>
+                                          <div class="panel-body form-horizontal payment-form"> 
+                                            <div class="form-group">
+                                                <div class="input-group mb-3" style="width: 72.8%;margin-left:14px ">
+                                                <div class="input-group-prepend">
+                                                  <label class="input-group-text" for="inputGroupSelect01">Origen</label>
+                                                </div>
+                                                <select class="custom-select" placeholder='vehiculo' name='IDorigen' id="inputGroupSelect01">
+                                                  <?php while($fila1 = $ciudades->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila1[1]?>"><?php echo $fila1[0] ?></option>
+                                                  <?php }?>
+                                                </select>
+                                                </div>
+                                            </div>
+                                              <br>
+                                            <div class="form-group">
+                                                <div class="input-group mb-3" style="width: 72.8%;margin-left:14px ">
+                                                <div class="input-group-prepend">
+                                                  <label class="input-group-text" for="inputGroupSelect01">Destino</label>
+                                                </div>
+                                                <select class="custom-select" placeholder='vehiculo' name='IDDestino' id="inputGroupSelect01">
+                                                  <?php mysqli_data_seek($ciudades,0);while($fila3 = $ciudades->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                  <?php }?>
+                                                </select>
+                                                </div>
+                                            </div>
                                             <div class="form-group">
                                                 <br>
                                                 <label for="concept" class="col-sm-3 control-label">Dia y horario</label>
                                                 <div class="col-sm-9">
-                                                    <input type="datetime-local" class="form-control" name="marca" required>
+                                                    <input type="datetime-local" class="form-control" name="horario" required>
                                                 </div>
                                             </div>                
                                             <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Precio por asiento</label>
+                                                <label for="amount" class="col-sm-3 control-label">Precio por asiento <font size="1">(En pesos sin simbolo)</font></label>
                                                 <div class="col-sm-9">
-                                                    <input required type="text" class="form-control" name="patente">
+                                                    <input required type="text" class="form-control" name="precio">
+                                                </div>
+                                            </div>
+                                           <div class="form-group">
+                                                <label for="amount" class="col-sm-3 control-label">Duracion</label>
+                                                <div class="col-sm-9">
+                                                    <input required type="time" class="form-control" name="duracion">
                                                 </div>
                                             </div>
                                               <br>
@@ -120,7 +157,7 @@
                                                 <div class="input-group-prepend">
                                                   <label class="input-group-text" for="inputGroupSelect01">Vehiculo</label>
                                                 </div>
-                                                <select class="custom-select" placeholder='vehiculo' name='marca' id="inputGroupSelect01">
+                                                <select class="custom-select" placeholder='vehiculo' name='IDvehiculo' id="inputGroupSelect01">
                                                   <?php while($fila = $vehiculos->fetch_array(MYSQL_NUM)){?>
                                                     <option value="<?php echo $fila[4]?>"><?php echo $fila[0] . ' ' . $fila[1] . ' ' . $fila[2]?></option>
                                                   <?php }?>
@@ -132,7 +169,7 @@
                                                 <div class="input-group-prepend">
                                                   <label class="input-group-text" for="inputGroupSelect01">Tipo</label>
                                                 </div>
-                                                <select class="custom-select" name='marca' id="inputGroupSelect01">
+                                                <select class="custom-select" name='tipo' id="inputGroupSelect01">
                                                   <option selected value="OC">Ocasional</option>
                                                   <option value="DI">Diario</option>
                                                   <option value="SE">Semanal</option>
