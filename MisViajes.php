@@ -94,12 +94,12 @@
                                                <tbody>
                                                  <?php while($row = $resultado->fetch_array(MYSQLI_NUM)) {
                                                  ?>
-                                                   <tr style='margin-top: 30px;<?php if(!fechaVencida($row[1])){ echo "background-color: #99ff99"; }else{echo "background-color: #ff9999";}?>'>
-                                                   <td><font face='georgia'><?php echo $row[5]; ?></font></td>
+                                                   <tr style='margin-top: 30px'>
                                                    <td><font face='georgia'><?php echo $row[6]; ?></font></td>
-                                                   <td><font face='georgia'><?php echo $row[1]; ?></font></td>
-                                                   <td><font face='georgia'><?php echo $row[4]; ?></font></td>
                                                    <td><font face='georgia'><?php echo $row[7]; ?></font></td>
+                                                   <td><font face='georgia'><?php $createDate = new DateTime("$row[1] . $row[2]"); echo $createDate ->format('Y-m-d h:i')?></font></td>
+                                                   <td><font face='georgia'><?php echo $row[5]; ?></font></td>
+                                                   <td><font face='georgia'><?php echo $row[8]; ?></font></td>
                                                    <td><a href='<?php echo "editarViaje.php?id=$id"; ?>'>Editar</a><span> | </span>
                                                        <a onclick="return confirm('¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$id"; ?>'>Eliminar</a></td>   
                                                  </tr>
@@ -110,6 +110,7 @@
                                              </table>
                                   </div>
                                   <div class="tab-pane fade" id="nav-vehiculo" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                      <p>jajaja</p>
                                   </div>   
                                 </div>
                        </div>

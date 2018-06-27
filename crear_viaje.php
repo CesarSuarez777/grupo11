@@ -29,22 +29,51 @@
             $ciudades = mysqli_query($link,"SELECT * FROM ciudades");
             
             if (isset($_POST['apreto_agregar'])){
-                        $fecha = $_POST['horario'];
+                        $fecha = $_POST['dia'];
+                        $hora = $_POST['horario'];
                         $IDOrigen = $_POST['IDorigen'];
                         $IDDestino = $_POST['IDDestino'];
                         $IDConductor = $_SESSION['id'];
-                        $tipo = $_POST['tipo'];
                         $IDVehiculo = $_POST['IDvehiculo'];
                         $precio = $_POST['precio'];
                         $duracion = $_POST['duracion'];
-                                                                
-                     
-                        $sql = "INSERT INTO viajes(fecha,IDVehiculo,tipo,IDConductor,Duracion,IDOrigen,IDDestino,Precio) VALUES('$fecha',$IDVehiculo,'$tipo',$IDConductor,$duracion,$IDOrigen,$IDDestino,$precio)";
+                        $fechaIncorrecta=false;
+                        $precioBajo=false;
+                        $yaPoseeViaje=false;
+                        $yaPoseeViajeDuranteFin=false;
                         
-                        if (mysqli_query($link, $sql)){
-                            header("Location: MiCuenta.php?vehiculo=true");
-                        } else { 
-                            header("Location: MiCuenta.php?vehiculo=false");
+                        $hoy = new DateTime('+2 days');
+                        $fechaCreada = new DateTime("$fecha . $hora");
+                        $fechaCreadaFinViaje = new DateTime($duracion);
+                        
+                        $viajes = mysqli_query($link, "SELECT * FROM viajes where IDconductor=$IDusuario");
+                        while ($cadaViaje = $viajes->fetch_array(MYSQLI_NUM)){
+                            $fechaDeViaje = new DateTime("$cadaViaje[1] . $cadaViaje[2]");
+                            $fechaFinViaje = new DateTime("$cadaViaje[5]");
+                            if(($fechaCreada > $fechaDeViaje)&&($fechaCreada<$fechaFinViaje)){
+                                $yaPoseeViaje=true;
+                            }
+                            if(($fechaCreadaFinViaje > $fechaDeViaje) && ($fechaCreadaFinViaje<$fechaFinViaje)){
+                                $yaPoseeViajeDuranteFin=true;
+                            }
+                        }
+                        
+                        if($hoy > $fechaCreada){   
+                            $fechaIncorrecta=true;
+                        }
+                        
+                        if($precio <= 0){
+                            $precioBajo=true;
+                        }
+                        
+                        if(!$fechaIncorrecta && !$precioBajo && !$yaPoseeViaje && !$yaPoseeViajeDuranteFin){
+                            $sql = "INSERT INTO `viajes` (`fecha`, `hora`, `IDvehiculo`, `IDconductor`, `llegada`, `IDOrigen`, `IDDestino`, `Precio`) VALUES ('$fecha', '$hora', $IDVehiculo, $IDConductor, '$duracion', $IDOrigen, $IDDestino, $precio);";
+                        
+                            if (mysqli_query($link, $sql)){
+                                 header("Location: MiCuenta.php?vehiculo=true");
+                            } else { 
+                              header("Location: MiCuenta.php?vehiculo=false");
+                            }
                         }
                     }
             ?>
@@ -96,6 +125,7 @@
 			<div class="col-2">
 			</div>
 			<div class="col-10">
+                                <font size="4"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($yaPoseeViaje) {echo "USTED TIENE UN VIAJE PENDIENTE A ESA FECHA";}else{if($yaPoseeViajeDuranteFin){echo "LA FECHA DE FIN DE VIAJE COINCIDE CON OTRO VIAJE PENDIENTE";}}} ?></font>
 				<nav>
 				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
 				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Crear viaje</font></a>  
@@ -133,22 +163,31 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <br>
-                                                <label for="concept" class="col-sm-3 control-label">Dia y horario</label>
+                                                <br>   
+                                                <label for="concept" class="col-sm-3 control-label">Dia</label>
+                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($fechaIncorrecta) {echo "La fecha del viaje debe superar las 48hs posteriores a su creacion";}} ?></font>
                                                 <div class="col-sm-9">
-                                                    <input type="datetime-local" class="form-control" name="horario" required>
+                                                    <input type="date" class="form-control" name="dia" required>
                                                 </div>
-                                            </div>                
+                                            </div>   
+                                           <div class="form-group">
+                                                <br>
+                                                <label for="concept" class="col-sm-3 control-label">Hora</label>
+                                                <div class="col-sm-9">
+                                                    <input type="time" class="form-control" name="horario" required>
+                                                </div>
+                                            </div> 
                                             <div class="form-group">
                                                 <label for="amount" class="col-sm-3 control-label">Precio por asiento <font size="1">(En pesos sin simbolo)</font></label>
+                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($precioBajo) {echo "Precio invalido";}} ?></font>
                                                 <div class="col-sm-9">
-                                                    <input required type="text" class="form-control" name="precio">
+                                                    <input required type="text" class="form-control" name="precio" value="<?php if (isset($_POST['apreto_agregar'])) {if (!$precioBajo) {echo $precio;}} ?>">
                                                 </div>
                                             </div>
                                            <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Duracion</label>
+                                                <label for="amount" class="col-sm-3 control-label">Fecha y horario de llegada</label>
                                                 <div class="col-sm-9">
-                                                    <input required type="time" class="form-control" name="duracion">
+                                                    <input required type="datetime-local" class="form-control" name="duracion">
                                                 </div>
                                             </div>
                                               <br>
@@ -164,8 +203,7 @@
                                                 </select>
                                                 </div>
                                             </div>   
-                                              <br>
-                                            <div class="input-group mb-3" style="width: 72.5%;margin-left:14px ">
+                                            <!--<div class="input-group mb-3" style="width: 72.5%;margin-left:14px ">
                                                 <div class="input-group-prepend">
                                                   <label class="input-group-text" for="inputGroupSelect01">Tipo</label>
                                                 </div>
@@ -174,7 +212,7 @@
                                                   <option value="DI">Diario</option>
                                                   <option value="SE">Semanal</option>
                                                 </select>
-                                            </div>
+                                            </div> -->
                                             <br>
                                             <div class="form-group">
                                                 <div class="col-sm-12 text-left">
