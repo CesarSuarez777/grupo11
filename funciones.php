@@ -37,6 +37,8 @@
             $usuario = mysqli_query($link,"SELECT * FROM usuarios WHERE ID='$IDorigen'");
             $usuario = mysqli_query($link,"SELECT * FROM usuarios WHERE ID='$IDorigen'");
         }
+       
+
 	
 ?>
 
