@@ -21,23 +21,47 @@
             }
             
             $email=$_SESSION['email'];
+            $id = $_SESSION['id'];
             $link=conectarABase();
             $resultado = mysqli_query($link, "SELECT * FROM usuarios where email='$email'");
+            $vehiculos = mysqli_query($link, "SELECT * FROM vehiculos where IDuser=$id");
+
             $row = $resultado->fetch_array(MYSQLI_ASSOC);        
                 
                     if (isset($_POST['apreto_agregar'])){
                         $marca = $_POST['marca'];
                         $modelo = $_POST['modelo'];
                         $patente = $_POST['patente'];
+                        $patente = strtoupper($patente);
                         $asientos = $_POST['asientos'];
-                        $IDusuario = $row['ID'];                                         
+                        $IDusuario = $row['ID'];
+                        $formatoInvalido = false;
+                        $patenteRegistrada = false;
+                        $errorAsientos =false;
+
+                        $regex = '/^[a-zA-Z]{3}\d{3}$/';
+                        if(!preg_match($regex,$patente)){
+                            $formatoInvalido=true;
+                        } else{
+                            while ($filaV = $vehiculos -> fetch_array(MYSQLI_NUM)){
+                                if($patente == $filaV[2]){
+                                    $patenteRegistrada=true;
+                                }
+                            }
+                        }
+
+                        if ($asientos <= 0){
+                            $errorAsientos =true;
+                        }
                      
-                        $sql = "INSERT INTO vehiculos(marca,modelo,patente,asientos,IDuser) VALUES('$marca','$modelo','$patente',$asientos,$IDusuario)";
-                        
-                        if (mysqli_query($link, $sql)){
-                            header("Location: MiCuenta.php?vehiculo=true");
-                        } else { 
-                            header("Location: MiCuenta.php?vehiculo=false");
+                        if (!$patenteRegistrada && !$errorAsientos && !$formatoInvalido){
+                            $sql = "INSERT INTO vehiculos(marca,modelo,patente,asientos,IDuser) VALUES('$marca','$modelo','$patente',$asientos,$IDusuario)";
+                            
+                            if (mysqli_query($link, $sql)){
+                                header("Location: MiCuenta.php?vehiculo=true");
+                            } else { 
+                                header("Location: MiCuenta.php?vehiculo=false");
+                            }
                         }
                     }
             ?>
@@ -114,12 +138,14 @@
                                             </div> 
                                             <div class="form-group">
                                                 <label for="amount" class="col-sm-3 control-label">Patente (sin espacios)</label>
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if($formatoInvalido){ echo "El formato de la patente es invalido";} else {if ($patenteRegistrada) {echo "Ya posee un vehiculo registrado con la patente ingresada";}}} ?> </font>
                                                 <div class="col-sm-9">
                                                     <input required type="text" class="form-control" name="patente">
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="text" class="col-sm-3 control-label">Asientos (sin incluir el del conductor)</label> 
+                                                <label for="text" class="col-sm-3 control-label">Asientos (sin incluir el del conductor)</label>
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($errorAsientos) {echo "Su vehiculo debe poseer al menos un asiento para acompañante";}} ?> </font> 
                                                 <div class="col-sm-9">
                                                     <input type="number" class="form-control" name="asientos" required>
                                                 </div>
@@ -134,7 +160,7 @@
                                          </div>
                                        </form>
                                     </div>
-				</div>
+				                </div>
                             </div>
                         </div>
                

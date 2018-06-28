@@ -69,7 +69,7 @@
                         </div>
                         <div class="col-2">
                             <br>
-                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
+                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     <?php echo $_SESSION['nombre']; ?></font></a><br>
                             <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
@@ -88,7 +88,7 @@
 				  </div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
-				  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+				<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                      <div class="container-fluid">
                                      <?php if (!empty($_GET['nuevaClave'])) {
                                          ?><br><h5 align="center" style="color: green">¡Contraseña modificada con éxito!</h5><?php
@@ -128,7 +128,10 @@
                                   <div class="tab-pane fade" id="nav-vehiculo" role="tabpanel" aria-labelledby="nav-contact-tab">
                                             <br>
                                              <?php if (!empty($_GET['veliminado'])) {
-                                                 ?><h5 align="center" style="color: red">¡Vehículo eliminado con éxito!</h5><?php
+                                                 ?><h5 align="center" style="color: green">¡Vehículo eliminado con éxito!</h5><?php
+                                             } 
+                                             if (!empty($_GET['vocupado'])) {
+                                                 ?><h5 align="center" style="color: red">Eliminación no completada. El vehiculo tiene un viaje pendiente</h5><?php
                                              } 
                                              if($vehiculos->num_rows > 0 ){ ?>
                                              <table class="table table-sm table-borderless">
@@ -151,7 +154,7 @@
                                                    <td><font face='georgia'><?php echo $fila[2]; ?></font></td>
                                                    <td><font face='georgia'><?php echo $fila[3]; ?></font></td>
                                                    <td><a href='<?php echo "editarVehiculo.php?id=$id"; ?>'>Editar</a><span> | </span>
-                                                       <a onclick="return confirm('¿Estás seguro?');" href='<?php echo "eliminarVehiculo.php?id=$id"; ?>'>Eliminar</a></td>   
+                                                   <a onclick="return confirm('¿Estás seguro?');" href='<?php echo "eliminarVehiculo.php?id=$id"; ?>'>Eliminar</a></td>   
                                                  </tr>
                                                  <?php
 
@@ -166,7 +169,7 @@
                                           <br>
                                           <a style="margin-left: 470px" class="btn btn-outline-danger btn-lg" href="agregarVehiculo.php" role="button">Agregar nuevo vehículo</a>
                                   </div>   
-				  <div class="tab-pane fade" id="nav-tarjeta" role="tabpanel" aria-labelledby="nav-profile-tab"> 
+				                          <div class="tab-pane fade" id="nav-tarjeta" role="tabpanel" aria-labelledby="nav-profile-tab"> 
                                       <br>
                                       <?php if($tarjeta ->num_rows > 0 ){ ?>
                                       <table class="table table-sm table-borderless">
@@ -175,17 +178,21 @@
                                             <th scope="col"><font size='5'>Numero</font></th>
                                             <th scope="col"><font size='5'>Marca</font></th>
                                             <th scope="col"><font size='5'>Fecha de vencimiento</font></th>
+                                            <th scope="col"><font size='5'>Titular</font></th>
+                                            <th scope="col"><font size='5'>Codigo seguridad</font></th>
                                             <th scope='col'></th>
                                           </tr>
                                         </thead>
                                         <tbody>
                                           <?php while($fila = $tarjeta->fetch_array(MYSQL_NUM)) {
-                                              $idt = $fila[3];
+                                              $idt = $fila[5];
                                           ?>
                                           <tr style='margin-top: 30px'>
                                             <td><font face='georgia'><?php echo $fila[0]; ?></font></td>
                                             <td><font face='georgia'><?php echo $fila[1]; ?></font></td>
                                             <td><font face='georgia'><?php echo $fila[2]; ?></font></td>
+                                            <td><font face='georgia'><?php echo $fila[3]; ?></font></td>
+                                            <td><font face='georgia'><?php echo $fila[4]; ?></font></td>
                                             <td><a href='<?php echo "editarTarjeta.php?id=$idt"; ?>'>Editar</a><span> | </span>
                                                 <a onclick="return confirm('¿Estás seguro?');" href='<?php echo "eliminarTarjeta.php?id=$idt"; ?>'>Eliminar</a></td>   
                                           </tr>

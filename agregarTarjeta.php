@@ -29,14 +29,46 @@
                         $marca = $_POST['marca'];
                         $numero = $_POST['numero'];
                         $fecha_vencimiento = $_POST['fecha_vencimiento'];
+                        $fecha = new DateTime("$fecha_vencimiento-01");
+                        $titular = $_POST['titular'];
+                        $codigoSeguridad = $_POST['codigo'];
+                        $result = $fecha -> format('Y-m-d');
                         $IDusuario = $row['ID'];
-                     
-                        $sql = "INSERT INTO tarjetas(numero,marca,fecha_vencimiento,IDtarjeta) VALUES($numero,'$marca','$fecha_vencimiento',$IDusuario)";
-                        
-                        if (mysqli_query($link, $sql)){
-                            header("Location: MiCuenta.php?tarjeta=true");
-                        } else { 
-                            header("Location: MiCuenta.php?tarjeta=false");
+                        $formatoInvalido = false;
+                        $formatoCodigo =false;
+                        $tarjetaVencida = false;
+
+                        $hoy= new DateTime('today');
+
+                        if($hoy > $fecha){
+                            $tarjetaVencida=true;
+                        }
+
+                        $regex2= '/^\d{3}$/';
+                        if(!preg_match($regex2,$codigoSeguridad)){
+                            $formatoCodigo=true;
+                        }
+
+                        if($marca=="American Express"){
+                            $regex = '/^\d{15}$/';
+                            if(!preg_match($regex,$numero)){
+                                $formatoInvalido=true;
+                            }
+                        }else{
+                          $regex = '/^\d{16}$/';
+                            if(!preg_match($regex,$numero)){
+                                $formatoInvalido=true;
+                            }  
+                        }
+
+                        if(!$formatoInvalido && !$tarjetaVencida && !$formatoCodigo){
+                            $sql = "INSERT INTO tarjetas(numero,marca,fecha_vencimiento,titular,codigo,IDtarjeta) VALUES($numero,'$marca','$result','$titular',$codigoSeguridad,$IDusuario)";
+                            
+                            if (mysqli_query($link, $sql)){
+                                header("Location: MiCuenta.php?tarjeta=true");
+                            } else { 
+                                header("Location: MiCuenta.php?tarjeta=false");
+                            }
                         }
                     }
             ?>
@@ -77,7 +109,7 @@
                         </div>
                         <div class="col-2">
                             <br>
-                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
+                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     <?php echo $_SESSION['nombre']; ?></font></a><br>
                             <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
@@ -104,23 +136,38 @@
                                                 <div class="input-group-prepend">
                                                   <label class="input-group-text" for="inputGroupSelect01">Marca</label>
                                                 </div>
-                                                <select class="custom-select" name='marca' id="inputGroupSelect01">
-                                                  <option selected value="Visa">Visa</option>
+                                                <select class="custom-select" name='marca' id="inputGroupSelect01" value="<?php if(isset($_POST['apreto_agregarT'])){echo $marca;}?>">
+                                                  <option value="Visa">Visa</option>
                                                   <option value="Mastercard">Mastercard</option>
                                                   <option value="American Express">American Express</option>
                                                 </select>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="description" class="col-sm-3 control-label">Titular</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" class="form-control" name="titular" value="<?php if(isset($_POST['apreto_agregarT'])){echo $titular;}?>" required>
+                                                </div>
+                                            </div>
                                               
                                             <div class="form-group">
                                                 <label for="description" class="col-sm-3 control-label">Numero</label>
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregarT'])){if ($formatoInvalido) {echo "La cantidad de numeros ingresada no corresponde a una tarjeta $marca";}} ?> </font> 
                                                 <div class="col-sm-9">
-                                                    <input type="number" class="form-control" name="numero" required>
+                                                    <input type="number" class="form-control" name="numero" value="<?php if(isset($_POST['apreto_agregarT'])){if(!$formatoInvalido){echo $numero;}}?>" required>
                                                 </div>
-                                            </div> 
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="description" class="col-sm-3 control-label">Codigo de seguridad</label>
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregarT'])){if ($formatoCodigo) {echo "El formato del codigo es incorrecto";}} ?> </font> 
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control" name="codigo" value="<?php if(isset($_POST['apreto_agregarT'])){if(!$formatoCodigo){echo $codigoSeguridad;}}?>" required>
+                                                </div>
+                                            </div>  
                                             <div class="form-group">
                                                 <label for="amount" class="col-sm-3 control-label">Fecha de vencimiento (MM/AA)</label>
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregarT'])){if ($tarjetaVencida) {echo "La tarjeta se encuentra vencida";}} ?> </font> 
                                                 <div class="col-sm-9">
-                                                    <input required type="text" class="form-control" name="fecha_vencimiento">
+                                                    <input required type="month" class="form-control" name="fecha_vencimiento" value="<?php if(isset($_POST['apreto_agregarT'])){if(!$tarjetaVencida){echo $fecha_vencimiento;}}?>">
                                                 </div>
                                             </div> 
                                             <br>

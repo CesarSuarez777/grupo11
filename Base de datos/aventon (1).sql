@@ -1,4 +1,4 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.7.9
 -- https://www.phpmyadmin.net/
 --
@@ -170,7 +170,7 @@ DROP TABLE IF EXISTS `viajes`;
 CREATE TABLE IF NOT EXISTS `viajes` (
   `IDviaje` int(11) NOT NULL AUTO_INCREMENT,
   `fecha` date NOT NULL,
-  `hora` time(6) NOT NULL,
+  `hora` time NOT NULL,
   `IDvehiculo` int(50) NOT NULL,
   `IDconductor` int(50) NOT NULL,
   `llegada` datetime NOT NULL,

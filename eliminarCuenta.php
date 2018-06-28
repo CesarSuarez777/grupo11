@@ -10,7 +10,7 @@
     $exito2 = mysqli_query($link, $sql);
     if ($exito && $exito2) {
 
-        header("Location: index.php?eliminado=$exito");
+        header("Location: index.php?eliminado#nav-vehiculo=$exito");
         unset ($SESSION['email']);
         unset ($SESSION['id']);
         session_destroy();

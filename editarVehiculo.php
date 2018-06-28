@@ -11,8 +11,7 @@
   <body>
             <?php
             require ('funciones.php');
-
-  	    session_start();
+        session_start();
             
             if (!inicioSesion()){
                 header('Location: index.php');
@@ -24,37 +23,63 @@
             
             $idvehiculo= $_GET['id'];
             $vehiculo = mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
+            $vehiculos =mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
             $veh = $vehiculo->fetch_array(MYSQLI_NUM);
-            
+            $viajes = mysqli_query($link, "SELECT * FROM viajes where IDvehiculo='$idvehiculo'");
                     if (isset($_POST['apreto_editar'])){
                         $nuevaMarca = $_POST['marca'];
                         $nuevoModelo = $_POST['modelo'];
                         $nuevaPatente = $_POST['patente'];
                         $nuevoAsientos = $_POST['asientos'];
-                        
-                        if($nuevaMarca != $veh[0]){
-                            mysqli_query($link, "UPDATE vehiculos SET marca='$nuevaMarca' where IDvehiculo='$idvehiculo'");
-                        }
-                        
-                        if($nuevaModelo != $veh[1]){
-                            mysqli_query($link, "UPDATE vehiculos SET modelo='$nuevoModelo' where IDvehiculo='$idvehiculo'");
-                        }
-                        
+                        $formatoInvalido = false;
+                        $patenteRegistrada = false;
+                        $errorAsientos =false;
+
                         if($nuevaPatente != $veh[2]){
-                            mysqli_query($link, "UPDATE vehiculos SET patente='$nuevaPatente' where IDvehiculo='$idvehiculo'");
+                            $regex = '/^[a-zA-Z]{3}\d{3}$/';
+                            if(!preg_match($regex,$nuevaPatente)){
+                                $formatoInvalido=true;
+                            } else{
+                                while ($filaV = $vehiculos -> fetch_array(MYSQLI_NUM)){
+                                    if($nuevaPatente == $filaV[2]){
+                                        $patenteRegistrada=true;
+                                    }
+                                }
+                            }
                         }
-                        
+
                         if($nuevoAsientos != $veh[3]){
-                            mysqli_query($link, "UPDATE vehiculos SET asientos='$nuevoAsientos' where IDvehiculo='$idvehiculo'");
+                            if ($nuevoAsientos <= 0){
+                                $errorAsientos =true;
+                           }
                         }
-                        
-                        header('Location: MiCuenta.php?vEditado=true');
+
+                        if (!$formatoInvalido && !$patenteRegistrada && !$errorAsientos){
+                            if($nuevaMarca != $veh[0]){
+                                mysqli_query($link, "UPDATE vehiculos SET marca='$nuevaMarca' where IDvehiculo='$idvehiculo'");
+                            }
+                            
+                            if($nuevaModelo != $veh[1]){
+                                mysqli_query($link, "UPDATE vehiculos SET modelo='$nuevoModelo' where IDvehiculo='$idvehiculo'");
+                            }
+                            
+                            if($nuevaPatente != $veh[2]){
+                                mysqli_query($link, "UPDATE vehiculos SET patente='$nuevaPatente' where IDvehiculo='$idvehiculo'");
+                            }
+                            
+                            if($nuevoAsientos != $veh[3]){
+                                mysqli_query($link, "UPDATE vehiculos SET asientos='$nuevoAsientos' where IDvehiculo='$idvehiculo'");
+                            }
+                            
+                            header('Location: MiCuenta.php?vEditado=true');
+                        }
+                
                     }
             ?>
       
         <header>
             <nav>
-		 <ul>
+         <ul>
                     <div class="row" position="fixed">
                         <div class="col-2">
                             <p>
@@ -96,17 +121,18 @@
                  </ul>
             </nav>        
         </header>
-		<div class="row">
-			<div class="col-2">
-			</div>
-			<div class="col-10">
-				<nav>
-				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Editar vehículo</font></a>  
-				  </div>
-				</nav>
-				<div class="tab-content" id="nav-tabContent">
-				  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+        <div class="row">
+            <div class="col-2">
+            </div>
+            <div class="col-10">
+                <?php if(($viajes -> num_rows)==0){ ?>
+                <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Editar vehículo</font></a>  
+                  </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                       <div class="panel panel-default">
                                         <form id="modificar" method="POST">
                                           <div class="panel-body form-horizontal payment-form">
@@ -114,25 +140,27 @@
                                                 <br>
                                                 <label for="concept" class="col-sm-3 control-label">Marca</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $veh[0];?>" name="marca" required>
+                                                    <input type="text" class="form-control" value="<?php if(isset($_POST['apreto_editar'])){echo $nuevaMarca;}else{ echo $veh[0];}?>" name="marca" required>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="description" class="col-sm-3 control-label">Modelo</label>
                                                 <div class="col-sm-9">
-                                                    <input type="text" class="form-control" value="<?php echo $veh[1];?>" name="modelo" required>
+                                                    <input type="text" class="form-control" value="<?php if(isset($_POST['apreto_editar'])){echo $nuevoModelo;}else{ echo $veh[1];}?>" name="modelo" required>
                                                 </div>
                                             </div> 
                                             <div class="form-group">
                                                 <label for="amount" class="col-sm-3 control-label">Patente (sin espacios)</label>
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if($formatoInvalido){ echo "El formato de la patente es invalido";} else {if ($patenteRegistrada) {echo "Ya posee un vehiculo registrado con la patente ingresada";}}} ?> </font>
                                                 <div class="col-sm-9">
-                                                    <input required type="text" value="<?php echo $veh[2];?>" class="form-control" name="patente">
+                                                    <input required type="text" value="<?php if(isset($_POST['apreto_editar'])){if((!$patenteRegistrada) && (!$formatoInvalido)){echo $nuevaPatente;}else{ echo $veh[2];}}else{ echo $veh[2];}?>" class="form-control" name="patente">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="text" class="col-sm-3 control-label">Asientos (sin incluir el del conductor)</label> 
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if ($errorAsientos) {echo "Su vehiculo debe poseer al menos un asiento para acompañante";}} ?> </font> 
                                                 <div class="col-sm-9">
-                                                    <input type="number" class="form-control" value="<?php echo $veh[3];?>" name="asientos" required>
+                                                    <input type="number" class="form-control" value="<?php if(isset($_POST['apreto_editar'])){if(!$errorAsientos){echo $nuevoAsientos;}else{ echo $veh[3];}}else{ echo $veh[3];}?>" name="asientos" required>
                                                 </div>
                                             </div>   
                                             <br>
@@ -145,12 +173,16 @@
                                          </div>
                                        </form>
                                     </div>
-				</div>
+                                </div>
                             </div>
+                            <?php  }else{ ?>
+                                <h3 align="center" style="color: red">El vehiculo que desea editar tiene viajes asociados.</h3>
+                            <?php } ?>
                         </div>
+                    </div>
                
                 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        	<input type="submit" value="" />  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        	<script src="js/bootstrap.min.js"></script>
-    	</body>
+            <input type="submit" value="" />  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+            <script src="js/bootstrap.min.js"></script>
+        </body>
     </html>

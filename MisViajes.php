@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-2">
                             <br>
-                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
+                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     <?php echo $_SESSION['nombre']; ?></font></a><br>
                             <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
@@ -86,7 +86,7 @@
                                                    <th scope="color"><font size='5'>Origen</font></th>
                                                    <th scope="col"><font size='5'>Destino</font></th>
                                                    <th scope="col"><font size='5'>Fecha</font></th>
-                                                   <th scope="col"><font size='5'>Duración</font></th>
+                                                   <th scope="col"><font size='5'>Fecha llegada</font></th>
                                                    <th scope="col"><font size='5'>Precio</font></th>
                                                    <th scope='col'></th>
                                                  </tr>
@@ -97,8 +97,8 @@
                                                    <tr style='margin-top: 30px'>
                                                    <td><font face='georgia'><?php echo $row[6]; ?></font></td>
                                                    <td><font face='georgia'><?php echo $row[7]; ?></font></td>
-                                                   <td><font face='georgia'><?php $createDate = new DateTime("$row[1] . $row[2]"); echo $createDate ->format('Y-m-d h:i')?></font></td>
-                                                   <td><font face='georgia'><?php echo $row[5]; ?></font></td>
+                                                   <td><font face='georgia'><?php $createDate = new DateTime("$row[1] . $row[2]"); echo $createDate ->format('Y-m-d h:i');?></font></td>
+                                                   <td><font face='georgia'><?php $createDate2 = new DateTime($row[5]);echo $createDate2->format('Y-m-d h:i'); ?></font></td>
                                                    <td><font face='georgia'><?php echo $row[8]; ?></font></td>
                                                    <td><a href='<?php echo "editarViaje.php?id=$id"; ?>'>Editar</a><span> | </span>
                                                        <a onclick="return confirm('¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$id"; ?>'>Eliminar</a></td>   

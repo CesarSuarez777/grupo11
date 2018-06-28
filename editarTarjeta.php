@@ -31,20 +31,44 @@
                         $nuevaMarca = $_POST['marca'];
                         $nuevoNumero = $_POST['numero'];
                         $nuevaFecha = $_POST['fecha_vencimiento'];
-                        
-                        if($nuevaMarca != $tar[0]){
-                            mysqli_query($link, "UPDATE tarjeta SET marca='$nuevaMarca' where IDtarjeta='$idtarjeta'");
-                        }
-                        
-                        if($nuevoNumero != $tar[1]){
-                            mysqli_query($link, "UPDATE tarjetas SET numero=$nuevoNumero where IDtarjeta='$idtarjeta'");
-                        }
-                        
-                        if($nuevaFecha != $tar[2]){
-                            mysqli_query($link, "UPDATE tarjetas SET fecha_vencimiento='$nuevaFecha' where IDtarjeta='$idtarjeta'");
+                        $fech = new DateTime("$nuevaFecha-01");
+                        $result = $fech -> format('Y-m-d');
+                        $formatoInvalido = false;
+                        $tarjetaVencida = false;
+
+                        $hoy= new DateTime('today');
+
+                        if($hoy > $fech){
+                            $tarjetaVencida=true;
                         }
 
-                        header('Location: MiCuenta.php?tEditada=true');
+                        if($nuevaMarca=="American Express"){
+                            $regex = '/^\d{15}$/';
+                            if(!preg_match($regex,$nuevoNumero)){
+                                $formatoInvalido=true;
+                            }
+                        }else{
+                          $regex = '/^\d{16}$/';
+                            if(!preg_match($regex,$nuevoNumero)){
+                                $formatoInvalido=true;
+                            }  
+                        }
+                        
+                        if(!$formatoInvalido && !$tarjetaVencida){
+                            if($nuevaMarca != $tar[0]){
+                                mysqli_query($link, "UPDATE tarjeta SET marca='$nuevaMarca' where IDtarjeta='$idtarjeta'");
+                            }
+                            
+                            if($nuevoNumero != $tar[1]){
+                                mysqli_query($link, "UPDATE tarjetas SET numero=$nuevoNumero where IDtarjeta='$idtarjeta'");
+                            }
+                            
+                            if($nuevaFecha != $tar[2]){
+                                mysqli_query($link, "UPDATE tarjetas SET fecha_vencimiento='$result' where IDtarjeta='$idtarjeta'");
+                            }
+
+                            header('Location: MiCuenta.php?tEditada=true');
+                        }
                     }
             ?>
       
@@ -119,14 +143,16 @@
                                             </div>
                                          <div class="form-group">
                                                 <label for="description" class="col-sm-3 control-label">Numero</label>
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editarT'])){if ($formatoInvalido) {echo "El nuevo numero es invalido para una tarjeta $nuevaMarca";}} ?> </font> 
                                                 <div class="col-sm-9">
-                                                    <input type="number" value="<?php echo $tar[0];?>" class="form-control" name="numero" required>
+                                                    <input type="number" value="<?php if(isset($_POST['apreto_editarT'])){ if(!$formatoInvalido){echo $nuevoNumero;}else{echo $tar[0];}} else{ echo $tar[0];} ?>" class="form-control" name="numero" required>
                                                 </div>
                                             </div> 
                                             <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Fecha de vencimiento (MM/AA)</label>
+                                                <label for="amount" class="col-sm-3 control-label">Fecha de vencimiento</label>
+                                                <font size="2" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editarT'])){if ($tarjetaVencida) {echo "La tarjeta se encuentra vencida con la nueva fecha ingresada";}} ?> </font> 
                                                 <div class="col-sm-9">
-                                                    <input required type="text" value="<?php echo $tar[2];?>" class="form-control" name="fecha_vencimiento">
+                                                    <input required type="month" value="<?php $f= new DateTime("$tar[2]"); $f = $f -> format('Y-m'); if(isset($_POST['apreto_editarT'])){ if(!$tarjetaVencida){echo $nuevaFecha;}else{echo $f;}} else{ echo $f;}?>" class="form-control" name="fecha_vencimiento">
                                                 </div>
                                             </div> 
                                             <br>
