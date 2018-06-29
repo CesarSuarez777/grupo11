@@ -24,11 +24,9 @@
             
             $id=$_SESSION['id'];
   
-            $resultado = mysqli_query($link, "SELECT * FROM viajes where IDconductor=$id ORDER BY fecha desc");
+            $idviaje=$_GET['id'];
+            $solicitudes = mysqli_query($link, "SELECT * FROM postulados_usuarios_viajes,usuarios where IDviaje=$idviaje and ID=IDusuario ORDER BY estado desc");
 
-            $solicitudes = mysqli_query($link, "SELECT * FROM postulados_usuarios_viajes,viajes where IDusuario=$id AND postulados_usuarios_viajes.IDviaje=viajes.IDviaje");
-            
-            $hoy = new DateTime('today');
   	?>
         <header>
             <nav>
@@ -78,38 +76,37 @@
 			<div class="col-10">
                             <br>
                             <h5 style="margin-left:300px"><img src="Imagenes/Amarillo.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud pendiente   </font><img src="Imagenes/Verde.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud aceptada   </font><img src="Imagenes/Rojo.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud rechazada   </font></h5>                                    
-                                      
+                            <br>    
+                            <div  class="container">
 				<table class="table table-sm table-borderless">
                                                  <thead class='thead-light'>
                                                  <tr style='border-bottom: 2px solid #f17376'>
-                                                   <th scope="color"><font size='5'>Origen</font></th>
-                                                   <th scope="col"><font size='5'>Destino</font></th>
-                                                   <th scope="col"><font size='5'>Fecha</font></th>
-                                                   <th scope="col"><font size='5'>Fecha llegada</font></th>
-                                                   <th scope="col"><font size='5'>Precio</font></th>
-                                                   <th scope='col'></th>
+                                                   <th scope="color"><font size='5'>Nombre</font></th>
+                                                   <th scope="col"><font size='5'>Edad</font></th>
+                                                   <th scope="col"><font size='5'>Calificación</font></th>
+                                                   <th scope="col"></th>
                                                  </tr>
                                                </thead>
                                                <tbody>
-                                                 <?php while($fila = $solicitudes->fetch_array(MYSQLI_NUM)) {
-                                                     $origen = mysqli_query($link, "SELECT * FROM ciudades where IDCiudad=$fila[10]");
-                                                     $destino = mysqli_query($link, "SELECT * FROM ciudades where IDCiudad=$fila[11]");
-                                                     $origen = $origen->fetch_array(MYSQLI_NUM);
-                                                     $destino = $destino->fetch_array(MYSQLI_NUM);
+                                                 <?php while($fila = $solicitudes->fetch_array(MYSQLI_NUM)) {     
                                                  ?>
-                                                 <tr style='margin-top: 30px;background-color: <?php $createDate3 = new DateTime("$fila[5] . $fila[6]");if(($fila[2]==1)&&($hoy>$createDate3)){echo "b3f9ff";}else{if ($fila[2]==0){echo "ecf7bd";}else{if ($fila[2]==-1){echo "ffb3b8";}else{echo "8fe59d";}}}?>'>
-                                                   <td><font face='georgia'><?php echo $origen[0]; ?></font></td>
-                                                   <td><font face='georgia'><?php echo $destino[0]; ?></font></td>
-                                                   <td><font face='georgia'><?php echo $createDate3 ->format('d-m-Y H:i');?></font></td>
-                                                   <td><font face='georgia'><?php $createDate4 = new DateTime($fila[9]);echo $createDate4->format('d-m-Y H:i'); ?></font></td>
-                                                   <td><font face='georgia'><?php echo '$' . $fila[12]; ?></font></td>
-                                                   <td><?php if((($fila[2]==1)&&($hoy>$createDate3))or $fila[2]==-1){}else{?><a onclick="return confirm('¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$id"; ?>'>Eliminar solicitud</a> <?php }?></td>   
+                                                 <tr style='margin-top: 30px;background-color: <?php if($fila[2]==1){echo "8fe59d";}else{if ($fila[2]==0){echo "ecf7bd";}else{echo "ffb3b8";}}?>'>
+                                                   <td><font face='georgia'><?php echo $fila[4] . ' ' .  $fila[5]; ?></font></td>
+                                                   <td><font face='georgia'><?php echo calcularEdad($fila[8]) . 'años'; ?></font></td>
+                                                   <td><font face='georgia'><?php ?></font></td>
+                                                   <td style="text-align:right"><?php if(($fila[2]==0)){?>
+                                                       <a class='btn  btn-success' style="font-size:14">Aceptar solicitud</a><span>  </span><a class='btn btn-danger' style="font-size:14">Rechazar solicitud</a>
+                                                   <?php  
+                                                   }else {if($fila[2]==1){?>
+                                                       <a class='btn btn-danger' style="font-size:14;width: 270px; height:35px">Cancelar solicitud</a>
+                                                   <?php }} ?>
                                                  </tr>
                                                  <?php
 
                                                  }?>
                                                </tbody>
                                 </table>
+                            </div>
                 </div>
   </body>
                 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
