@@ -22,28 +22,22 @@
             $link=conectarABase();
             
             $idvehiculo= $_GET['id'];
+            
+            $hoy = new DateTime('today');
+            $viajesPendientes = mysqli_query($link,"SELECT fecha,hora FROM viajes where IDvehiculo=$idvehiculo");
+            while($fila= $viajesPendientes->fetch_array(MYSQLI_NUM)){
+                  $fechaViaje = new DateTime($fila[0] . $fila[1]);
+                  if($hoy<$fechaViaje){
+                      header('Location: MiCuenta.php?vusado=true');
+                      exit();
+                  }
+            }
+            
             $vehiculo = mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
             $vehiculos =mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
             $veh = $vehiculo->fetch_array(MYSQLI_NUM);
             
-            $hoy = new DateTime('today');
-            $viajesPendientes = mysqli_query($link,"SELECT fecha,hora FROM viajes where IDVehiculo=$idvehiculo");
-            while($fila= $viajesPendientes->fetch_array(MYSQLI_NUM)){
-                  $fechaViaje = new DateTime($fila[0] . $fila[1]);
-                  if($hoy<$fechaViaje){
-                      header('Location: MiCuenta.php?viajespe=true');
-                      exit();
-                  }
-            }
-
-            $viajesPendientesA = mysqli_query($link,"SELECT fecha,hora FROM postulados_usuarios_viajes,viajes where postulados_usuarios_viajes.IDviaje=viajes.IDviaje AND IDusuario=$iduser AND estado<>-1");
-            while($fila= $viajesPendientesA->fetch_array(MYSQLI_NUM)){
-              $fechaViaje = new DateTime($fila[0] . $fila[1]);
-              if($hoy<$fechaViaje){
-                  header('Location: MiCuenta.php?viajespe=true');
-                  exit();
-                }
-            }
+            
             
             $viajes = mysqli_query($link, "SELECT * FROM viajes where IDvehiculo='$idvehiculo'");
                     if (isset($_POST['apreto_editar'])){

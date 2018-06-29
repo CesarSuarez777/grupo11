@@ -110,7 +110,11 @@
                                          ?><br><h5 align="center" style="color: green">¡Contraseña modificada con éxito!</h5><?php
                                       } if (!empty($_GET['viajesp'])) {
                                           ?><br><h5 align="center" style="color: red">No puede editar una tarjeta con viajes pendientes.</h5><?php
-                                      } if (!empty($_GET['tarjeta'])) {
+                                      }if (!empty($_GET['vusado'])) {
+                                          ?><br><h5 align="center" style="color: red">No puede editar un vehiculo con viajes pendientes.</h5><?php
+                                      }if (!empty($_GET['vusadoe'])) {
+                                          ?><br><h5 align="center" style="color: red">No puede borrar un vehiculo con viajes pendientes.</h5><?php
+                                      }if (!empty($_GET['tarjeta'])) {
                                          ?><br><h5 align="center" style="color: green">¡Tarjeta agregada con éxito!</h5><?php
                                       } if (!empty($_GET['teliminada'])){
                                          ?><br><h5 align="center" style="color: green">¡Tarjeta eliminada con éxito!</h5><?php
