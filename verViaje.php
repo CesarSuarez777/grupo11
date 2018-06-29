@@ -108,6 +108,12 @@
                              if (!empty($_GET['exito'])){?>
                              <h4 style="color: green;text-align: center" >¡USTED SE HA POSTULADO CON EXITO! </h4><br>
                           <?php }
+                             if (!empty($_GET['yaPoseeViaje'])){?>
+                             <h4 style="color: red;text-align: center" >USTED TIENE UN VIAJE PROGRAMADO PARA ESA FECHA. </h4><br>
+                          <?php }
+                             if (!empty($_GET['yaPoseeViajeA'])){?>
+                             <h4 style="color: red;text-align: center" >USTED SE ENCUENTRA POSTULADO A UN VIAJE CON LA MISMA FECHA. </h4><br>
+                          <?php }
                              if (!empty($_GET['califpendientes'])){?>
                              <h4 style="color: red;text-align: center" >USTED POSEE CALIFICACIONES PENDIENTES DE MAS DE 30 DIAS. </h4><br>
                           <?php }?>

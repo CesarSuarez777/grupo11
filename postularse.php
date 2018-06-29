@@ -21,18 +21,67 @@
         }
     }
     
-    $viaje = mysqli_query($link, "SELECT IDconductor,asientos_disponibles FROM viajes where IDviaje=$idviaje");
+    $viaje = mysqli_query($link, "SELECT fecha,hora,IDconductor,llegada,asientos_disponibles FROM viajes where IDviaje=$idviaje");
     $viaje = $viaje->fetch_array(MYSQLI_NUM);
     
-    if($viaje[0]==$IDusuario){
+    if($viaje[2]==$IDusuario){
         header("Location: verViaje.php?id=$idviaje&viajepropio=true");
         exit();
     }
     
-    if($viaje[1]==0){
+    if($viaje[4]==0){
         header("Location: verViaje.php?id=$idviaje&asientosNO=true");
         exit();
     }
+    
+    $horaViajeIinicio = new DateTime($viaje[0] . $viaje[1]);
+    $horaViajeFin = new DateTime($viaje[3]);
+    
+    $viajes = mysqli_query($link, "SELECT fecha,hora,llegada FROM viajes where IDconductor=$IDusuario ");
+    
+    while ($cadaViaje = $viajes->fetch_array(MYSQLI_NUM)){                                                       
+        $fechaDeViaje = new DateTime($cadaViaje[0] . $cadaViaje[1]);
+        $fechaFinViaje = new DateTime($cadaViaje[2]);
+
+        if(($horaViajeInicio > $fechaDeViaje)&&($horaViajeIinicio < $fechaFinViaje)){
+            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
+            exit();
+        }
+
+        if(($horaViajeFin >= $fechaDeViaje) && ($horaViajeFin <= $fechaFinViaje)){
+            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
+            exit();
+        }
+        if (($horaViajeIinicio <= $fechaDeViaje) && ($horaViajeFin >= $fechaFinViaje)) {
+            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
+            exit();
+        }
+    }
+    
+    $viajesAcom = mysqli_query($link, "SELECT fecha,hora,llegada,estado FROM viajes,postulados_usuarios_viajes where viajes.IDviaje=postulados_usuarios_viajes.IDviaje AND IDusuario=$IDusuario");
+    
+    while ($cadaViajeA = $viajesAcom->fetch_array(MYSQLI_NUM)){
+        if($cadaViajeA[3]>-1){
+            $fechaDeViajeA = new DateTime($cadaViajeA[0] . $cadaViajeA[1]);
+            $fechaFinViajeA = new DateTime($cadaViajeA[2]);
+
+            if(($horaViajeInicio > $fechaDeViajeA)&&($horaViajeIinicio < $fechaFinViajeA)){
+                header("Location: verViaje.php?id=$idviaje&yaPoseeViajeA=true");
+                exit();
+            }
+
+            if(($horaViajeFin >= $fechaDeViajeA) && ($horaViajeFin <= $fechaFinViajeA)){
+                header("Location: verViaje.php?id=$idviaje&yaPoseeViajeA=true");
+                exit();
+            }
+            if (($horaViajeIinicio <= $fechaDeViajeA) && ($horaViajeFin >= $fechaFinViajeA)) {
+                header("Location: verViaje.php?id=$idviaje&yaPoseeViajeA=true");
+                exit();
+            }
+        }
+    }
+    
+    
     
     if($calificacionPendientes){
         header("Location: verViaje.php?id=$idviaje?califpendientes=true");
