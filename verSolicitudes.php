@@ -25,8 +25,11 @@
             $id=$_SESSION['id'];
   
             $idviaje=$_GET['id'];
+            
             $solicitudes = mysqli_query($link, "SELECT * FROM postulados_usuarios_viajes,usuarios where IDviaje=$idviaje and ID=IDusuario ORDER BY estado desc");
-
+            
+            
+            
   	?>
         <header>
             <nav>
@@ -78,6 +81,11 @@
                             <h5 style="margin-left:300px"><img src="Imagenes/Amarillo.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud pendiente   </font><img src="Imagenes/Verde.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud aceptada   </font><img src="Imagenes/Rojo.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud rechazada   </font></h5>                                    
                             <br>    
                             <div  class="container">
+                                <?php 
+                                    if(!empty($_GET['noAsientos'])){?>
+                                <h4 style="color: red;text-align: center" >NO SE PUEDE ACEPTAR MAS SOLICITUDES. VIAJE LLENO. </h4><br>
+                                <?php
+                                    }?> 
 				<table class="table table-sm table-borderless">
                                                  <thead class='thead-light'>
                                                  <tr style='border-bottom: 2px solid #f17376'>
@@ -88,17 +96,26 @@
                                                  </tr>
                                                </thead>
                                                <tbody>
-                                                 <?php while($fila = $solicitudes->fetch_array(MYSQLI_NUM)) {     
+                                                 <?php while($fila = $solicitudes->fetch_array(MYSQLI_NUM)) {
+                                                    $nombreUser = mysqli_query($link,"SELECT ID,penalizacion_acom FROM usuarios where ID=$fila[0]");
+                                                    $nombreUser = $nombreUser ->fetch_array(MYSQLI_NUM);
+                                                    
+                                                    $puntos=0;
+                                                    $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$nombreUser[0] AND !aConductor");
+                                                    while($cal = $calificaciones->fetch_array(MYSQLI_NUM)){
+                                                        $puntos=$puntos+$cal[0];
+                                                    }
+                                                    $puntos = $puntos - $nombreUser[1];
                                                  ?>
                                                  <tr style='margin-top: 30px;background-color: <?php if($fila[2]==1){echo "8fe59d";}else{if ($fila[2]==0){echo "ecf7bd";}else{echo "ffb3b8";}}?>'>
                                                    <td><font face='georgia'><?php echo $fila[4] . ' ' .  $fila[5]; ?></font></td>
                                                    <td><font face='georgia'><?php echo calcularEdad($fila[8]) . 'años'; ?></font></td>
-                                                   <td><font face='georgia'><?php ?></font></td>
+                                                   <td ><font face='georgia' style="color: <?php if ($puntos>=0){echo "green";}else{echo "red";}?>"><?php echo $puntos?> puntos</font></td>
                                                    <td style="text-align:right"><?php if(($fila[2]==0)){?>
-                                                       <a class='btn  btn-success' style="font-size:14">Aceptar solicitud</a><span>  </span><a class='btn btn-danger' style="font-size:14">Rechazar solicitud</a>
+                                                       <a href="aceptarPostulado.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>" class='btn  btn-success' style="font-size:14">Aceptar solicitud</a><span>  </span><a href="rechazarPostulado.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>" class='btn btn-danger' style="font-size:14">Rechazar solicitud</a>
                                                    <?php  
                                                    }else {if($fila[2]==1){?>
-                                                       <a class='btn btn-danger' style="font-size:14;width: 270px; height:35px">Cancelar solicitud</a>
+                                                       <a  href="cancelarPostulado.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>"class='btn btn-danger' style="font-size:14;width: 270px; height:35px">Cancelar solicitud</a>
                                                    <?php }} ?>
                                                  </tr>
                                                  <?php
