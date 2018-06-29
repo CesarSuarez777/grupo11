@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 29-06-2018 a las 02:54:11
+-- Tiempo de generación: 29-06-2018 a las 16:43:30
 -- Versión del servidor: 5.7.21
 -- Versión de PHP: 5.6.35
 
@@ -36,15 +36,17 @@ CREATE TABLE IF NOT EXISTS `calificaciones` (
   `fecha` datetime NOT NULL,
   `calificacion` int(2) NOT NULL DEFAULT '0',
   `IDcalif` int(11) NOT NULL AUTO_INCREMENT,
+  `aConductor` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`IDcalif`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `calificaciones`
 --
 
-INSERT INTO `calificaciones` (`IDorigen`, `IDdestino`, `comentario`, `fecha`, `calificacion`, `IDcalif`) VALUES
-(99, 100, 'Horrible todo', '2018-06-27 21:42:00', 0, 1);
+INSERT INTO `calificaciones` (`IDorigen`, `IDdestino`, `comentario`, `fecha`, `calificacion`, `IDcalif`, `aConductor`) VALUES
+(114, 113, 'Buenisimo!', '2018-06-13 00:00:00', 1, 2, 1),
+(114, 113, 'Muy buena onda ', '2018-06-20 00:00:00', 1, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -57,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `ciudades` (
   `nombre` varchar(100) NOT NULL,
   `IDCiudad` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`IDCiudad`)
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `ciudades`
@@ -77,7 +79,8 @@ INSERT INTO `ciudades` (`nombre`, `IDCiudad`) VALUES
 ('Balcarce', 11),
 ('Banfield', 12),
 ('Baradero', 13),
-('Baradero', 26);
+('Necochea', 27),
+('Berisso', 28);
 
 -- --------------------------------------------------------
 
@@ -108,15 +111,15 @@ CREATE TABLE IF NOT EXISTS `postulados_usuarios_viajes` (
   `estado` int(3) NOT NULL DEFAULT '0' COMMENT '0-> pendiente, 1->aceptado, -1->rechazado',
   `IDusuario_viaje` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`IDusuario_viaje`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `postulados_usuarios_viajes`
 --
 
 INSERT INTO `postulados_usuarios_viajes` (`IDusuario`, `IDviaje`, `estado`, `IDusuario_viaje`) VALUES
-(112, 18, 1, 7),
-(100, 42, 0, 15);
+(113, 54, 0, 18),
+(113, 51, -1, 17);
 
 -- --------------------------------------------------------
 
@@ -133,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `tarjetas` (
   `codigo` int(3) NOT NULL,
   `IDtarjeta` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`IDtarjeta`)
-) ENGINE=MyISAM AUTO_INCREMENT=113 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=114 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `tarjetas`
@@ -141,7 +144,8 @@ CREATE TABLE IF NOT EXISTS `tarjetas` (
 
 INSERT INTO `tarjetas` (`numero`, `marca`, `fecha_vencimiento`, `titular`, `codigo`, `IDtarjeta`) VALUES
 (1245124512451245, 'Visa', '2019-03-01', 'IGLESIAS FERNANDO', 321, 112),
-(1234123412341234, 'Visa', '2019-01-01', 'PATRICIO ESTEVEZ', 654, 100);
+(1234123412341234, 'Visa', '2019-01-01', 'PATRICIO ESTEVEZ', 654, 100),
+(147852144125784, 'American Express', '2019-11-01', 'ROMINA ALBERDI', 987, 113);
 
 -- --------------------------------------------------------
 
@@ -161,18 +165,21 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `borrado` tinyint(1) NOT NULL DEFAULT '0',
   `penalizacion` int(20) NOT NULL DEFAULT '0',
+  `penalizacion_acom` int(20) NOT NULL DEFAULT '0',
   `deuda` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`nombre`, `apellido`, `email`, `clave`, `fecha`, `foto`, `token`, `ID`, `borrado`, `penalizacion`, `deuda`) VALUES
-('Maria Lujan', 'Andersen', 'Lujan.andersen@gmail.com', 'lujancita', '1975-08-02', '', 'AKLSGNASLKGANSGKLANSLÑKDNASKLD506', 99, 0, 2, 0),
-('Patricio', 'Estevez', 'pato.estevez@gmail.com', 'patito', '1990-08-12', '', 'asgasgas6f5as4f65DS', 100, 0, 0, 0),
-('Fernando', 'Iglesias', 'fer.iglesias@gmail.com', 'fer1990', '1990-07-05', '', 'df1407442b9618b956494f27bfa68a19', 112, 0, 0, 0);
+INSERT INTO `usuarios` (`nombre`, `apellido`, `email`, `clave`, `fecha`, `foto`, `token`, `ID`, `borrado`, `penalizacion`, `penalizacion_acom`, `deuda`) VALUES
+('Maria Lujan', 'Andersen', 'Lujan.andersen@gmail.com', 'lujancita', '1975-08-02', '', 'AKLSGNASLKGANSGKLANSLÑKDNASKLD506', 99, 0, 2, 0, 0),
+('Patricio', 'Estevez', 'pato.estevez@gmail.com', 'patito', '1990-08-12', '', 'asgasgas6f5as4f65DS', 100, 0, 2, 0, 0),
+('Fernando', 'Iglesias', 'fer.iglesias@gmail.com', 'fer1990', '1990-07-05', '', 'df1407442b9618b956494f27bfa68a19', 112, 0, 0, 0, 0),
+('Romina', 'Alberdi', 'romi.albertdi@gmail.com', 'romina', '1988-02-13', '', '1dcb1c1cce4490ded59a34460a826ad0', 113, 0, 4, 0, 0),
+('Pedro', 'Carballo', 'peter.c@gmail.com', 'pedro', '1998-04-08', '', '7d0128b1bd8d148181fafc491376733f', 114, 0, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -189,7 +196,7 @@ CREATE TABLE IF NOT EXISTS `vehiculos` (
   `IDvehiculo` int(100) NOT NULL AUTO_INCREMENT,
   `IDuser` int(11) NOT NULL,
   PRIMARY KEY (`IDvehiculo`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `vehiculos`
@@ -199,7 +206,10 @@ INSERT INTO `vehiculos` (`Marca`, `Modelo`, `Patente`, `Asientos`, `IDvehiculo`,
 ('Renault 12', '1999', 'ZPL695', 3, 5, 100),
 ('FIAT', '600', 'MOP111', 3, 15, 99),
 ('Fiat Punto', '2010', 'KLM123', 4, 6, 110),
-('Maserati', '2016', 'KLQ568', 2, 17, 112);
+('Maserati', '2016', 'KLQ568', 2, 17, 112),
+('FIAT PUNTO', '2010', 'APO123', 4, 19, 113),
+('FIAT PALIO', '2006', 'KOL980', 4, 20, 113),
+('RENAULT KANGOO', '2009', 'MOD777', 6, 21, 113);
 
 -- --------------------------------------------------------
 
@@ -220,15 +230,17 @@ CREATE TABLE IF NOT EXISTS `viajes` (
   `Precio` double NOT NULL,
   `asientos_disponibles` int(5) NOT NULL,
   PRIMARY KEY (`IDviaje`)
-) ENGINE=MyISAM AUTO_INCREMENT=50 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=55 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `viajes`
 --
 
 INSERT INTO `viajes` (`IDviaje`, `fecha`, `hora`, `IDvehiculo`, `IDconductor`, `llegada`, `IDOrigen`, `IDDestino`, `Precio`, `asientos_disponibles`) VALUES
-(42, '2018-12-12', '23:45:00', 15, 99, '2018-12-12 23:50:00', 5, 3, 150, 3),
-(49, '2018-12-14', '23:00:00', 15, 99, '2018-12-14 23:30:00', 1, 5, 230, 3);
+(54, '2018-12-31', '20:58:00', 5, 100, '2018-12-31 23:59:00', 1, 5, 1666.6666666667, 2),
+(53, '2018-08-09', '12:00:00', 5, 100, '2018-08-09 16:00:00', 1, 6, 1500, 3),
+(52, '2018-07-04', '12:00:00', 20, 113, '2018-07-04 14:30:00', 12, 28, 80, 4),
+(51, '2018-12-12', '14:30:00', 5, 100, '2018-12-12 18:00:00', 10, 1, 250, 4);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
