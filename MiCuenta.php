@@ -35,7 +35,7 @@
             
             $puntos=0;
             
-            $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$IDusuario");
+            $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$IDusuario AND aConductor");
             while($cal = $calificaciones->fetch_array(MYSQLI_NUM)){
                 $puntos=$puntos+$cal[0];
             }
@@ -136,7 +136,7 @@
                                                   <p><img height="18" src="Imagenes/email.png"><?php echo " " . $row['email']; ?></p>
                                                   <p><img height="18" src="Imagenes/Edad.png"><?php echo " " . calcularEdad($row['fecha']) . " años"; ?></p>
                                                   <p><img height="20" src="Imagenes/calificacion.png"> Calificación piloto: <?php echo $puntos ?></p>
-                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación piloto: <?php echo $puntosA ?></p>
+                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación acompañante: <?php echo $puntosA ?></p>
                                                 </ul>
                                                   <div class="container" align="right">
                                                       <a href="modificarPerfil.php">Modificar perfil</a><span> | </span>
