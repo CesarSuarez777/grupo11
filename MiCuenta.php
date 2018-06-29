@@ -33,6 +33,14 @@
             
             $vehiculos = mysqli_query($link, "SELECT * FROM vehiculos where IDuser='$IDusuario'");
             
+            $puntos=0;
+            
+            $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$IDusuario");
+            while($cal = $calificaciones->fetch_array(MYSQLI_NUM)){
+                $puntos=$puntos+$cal[0];
+            }
+            $puntos = $puntos - $row['penalizacion'];
+
            
   	?>
         <header>
@@ -112,7 +120,7 @@
                                                 <ul class="container details">
                                                   <p><img height="18" src="Imagenes/email.png"><?php echo " " . $row['email']; ?></p>
                                                   <p><img height="18" src="Imagenes/Edad.png"><?php echo " " . calcularEdad($row['fecha']) . " años"; ?></p>
-                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación: </p>
+                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación piloto: <?php echo $puntos ?></p>
                                                 </ul>
                                                   <div class="container" align="right">
                                                       <a href="modificarPerfil.php">Modificar perfil</a><span> | </span>

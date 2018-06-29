@@ -109,7 +109,8 @@
                             }
                             
                             if(!$fechaIncorrecta && !$precioBajo && !$yaPoseeViajeDuranteFin && !$coincidenCiudades && !$fechaFinMenorInicio){
-                                $sql = "INSERT INTO `viajes` (`fecha`, `hora`, `IDvehiculo`, `IDconductor`, `llegada`, `IDOrigen`, `IDDestino`, `Precio`,asientos_disponibles) VALUES ('$fecha', '$hora', $IDVehiculo, $IDConductor, '$duracion', $IDOrigen, $IDDestino, $precio,$miVehiculo[0]);";
+                                $pre = $precio / $miVehiculo[0];
+                                $sql = "INSERT INTO `viajes` (`fecha`, `hora`, `IDvehiculo`, `IDconductor`, `llegada`, `IDOrigen`, `IDDestino`, `Precio`,asientos_disponibles) VALUES ('$fecha', '$hora', $IDVehiculo, $IDConductor, '$duracion', $IDOrigen, $IDDestino, $pre,$miVehiculo[0]);";
                             
                                 if (mysqli_query($link, $sql)){
                                      header("Location: MiCuenta.php?vehiculo=true");
@@ -238,7 +239,7 @@
                                                 </div>
                                             </div> 
                                             <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Precio por asiento <font size="1">(En pesos sin simbolo)</font></label>
+                                                <label for="amount" class="col-sm-3 control-label">Costo de viaje<font size="1">(En pesos sin simbolo)</font></label>
                                                 <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($precioBajo) {echo "Precio invalido";}} ?></font>
                                                 <div class="col-sm-9">
                                                     <input required type="text" class="form-control" name="precio" value="<?php if (isset($_POST['apreto_agregar'])) {if (!$precioBajo) {echo $precio;}} ?>">

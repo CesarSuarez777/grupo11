@@ -109,14 +109,19 @@
                                                      $destino1 = mysqli_query($link, "SELECT * FROM ciudades where IDCiudad=$row[7]");
                                                      $origen1 = $origen1->fetch_array(MYSQLI_NUM);
                                                      $destino1 = $destino1->fetch_array(MYSQLI_NUM);
+                                                     $vehiculoSelec= mysqli_query($link, "SELECT Patente,asientos FROM vehiculos where IDvehiculo=$row[3]"); 
+                                                     $vehiculoSelec = $vehiculoSelec ->fetch_array(MYSQLI_NUM);
+                                                     $valor = $row[8]*$vehiculoSelec[1];
+                                                     $valor = round($valor,2);
+                                                     
                                                      ?>
                                                    <tr style='margin-top: 30px;background-color:<?php $createDate = new DateTime("$row[1] . $row[2]");if($hoy>$createDate){echo "b3f9ff";}else{echo "ecf7bd";}?> '>
                                                    <td><font face='georgia'><?php echo $origen1[0]; ?></font></td>
                                                    <td><font face='georgia'><?php echo $destino1[0]; ?></font></td>
                                                    <td><font face='georgia'><?php echo $createDate ->format('d-m-Y H:i');?></font></td>
                                                    <td><font face='georgia'><?php $createDate2 = new DateTime($row[5]);echo $createDate2->format('d-m-Y H:i'); ?></font></td>
-                                                   <td><font face='georgia'><?php echo '$' . $row[8]; ?></font></td>
-                                                   <td><font face='georgia'><?php $vehiculoSelec= mysqli_query($link, "SELECT Patente FROM vehiculos where IDvehiculo=$row[3]"); $vehiculoSelec = $vehiculoSelec ->fetch_array(MYSQLI_NUM); echo $vehiculoSelec[0]; ?></font></td>
+                                                   <td><font face='georgia'><?php echo '$' . $valor; ?></font></td>
+                                                   <td><font face='georgia'><?php echo $vehiculoSelec[0]; ?></font></td>
                                                    <td><a href='<?php echo "verSolicitudes.php?id=$row[0]"; ?>'>Ver solicitudes</a><span> | </span>
                                                        <a href='<?php echo "editarViaje.php?id=$row[0]"; ?>'>Editar</a><span> | </span>
                                                        <a onclick="return confirm('Si posee acompañantes confirmados, entonces se le decrementara un punto de calificación ¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$row[0]"; ?>'>Eliminar</a></td>   

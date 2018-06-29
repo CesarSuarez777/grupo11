@@ -26,6 +26,13 @@
             $id = $_GET['id'];
             $resultado = mysqli_query($link, "SELECT * FROM usuarios where ID='$id'");
             $row = $resultado->fetch_array(MYSQLI_ASSOC);
+            
+            $puntos=0;
+            $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$id");
+            while($cal = $calificaciones->fetch_array(MYSQLI_NUM)){
+                $puntos=$puntos+$cal[0];
+            }
+            $puntos = $puntos - $row['penalizacion'];
 
   	?>
         <header>
@@ -90,7 +97,7 @@
                                                 <ul class="container details">
                                                   <p><img height="18" src="Imagenes/email.png"><?php echo " " . $row['email']; ?></p>
                                                   <p><img height="18" src="Imagenes/Edad.png"><?php echo " " . calcularEdad($row['fecha']) . " años"; ?></p>
-                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación: </p>
+                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación conductor: <?php echo $puntos ?></p>
                                                 </ul>
                                             </div>
                                         </div>

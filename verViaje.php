@@ -31,13 +31,18 @@
             $destino = mysqli_query($link, "SELECT nombre FROM ciudades where IDCiudad=$row[7]");
             $destino = $destino ->fetch_array(MYSQLI_NUM);
             
-            $nombreUser = mysqli_query($link,"SELECT nombre,apellido FROM usuarios where ID=$row[4]");
+            $nombreUser = mysqli_query($link,"SELECT nombre,apellido,ID,penalizacion FROM usuarios where ID=$row[4]");
             $nombreUser = $nombreUser ->fetch_array(MYSQLI_NUM);
             
             $vehiculos = mysqli_query($link, "SELECT marca,modelo FROM vehiculos where IDvehiculo='$row[3]'");
             $vehiculos = $vehiculos -> fetch_array(MYSQLI_NUM);
             
-            
+            $puntos=0;
+            $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$nombreUser[2]");
+            while($cal = $calificaciones->fetch_array(MYSQLI_NUM)){
+                $puntos=$puntos+$cal[0];
+            }
+            $puntos = $puntos - $nombreUser[3];
 
   	?>
         <header>
@@ -124,21 +129,22 @@
                                         <?php echo $origen[0] . " -> " . $destino[0]; ?></h3>
                                 </div>
                             </div>
-                              <div class='container-fluid' style='background-color: #ebe4e4'>
+                              <div class='container-fluid' style='background-color: #ebe4e4;'>
                                     <div class="panel-body text-center" >
                                         <p style="font-size: 40" class="lead">
-                                            <strong>$<?php echo $row[8];?></strong></p>
+                                            <strong>$<?php echo round($row[8],2);?></strong></p>
                                     </div>
                                       <ul class="list-group list-group-flush text-center" >
-                                        <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/CONDUCTOR.png'><a href="verPerfil.php?id=<?php echo $row[4];?>"><?php echo '    ' . $nombreUser[0] . ' ' . $nombreUser[1]; ?></a></li>
-                                        <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/calendario.png'><?php echo '     ' . $row[1]. ' a las ' . substr($row[2], 0, 5);?></li>
+                                          <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/CONDUCTOR.png'><a href="verPerfil.php?id=<?php echo $row[4];?>"><?php echo '    ' . $nombreUser[0] . ' ' . $nombreUser[1]; ?></a><img style="margin-left:15px" height="25x25" src="Imagenes/<?php if($puntos>=0){echo "like.png";}else{echo "unlinke.jpg";}?>"><font style="color: <?php if ($puntos>=0){echo "green";}else{echo "red";}?>"> <?php echo '   ' . $puntos;?></font></li>
+                                        <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/calendario.png'><?php echo '     ' . $row[1]. ' a las ' . substr($row[2], 0, 5);?></li> 
                                         <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src="Imagenes/reloj.png"><?php $fecha1 = new DateTime("$row[1] . $row[2]");$fecha2 = new DateTime($row[5]);$diferencia = $fecha2->diff($fecha1);$agregar=0;if($diferencia->d>0){$agregar=$diferencia->d*24;}$horas=$diferencia->h+$agregar;echo "   $horas horas";if(($diferencia->i)!=0){echo" y $diferencia->i minutos";}?></li>
                                         <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/AUTO.png'><?php echo '     ' . $vehiculos[0] . ' '.$vehiculos[1] ;?></li>
                                         <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/asiento.png'><?php echo '     ' . $row[9]. ' asientos disponibles';?></li>
                                       </ul>
                                     <div class="panel-footer">
                                         <a class="btn btn-lg btn-block btn-danger" href="postularse.php?id=<?php echo $idviaje;?>">SOLICITAR INSCRIPCIÓN</a>
-                                </div>
+                                        <br>
+                                    </div>
                               </div>
                             </div>
 			</div>
