@@ -14,14 +14,19 @@
           <?php
           include 'funciones.php';
           session_start();
-
+            
+          $link = conectarABase();
+          
           $incioSesion = inicioSesion();
           if (!$incioSesion){
             
-            header("Location: index.php?inicio=$incioSesion");
+          header("Location: index.php?inicio=$incioSesion");
             
-            exit;
+          exit;
           }
+          $hoy = new DateTime('today');
+          
+          $viajes = mysqli_query($link, "SELECT * FROM viajes"); 
           
         ?>
           <header style="position: fixed">
@@ -73,61 +78,48 @@
                   </div>
               </div>
               <div class="col-10 ">
-               <div class="container-fluid">
-                    <div class="row">
                         <div style="margin-right: 30px">
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>Detalle de viaje</th>
                                         <th class='text-center'>Fecha</th>
-                                        <th class="text-center">Tipo</th>
                                         <th class="text-center">Precio</th>
                                         <th> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php while($row = $viajes->fetch_array(MYSQLI_NUM)){
+                                    $fechaViaje = new DateTime($row[1] . $row[2]);
+                                    if (($fechaViaje > $hoy)&&($row[9]>0)){
+                                    $origen= mysqli_query($link, "SELECT * FROM ciudades where IDCiudad=$row[6]");
+                                    $origen = $origen ->fetch_array(MYSQLI_NUM);
+                                    $destino= mysqli_query($link, "SELECT * FROM ciudades where IDCiudad=$row[7]");
+                                    $destino = $destino ->fetch_array(MYSQLI_NUM);
+                                    $conductor = mysqli_query($link, "SELECT * FROM usuarios where ID=$row[4]");
+                                    $conductor = $conductor ->fetch_array(MYSQLI_NUM);
+                                    ?>
                                     <tr>
-                                        <td class="col-sm-7 col-md-6">
+                                        <td>
                                         <div class="media">                                           
                                             <div class="media-body">
-                                                <img src="Imagenes/VIAJE.png" height="20"><font size='6' color='black'> Necochea - La Plata</font>&nbsp;<img src="Imagenes/reloj.png" height="15"><strong style="font-size: 13px"> 4.5hs</strong><br>
-                                                <img src="Imagenes/CONDUCTOR.png" height="28"><font size='4'><a href="verPerfil.php?id=99"> Maria Lujan Andersen</a></font><font size='2' color='Green'><strong color='green'>&nbsp;&nbsp;200</strong> puntos</font><br>  
+                                                <img src="Imagenes/VIAJE.png" height="20"><font size='5' color='black'> <?php echo"$origen[0] - $destino[0]" ?></font>&nbsp;<img src="Imagenes/reloj.png" height="15"><strong style="font-size: 13px"> <?php $fecha1 = new DateTime("$row[1] . $row[2]");$fecha2 = new DateTime($row[5]);$diferencia = $fecha2->diff($fecha1);$agregar=0;if($diferencia->d>0){$agregar=$diferencia->d*24;}$horas=$diferencia->h+$agregar;echo "$horas horas";if(($diferencia->i)!=0){echo" y $diferencia->i minutos";}?></strong><br>
+                                                <img src="Imagenes/CONDUCTOR.png" height="28"><font size='4'><a href="verPerfil.php?id=99"> <?php echo "$conductor[0] $conductor[1]"?></a></font><font size='2' color='Green'><strong color='green'>&nbsp;&nbsp;200</strong> puntos</font><br>  
                                             </div>
                                         </div></td>
-                                        <td class="col-sm-1 col-md-1" style="text-align: center">                                    
-                                        05/07/2018
+                                        <td style="text-align: center">                                    
+                                        <?php $fechaS = new DateTime($row[1]); echo $fechaS->format('d-m-Y');?>
                                         </td>
-                                        <td class="col-sm-1 col-md-1 text-center"><strong>Casual</strong></td>
-                                        <td class="col-sm-1 col-md-1 text-center"><strong>$250</strong></td>
-                                        <td class="col-sm-1 col-md-1">
-                                        <button type="button" class="btn btn-outline-danger">
-                                            <span class="glyphicon glyphicon-remove"></span> VER VIAJE
-                                        </button></td>
+                                        <td style="text-align: center"><strong><?php echo '$' . $row[8];?></strong></td>
+                                        <td>
+                                            <a class="btn btn-outline-danger" href="verViaje.php?id=<?php echo $row[0];?>">
+                                             VER VIAJE
+                                        </a></td>
                                     </tr>
-                                    <tr>
-                                        <td class="col-sm-7 col-md-6">
-                                        <div class="media">                                           
-                                            <div class="media-body">
-                                                <img src="Imagenes/VIAJE.png" height="20"><font size='6' color='black'> La Plata - Ensenada</font>&nbsp;<img src="Imagenes/reloj.png" height="15"><strong style="font-size: 13px"> 20min</strong><br>
-                                                <img src="Imagenes/CONDUCTOR.png" height="28"><font size='4'><a href="verPerfil.php?id=100"> Patricio Estevez</a></font><font size='2' color='green'><strong>&nbsp;&nbsp;15</strong> puntos</font><br>
-                                                </div>
-                                        </div></td>
-                                        <td class="col-sm-1 col-md-1" style="text-align: center">                                    
-                                        04/06/2018
-                                        </td>
-                                        <td class="col-sm-1 col-md-1 text-center"><strong>Semanal</strong></td>
-                                        <td class="col-sm-1 col-md-1 text-center"><strong>$25</strong></td>
-                                        <td class="col-sm-1 col-md-1">
-                                        <button type="button" class="btn btn-outline-danger">
-                                            <span class="glyphicon glyphicon-remove"></span> VER VIAJE
-                                        </button></td>
-                                    </tr>
+                                    <?php }}?>
                                 </tbody>
                             </table>
-                        </div>
                     </div>
-</div>
               </div>
           </div>
 

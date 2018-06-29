@@ -43,6 +43,7 @@
                             <div class="row" position="fixed">
                                 <div class="col-10">
                                     <br>
+                                    
                                     <div class="input-group input-group-prepend mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
@@ -75,63 +76,10 @@
 			<div class="col-2">
 			</div>
 			<div class="col-10">
-				<nav>
-				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Mis viajes como conductor</font></a>
-				    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-vehiculo" role="tab" aria-controls="nav-profile" aria-selected="false"><font color="#f87678">Mis viajes como acompañante</font></a>
-				  </div>
-				</nav>
-				<div class="tab-content" id="nav-tabContent">
-				 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                            <br>
-                                            <?php if (!empty($_GET['veliminado'])) {
-                                            ?><br><h5 align="center" style="color: green">¡Viaje eliminado con éxito!</h5><?php
-                                            }if (!empty($_GET['inhabilitado'])) {
-                                            ?><br><h5 align="center" style="color: red">No puede editar un viaje con solicitudes pendientes o aceptadas.</h5>
-                                            <?php }
-                                            ?>
-                                            <h5 style="margin-left:380px"><img src="Imagenes/Amarillo.jpg" height="17x17"><font size="3" face="Georgia">     Viaje pendiente   </font><img src="Imagenes/Celeste.jpg" height="17x17"><font size="3" face="Georgia">     Viaje realizado</font></h5>                                   
-                                            <table class="table table-sm table-borderless">
-                                                 <thead class='thead-light'>
-                                                 <tr style='border-bottom: 2px solid #f17376'>
-                                                   <th scope="color"><font size='5'>Origen</font></th>
-                                                   <th scope="col"><font size='5'>Destino</font></th>
-                                                   <th scope="col"><font size='5'>Fecha</font></th>
-                                                   <th scope="col"><font size='5'>Fecha llegada</font></th>
-                                                   <th scope="col"><font size='5'>Precio</font></th>
-                                                   <th scope="col"><font size='5'>Vehiculo</font></th>
-                                                   <th scope='col'></th>
-                                                 </tr>
-                                               </thead>
-                                               <tbody>
-                                                 <?php while($row = $resultado->fetch_array(MYSQLI_NUM)) {
-                                                     $origen1 = mysqli_query($link, "SELECT * FROM ciudades where IDCiudad=$row[6]");
-                                                     $destino1 = mysqli_query($link, "SELECT * FROM ciudades where IDCiudad=$row[7]");
-                                                     $origen1 = $origen1->fetch_array(MYSQLI_NUM);
-                                                     $destino1 = $destino1->fetch_array(MYSQLI_NUM);
-                                                     ?>
-                                                   <tr style='margin-top: 30px;background-color:<?php $createDate = new DateTime("$row[1] . $row[2]");if($hoy>$createDate){echo "b3f9ff";}else{echo "ecf7bd";}?> '>
-                                                   <td><font face='georgia'><?php echo $origen1[0]; ?></font></td>
-                                                   <td><font face='georgia'><?php echo $destino1[0]; ?></font></td>
-                                                   <td><font face='georgia'><?php echo $createDate ->format('d-m-Y H:i');?></font></td>
-                                                   <td><font face='georgia'><?php $createDate2 = new DateTime($row[5]);echo $createDate2->format('d-m-Y H:i'); ?></font></td>
-                                                   <td><font face='georgia'><?php echo '$' . $row[8]; ?></font></td>
-                                                   <td><font face='georgia'><?php $vehiculoSelec= mysqli_query($link, "SELECT Patente FROM vehiculos where IDvehiculo=$row[3]"); $vehiculoSelec = $vehiculoSelec ->fetch_array(MYSQLI_NUM); echo $vehiculoSelec[0]; ?></font></td>
-                                                   <td><a href='<?php echo "verSolicitudes.php?id=$row[0]"; ?>'>Ver solicitudes</a><span> | </span>
-                                                       <a href='<?php echo "editarViaje.php?id=$row[0]"; ?>'>Editar</a><span> | </span>
-                                                       <a onclick="return confirm('Si posee acompañantes confirmados, entonces se le decrementara un punto de calificación ¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$row[0]"; ?>'>Eliminar</a></td>   
-                                                 </tr>
-                                                 <?php
-
-                                                 }?>
-                                               </tbody>
-                                             </table>
-                                     
-                                  </div>
-                                  <div class="tab-pane fade" id="nav-vehiculo" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                      <br>
-                                      <h5 style="margin-left:300px"><img src="Imagenes/Amarillo.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud pendiente   </font><img src="Imagenes/Verde.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud aceptada   </font><img src="Imagenes/Rojo.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud rechazada   </font><img src="Imagenes/Celeste.jpg" height="17x17"><font size="3" face="Georgia">     Viaje realizado</font></h5>                                    
-                                      <table class="table table-sm table-borderless">
+                            <br>
+                            <h5 style="margin-left:300px"><img src="Imagenes/Amarillo.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud pendiente   </font><img src="Imagenes/Verde.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud aceptada   </font><img src="Imagenes/Rojo.jpg" height="17x17"><font size="3" face="Georgia">     Solicitud rechazada   </font></h5>                                    
+                                      
+				<table class="table table-sm table-borderless">
                                                  <thead class='thead-light'>
                                                  <tr style='border-bottom: 2px solid #f17376'>
                                                    <th scope="color"><font size='5'>Origen</font></th>
@@ -161,10 +109,7 @@
 
                                                  }?>
                                                </tbody>
-                                        </table>
-                                  </div>   
-                                </div>
-                       </div>
+                                </table>
                 </div>
   </body>
                 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

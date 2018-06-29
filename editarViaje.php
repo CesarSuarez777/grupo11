@@ -12,7 +12,7 @@
             <?php
             require ('funciones.php');
 
-  	         session_start();
+  	    session_start();
             
             if (!inicioSesion()){
                 header('Location: index.php');
@@ -22,29 +22,29 @@
             $email=$_SESSION['email'];
             $IDusuario=$_SESSION['id'];
             $link=conectarABase();
-            $resultado = mysqli_query($link, "SELECT * FROM usuarios where email='$email'");
-            $row = $resultado->fetch_array(MYSQLI_ASSOC);
-
-            $noMostrar=false;
             
-            $vehiculos = mysqli_query($link, "SELECT * FROM vehiculos where IDuser='$IDusuario'");
-            $tarjetas = mysqli_query($link, "SELECT * FROM tarjetas where IDtarjeta=$IDusuario");
-
-
-            $ciudades = mysqli_query($link,"SELECT * FROM ciudades");
-
-            $calificacionPendientes = false;
-            $calificaciones = mysqli_query($link,"SELECT * FROM calificaciones where IDorigen=$IDusuario");
-            $hace30 = new DateTime('-30 days');
-
-            while($cali = $calificaciones->fetch_array(MYSQLI_NUM)){
-                $fechaCal = new DateTime($cali[3]);
-                if((($cali[4])==0) && ($hace30 > $fechaCal)){
-                    $calificacionPendientes=true;
+            $idviaje = $_GET['id'];
+            
+            $postulados = mysqli_query($link,"SELECT estado FROM postulados_usuarios_viajes where IDviaje='$idviaje'");
+            $inhabilitado=false;
+            
+            while($filas = $postulados ->fetch_array(MYSQLI_NUM)){
+                if($filas[0]!=-1){
+                    $inhabilitado=true;
                 }
             }
-
-            if (isset($_POST['apreto_agregar'])){
+            
+            if($inhabilitado){
+                header('Location: MisViajes.php?inhabilitado=true');
+                exit();
+            }
+            
+            $viaje = mysqli_query($link,"SELECT * FROM viajes where IDviaje='$idviaje'");
+            $viaje = $viaje->fetch_array(MYSQLI_NUM);
+            $ciudades = mysqli_query($link,"SELECT * FROM ciudades");
+            $vehiculos = mysqli_query($link, "SELECT * FROM vehiculos where IDuser='$IDusuario'");
+            
+            if (isset($_POST['apreto_editar'])){
                         $fecha = $_POST['dia'];
                         $hora = $_POST['horario'];
                         $IDOrigen = $_POST['IDorigen'];
@@ -61,10 +61,9 @@
                         $yaPoseeViajeDuranteFin=false;
                         $coincidenCiudades =false;
                         $fechaFinMenorInicio =false;
-                       
                         
                         $hoy = new DateTime('+2 days');
-                        $fechaCreada = new DateTime($fecha . $hora);
+                        $fechaCreada = new DateTime("$fecha . $hora");
                         $fechaCreadaFinViaje = new DateTime($duracion);
                         $fechaCreada -> format('Y-m-d H:i:s');
                         $fechaCreadaFinViaje -> format('Y-m-d H:i:s');
@@ -72,24 +71,25 @@
                         $viajes = mysqli_query($link, "SELECT * FROM viajes where IDconductor=$IDusuario");
 
                         while ($cadaViaje = $viajes->fetch_array(MYSQLI_NUM)){
-                            $fechaDeViaje = new DateTime($cadaViaje[1] . $cadaViaje[2]);
-                            $fechaFinViaje = new DateTime($cadaViaje[5]);
-                            $fechaDeViaje -> format('Y-m-d H:i:s');
-                            $fechaFinViaje -> format('Y-m-d H:i:s');
-                            
-                            if(($fechaCreada > $fechaDeViaje)&&($fechaCreada < $fechaFinViaje)){
-                                $yaPoseeViaje=true;
-                            }
-                            
-                            if(($fechaCreadaFinViaje >= $fechaDeViaje) && ($fechaCreadaFinViaje <= $fechaFinViaje)){
-                                $yaPoseeViajeDuranteFin=true;
-                            }
-                            if (($fechaCreada <= $fechaDeViaje) && ($fechaCreadaFinViaje >= $fechaFinViaje)) {
-                                $yaPoseeViaje=true;
+                            if($cadaViaje[0]!=$idviaje){
+                                $fechaDeViaje = new DateTime("$cadaViaje[1] . $cadaViaje[2]");
+                                $fechaDeViaje -> format('Y-m-d H:i:s');
+                                $fechaFinViaje = new DateTime("$cadaViaje[5]");
+                                $fechaFinViaje -> format('Y-m-d H:i:s');
+                                if(($fechaCreada >= $fechaDeViaje)&&($fechaCreada<=$fechaFinViaje)){
+                                    $yaPoseeViaje=true;
+                                }
+                                if(($fechaCreadaFinViaje >= $fechaDeViaje) && ($fechaCreadaFinViaje<=$fechaFinViaje)){
+                                    $yaPoseeViajeDuranteFin=true;
+                                }
+                                if (($fechaCreada <= $fechaDeViaje) && ($fechaCreadaFinViaje >= $fechaFinViaje)) {
+                                   $yaPoseeViaje=true;
+                                }
                             }
                         }
-
-                        if (!$yaPoseeViaje && !$calificacionPendientes){
+                        
+                        
+                        if (!$yaPoseeViaje){
 
                             if($IDOrigen == $IDDestino){
                                 $coincidenCiudades = true;
@@ -109,17 +109,17 @@
                             }
                             
                             if(!$fechaIncorrecta && !$precioBajo && !$yaPoseeViajeDuranteFin && !$coincidenCiudades && !$fechaFinMenorInicio){
-                                $sql = "INSERT INTO `viajes` (`fecha`, `hora`, `IDvehiculo`, `IDconductor`, `llegada`, `IDOrigen`, `IDDestino`, `Precio`,asientos_disponibles) VALUES ('$fecha', '$hora', $IDVehiculo, $IDConductor, '$duracion', $IDOrigen, $IDDestino, $precio,$miVehiculo[0]);";
-                            
-                                if (mysqli_query($link, $sql)){
-                                     header("Location: MiCuenta.php?vehiculo=true");
-                                } else { 
-                                  header("Location: MiCuenta.php?vehiculo=false");
+                                $edicion = mysqli_query($link, "UPDATE viajes SET fecha='$fecha',hora='$hora',IDvehiculo=$IDVehiculo,llegada='$duracion',IDOrigen=$IDOrigen,IDDestino=$IDDestino,Precio=$precio where IDviaje=$idviaje"  );
+                                if ($edicion){
+                                    header('Location: MisViajes.php?editado=true');
+                                }else{
+                                   header('Location: MisViajes.php?editado=false');
                                 }
                             }
                         }
                     }
-            ?>
+ 
+        ?>
         <header>
             <nav>
 		 <ul>
@@ -168,27 +168,12 @@
 			<div class="col-2">
 			</div>
 			<div class="col-10">
-                 <?php if (($vehiculos->num_rows)==0){
-                    $noMostrar=true;
-                    ?><br>
-                    <h3 align="center" style="color: red">NO POSEE UN VEHICULO VINCULADO A LA CUENTA<br><font size="2" color="red" face="Univers-Light-Normal">Ir a <?php echo $_SESSION['nombre'] ?> -> Mis vehiculos -> Agregar vehiculo</font></h3><br>
-                    <?php }
-                    if ($calificacionPendientes){
-                        $noMostrar=true;
-                    ?><br>
-                    <h3 align="center" style="color: red">USTED TIENE CALIFICACIONES PENDIENTES DE MAS DE 30 DIAS<br><font size="2" color="red" face="Univers-Light-Normal">Ir a Mis viajes -> Calificar </font></h3><br>
-                    <?php } 
-                    if (($tarjetas->num_rows)==0){
-                    $noMostrar=true;
-                    ?><br>
-                    <h3 align="center" style="color: red">NO POSEE UNA TARJETA VINCULADA A LA CUENTA<br><font size="2" color="red" face="Univers-Light-Normal">Ir a <?php echo $_SESSION['nombre'] ?> -> Mi Tarjeta -> Agregar tarjeta</font></h3><br>
-                    <?php } if (!$noMostrar) { ?>
-                <font size="4" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($yaPoseeViaje) {echo "USTED TIENE UN VIAJE PENDIENTE A ESA FECHA";}else{if($yaPoseeViajeDuranteFin){echo "LA FECHA DE FIN DE VIAJE COINCIDE CON OTRO VIAJE PENDIENTE";}}} ?></font>
 				<nav>
 				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Crear viaje</font></a>  
+				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Editar viaje</font></a>  
 				  </div>
 				</nav>
+                                <font size="4" color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if ($yaPoseeViaje) {echo "USTED TIENE UN VIAJE PENDIENTE A ESA FECHA";}else{if($yaPoseeViajeDuranteFin){echo "LA FECHA DE FIN DE VIAJE COINCIDE CON OTRO VIAJE PENDIENTE";}}} ?></font>
 				<div class="tab-content" id="nav-tabContent">
 				  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                       <div class="panel panel-default">
@@ -196,15 +181,14 @@
                                             <br>
                                           <div class="panel-body form-horizontal payment-form"> 
                                             <div class="form-group">
-                                                <font size="2"  color="red" style="margin-left: 400px" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($coincidenCiudades) {echo "Las ciudades destino y origen no deben coincidir";}} ?></font>
+                                                <font size="2"  color="red" style="margin-left: 400px" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if ($coincidenCiudades) {echo "Las ciudades destino y origen no deben coincidir";}} ?></font>
                                                 <div class="input-group mb-3" style="width: 72.8%;margin-left:14px ">
                                                 <div class="input-group-prepend">
                                                   <label class="input-group-text" for="inputGroupSelect01">Origen</label>
                                                 </div>
-                                                
-                                                <select class="custom-select" placeholder='vehiculo' name='IDorigen' id="inputGroupSelect01">
+                                                <select class="custom-select"  placeholder='vehiculo' name='IDorigen' id="inputGroupSelect01">
                                                   <?php while($fila1 = $ciudades->fetch_array(MYSQL_NUM)){?>
-                                                    <option value="<?php echo $fila1[1]?>"><?php echo $fila1[0] ?></option>
+                                                  <option value="<?php echo $fila1[1]?>"><?php echo $fila1[0] ?></option>
                                                   <?php }?>
                                                 </select>
                                                 </div>
@@ -225,30 +209,30 @@
                                             <div class="form-group">
                                                 <br>   
                                                 <label for="concept" class="col-sm-3 control-label">Dia</label>
-                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($fechaIncorrecta) {echo "La fecha del viaje debe superar las 48hs posteriores a su creacion";}} ?></font>
+                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if ($fechaIncorrecta) {echo "La fecha del viaje debe superar las 48hs posteriores a su creacion";}} ?></font>
                                                 <div class="col-sm-9">
-                                                    <input type="date" class="form-control" name="dia" required value="<?php if (isset($_POST['apreto_agregar'])) {if (!$fechaIncorrecta) {echo $fecha;}} ?>">
+                                                    <input type="date" class="form-control" name="dia" required value="<?php if (isset($_POST['apreto_editar'])) {if (!$fechaIncorrecta) {echo $fecha;}else{echo $viaje[1];}}else{echo $viaje[1];} ?>">
                                                 </div>
                                             </div>   
                                            <div class="form-group">
                                                 <br>
                                                 <label for="concept" class="col-sm-3 control-label">Hora</label>
                                                 <div class="col-sm-9">
-                                                    <input type="time" class="form-control" name="horario" required value="<?php if (isset($_POST['apreto_agregar'])) {if (!$fechaIncorrecta) {echo $hora;}} ?>">
+                                                    <input type="time" class="form-control" name="horario" required value="<?php if (isset($_POST['apreto_editar'])) {if (!$fechaIncorrecta) {echo $hora;}else{echo $viaje[2];}}else{echo $viaje[2];} ?>">
                                                 </div>
                                             </div> 
                                             <div class="form-group">
                                                 <label for="amount" class="col-sm-3 control-label">Precio por asiento <font size="1">(En pesos sin simbolo)</font></label>
-                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($precioBajo) {echo "Precio invalido";}} ?></font>
+                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if ($precioBajo) {echo "Precio invalido";}} ?></font>
                                                 <div class="col-sm-9">
-                                                    <input required type="text" class="form-control" name="precio" value="<?php if (isset($_POST['apreto_agregar'])) {if (!$precioBajo) {echo $precio;}} ?>">
+                                                    <input required type="text" class="form-control" name="precio" value="<?php if (isset($_POST['apreto_editar'])) {if (!$precioBajo) {echo $precio;}else {echo $viaje[8];}}else{echo $viaje[8];} ?>">
                                                 </div>
                                             </div>
                                            <div class="form-group">
                                                 <label for="amount" class="col-sm-3 control-label">Fecha y horario de llegada</label>
-                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_agregar'])){if ($fechaFinMenorInicio) {echo "La fecha de fin de viaje debe ser posterior a la de inicio";}} ?></font>
+                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if ($fechaFinMenorInicio) {echo "La fecha de fin de viaje debe ser posterior a la de inicio";}} ?></font>
                                                 <div class="col-sm-9">
-                                                    <input required type="datetime-local" class="form-control" name="duracion" value="<?php if (isset($_POST['apreto_agregar'])) {if (!$fechaFinMenorInicio && !$fechaIncorrecta) {echo $duracion;}} ?>">
+                                                    <input required type="datetime-local" class="form-control" name="duracion" value="<?php if (isset($_POST['apreto_editar'])) {if (!$fechaFinMenorInicio && !$fechaIncorrecta) {echo $duracion;}else{echo $viaje[5];}}else {echo $viaje[5];} ?>">
                                                 </div>
                                             </div>
                                               <br>
@@ -277,21 +261,18 @@
                                             <br>
                                             <div class="form-group">
                                                 <div class="col-sm-12 text-left">
-                                                    <a class="btn btn-outline-danger btn-lg" href="PaginaPrincipal.php" role="button">Volver</a>
-                                                    <input type="submit" name="apreto_agregar" class="btn btn-outline-danger preview-add-button btn-lg" value="Agregar" style="margin-left: 10px">                       
+                                                    <a class="btn btn-outline-danger btn-lg" href="MisViajes.php" role="button">Volver</a>
+                                                    <input type="submit" name="apreto_editar" class="btn btn-outline-danger preview-add-button btn-lg" value="Editar" style="margin-left: 10px">                       
                                                  </div>
                                             </div>
                                          </div>
                                        </form>
                                     </div>
-				                </div>
+				</div>
                             </div>
                         </div>
-                <?php } ?>
                 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         	<input type="submit" value="" />  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         	<script src="js/bootstrap.min.js"></script>
     	</body>
     </html>
-
-
