@@ -100,7 +100,7 @@
                                     $destino = $destino ->fetch_array(MYSQLI_NUM);
                                     $conductor = mysqli_query($link, "SELECT * FROM usuarios where ID=$row[4]");
                                     $conductor = $conductor ->fetch_array(MYSQLI_NUM);
-                                    $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$conductor[7]");
+                                    $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$conductor[7] AND aConductor");
                                     $puntos=0;
                                     while($cal = $calificaciones->fetch_array(MYSQLI_NUM)){
                                         $puntos=$puntos+$cal[0];

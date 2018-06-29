@@ -40,6 +40,14 @@
                 $puntos=$puntos+$cal[0];
             }
             $puntos = $puntos - $row['penalizacion'];
+            
+            $puntosA=0;
+            $calificacionesA= mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$IDusuario AND !aConductor");
+            while($calA = $calificacionesA->fetch_array(MYSQLI_NUM)){
+                $puntosA=$puntosA+$calA[0];
+            }
+            
+            $puntosA = $puntosA - $row['penalizacion_acom'];
 
            
   	?>
@@ -100,12 +108,15 @@
                                      <div class="container-fluid">
                                      <?php if (!empty($_GET['nuevaClave'])) {
                                          ?><br><h5 align="center" style="color: green">¡Contraseña modificada con éxito!</h5><?php
+                                      } if (!empty($_GET['viajesp'])) {
+                                          ?><br><h5 align="center" style="color: red">No puede editar una tarjeta con viajes pendientes.</h5><?php
                                       } if (!empty($_GET['tarjeta'])) {
                                          ?><br><h5 align="center" style="color: green">¡Tarjeta agregada con éxito!</h5><?php
                                       } if (!empty($_GET['teliminada'])){
                                          ?><br><h5 align="center" style="color: green">¡Tarjeta eliminada con éxito!</h5><?php
+                                      }if (!empty($_GET['viajespe'])){
+                                         ?><br><h5 align="center" style="color: red">No puede eliminar una tarjeta con viajes pendientes.</h5><?php
                                       }
-                                        
                                       ?>
                                       <div class="jumbotron">
                                         <div class="row">
@@ -121,6 +132,7 @@
                                                   <p><img height="18" src="Imagenes/email.png"><?php echo " " . $row['email']; ?></p>
                                                   <p><img height="18" src="Imagenes/Edad.png"><?php echo " " . calcularEdad($row['fecha']) . " años"; ?></p>
                                                   <p><img height="20" src="Imagenes/calificacion.png"> Calificación piloto: <?php echo $puntos ?></p>
+                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación piloto: <?php echo $puntosA ?></p>
                                                 </ul>
                                                   <div class="container" align="right">
                                                       <a href="modificarPerfil.php">Modificar perfil</a><span> | </span>

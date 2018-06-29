@@ -28,11 +28,19 @@
             $row = $resultado->fetch_array(MYSQLI_ASSOC);
             
             $puntos=0;
-            $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$id");
+            $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$id AND aConductor");
             while($cal = $calificaciones->fetch_array(MYSQLI_NUM)){
                 $puntos=$puntos+$cal[0];
             }
             $puntos = $puntos - $row['penalizacion'];
+            
+            $puntosA=0;
+            $calificacionesA= mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$id AND !aConductor");
+            while($calA = $calificacionesA->fetch_array(MYSQLI_NUM)){
+                $puntosA=$puntosA+$calA[0];
+            }
+            
+            $puntosA = $puntosA - $row['penalizacion_acom'];
 
   	?>
         <header>
@@ -98,6 +106,7 @@
                                                   <p><img height="18" src="Imagenes/email.png"><?php echo " " . $row['email']; ?></p>
                                                   <p><img height="18" src="Imagenes/Edad.png"><?php echo " " . calcularEdad($row['fecha']) . " años"; ?></p>
                                                   <p><img height="20" src="Imagenes/calificacion.png"> Calificación conductor: <?php echo $puntos ?></p>
+                                                  <p><img height="20" src="Imagenes/calificacion.png"> Calificación acompañante: <?php echo $puntosA ?></p>
                                                 </ul>
                                             </div>
                                         </div>

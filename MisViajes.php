@@ -85,7 +85,9 @@
 				 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                             <br>
                                             <?php if (!empty($_GET['veliminado'])) {
-                                            ?><br><h5 align="center" style="color: green">¡Viaje eliminado con éxito!</h5><?php
+                                            ?><h5 align="center" style="color: green">¡Viaje eliminado con éxito!</h5><?php
+                                            } if (!empty($_GET['exito'])) {
+                                            ?><h5 align="center" style="color: green">Se ha eliminado su solicitud.</h5><?php
                                             }if (!empty($_GET['inhabilitado'])) {
                                             ?><br><h5 align="center" style="color: red">No puede editar un viaje con solicitudes pendientes o aceptadas.</h5>
                                             <?php }
@@ -160,7 +162,7 @@
                                                    <td><font face='georgia'><?php echo $createDate3 ->format('d-m-Y H:i');?></font></td>
                                                    <td><font face='georgia'><?php $createDate4 = new DateTime($fila[9]);echo $createDate4->format('d-m-Y H:i'); ?></font></td>
                                                    <td><font face='georgia'><?php echo '$' . $fila[12]; ?></font></td>
-                                                   <td><?php if((($fila[2]==1)&&($hoy>$createDate3))or $fila[2]==-1){}else{?><a onclick="return confirm('¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$id"; ?>'>Eliminar solicitud</a> <?php }?></td>   
+                                                   <td><?php if((($fila[2]==1)&&($hoy>$createDate3))or $fila[2]==-1){}else{?><a onclick="return confirm('¿Estás seguro?');" href='eliminarSolicitudAco.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>'>Eliminar solicitud</a> <?php }?></td>   
                                                  </tr>
                                                  <?php
 
