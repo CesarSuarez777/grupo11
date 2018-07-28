@@ -22,6 +22,7 @@
             $link=conectarABase();
             
             $idvehiculo= $_GET['id'];
+            $id = $_SESSION['id'];
             
             $hoy = new DateTime('today');
             $viajesPendientes = mysqli_query($link,"SELECT fecha,hora FROM viajes where IDvehiculo=$idvehiculo");
@@ -34,7 +35,7 @@
             }
             
             $vehiculo = mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
-            $vehiculos =mysqli_query($link, "SELECT * FROM vehiculos where IDvehiculo='$idvehiculo'");
+            $vehiculos = mysqli_query($link, "SELECT * FROM vehiculos where IDuser=$id");
             $veh = $vehiculo->fetch_array(MYSQLI_NUM);
             
             
@@ -44,24 +45,23 @@
                         $nuevaMarca = $_POST['marca'];
                         $nuevoModelo = $_POST['modelo'];
                         $nuevaPatente = $_POST['patente'];
+                        $nuevaPatente = strtoupper($nuevaPatente);
                         $nuevoAsientos = $_POST['asientos'];
                         $formatoInvalido = false;
                         $patenteRegistrada = false;
                         $errorAsientos =false;
 
-                        if($nuevaPatente != $veh[2]){
-                            $regex = '/^[a-zA-Z]{3}\d{3}$/';
-                            if(!preg_match($regex,$nuevaPatente)){
-                                $formatoInvalido=true;
-                            } else{
-                                while ($filaV = $vehiculos -> fetch_array(MYSQLI_NUM)){
-                                    if($nuevaPatente == $filaV[2]){
-                                        $patenteRegistrada=true;
-                                    }
+                        $regex = '/^[a-zA-Z]{3}\d{3}$/';
+                        if(!preg_match($regex,$nuevaPatente)){
+                            $formatoInvalido=true;
+                        } else{
+                            while ($filaV = $vehiculos -> fetch_array(MYSQLI_NUM)){
+                                if($nuevaPatente == $filaV[2]){
+                                    $patenteRegistrada=true;
                                 }
                             }
-                        }
-
+                        }                
+                        
                         if($nuevoAsientos != $veh[3]){
                             if ($nuevoAsientos <= 0){
                                 $errorAsientos =true;
@@ -73,7 +73,7 @@
                                 mysqli_query($link, "UPDATE vehiculos SET marca='$nuevaMarca' where IDvehiculo='$idvehiculo'");
                             }
                             
-                            if($nuevaModelo != $veh[1]){
+                            if($nuevoModelo != $veh[1]){
                                 mysqli_query($link, "UPDATE vehiculos SET modelo='$nuevoModelo' where IDvehiculo='$idvehiculo'");
                             }
                             

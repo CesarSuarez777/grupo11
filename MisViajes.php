@@ -78,7 +78,9 @@
 				<nav>
 				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
 				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Mis viajes como conductor</font></a>
-				    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-vehiculo" role="tab" aria-controls="nav-profile" aria-selected="false"><font color="#f87678">Mis viajes como acompañante</font></a>
+				    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-vehiculo" role="tab" aria-controls="nav-profile" aria-selected="false"><font color="#f87678">Mis viajes como acompañante</font></a> 
+                                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><font color="#f87678">Mis transacciones</font></a>
+
 				  </div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
@@ -161,15 +163,18 @@
                                                    <td><font face='georgia'><?php echo $destino[0]; ?></font></td>
                                                    <td><font face='georgia'><?php echo $createDate3 ->format('d-m-Y H:i');?></font></td>
                                                    <td><font face='georgia'><?php $createDate4 = new DateTime($fila[9]);echo $createDate4->format('d-m-Y H:i'); ?></font></td>
-                                                   <td><font face='georgia'><?php echo '$' . $fila[12]; ?></font></td>
-                                                   <td><?php if((($fila[2]==1)&&($hoy>$createDate3))or $fila[2]==-1){}else{?><a onclick="return confirm('¿Estás seguro?');" href='eliminarSolicitudAco.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>'>Eliminar solicitud</a> <?php }?></td>   
+                                                   <td><font face='georgia'><?php echo '$' . round($fila[12],2); ?></font></td>
+                                                   <td><a href="VerViaje?id=<?php echo $fila[1];?>">Detalle</a>
+                                                       <?php if((($fila[2]==1)&&($hoy>$createDate3))or $fila[2]==-1){}else{?><span> | </span><a onclick="return confirm('ADVERTENCIA: si usted ya se encuentra aceptado en el viaje se descontará 1 punto a su calificación');" href='eliminarSolicitudAco.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>'>Eliminar solicitud</a> <?php }?>   
+                                                   </td>   
                                                  </tr>
                                                  <?php
 
                                                  }?>
                                                </tbody>
                                         </table>
-                                  </div>   
+                                  </div>
+                                  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
                                 </div>
                        </div>
                 </div>

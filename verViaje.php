@@ -23,6 +23,8 @@
             $email=$_SESSION['email'];
             $iduser = $_SESSION['id'];
             
+   
+            
             $idviaje = $_GET['id'];
             $resultado = mysqli_query($link, "SELECT * FROM viajes where IDviaje='$idviaje'");
             $row = $resultado->fetch_array(MYSQLI_NUM);
@@ -38,11 +40,17 @@
             $vehiculos = $vehiculos -> fetch_array(MYSQLI_NUM);
             
             $puntos=0;
+            
             $calificaciones = mysqli_query($link, "SELECT calificacion FROM calificaciones where IDdestino=$nombreUser[2] AND aConductor");
             while($cal = $calificaciones->fetch_array(MYSQLI_NUM)){
                 $puntos=$puntos+$cal[0];
             }
+            
             $puntos = $puntos - $nombreUser[3];
+            
+            $postulados = mysqli_query($link, "SELECT IDusuario from postulados_usuarios_viajes where IDviaje=$idviaje AND IDusuario=$iduser");
+            
+            $numfilas = mysqli_num_rows($postulados);
 
   	?>
         <header>
@@ -82,7 +90,7 @@
                         </div>
                         <div class="col-2">
                             <br>
-                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     Mi cuenta</font></a><br>
+                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     <?php echo $_SESSION['nombre']; ?></font></a><br>
                             <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
@@ -142,7 +150,9 @@
                                         <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/asiento.png'><?php echo '     ' . $row[9]. ' asientos disponibles';?></li>
                                       </ul>
                                     <div class="panel-footer">
-                                        <a class="btn btn-lg btn-block btn-danger" href="postularse.php?id=<?php echo $idviaje;?>">SOLICITAR INSCRIPCIÓN</a>
+                                        <?php if ($row[4]!=$iduser && $numfilas == 0){ ?>
+                                        <a class="btn btn-lg btn-block btn-danger" href="postularse.php?id=<?php echo $idviaje;?>">SOLICITAR INSCRIPCIÓN</a>                                                           
+                                        <?php }?>  
                                         <br>
                                     </div>
                               </div>

@@ -82,7 +82,7 @@
     }
  
     if($calificacionPendientes){
-        header("Location: verViaje.php?id=$idviaje?califpendientes=true");
+        header("Location: verViaje.php?id=$idviaje&califpendientes=true");
         exit();
     }
     

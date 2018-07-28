@@ -121,7 +121,11 @@
                                       }if (!empty($_GET['viajespe'])){
                                          ?><br><h5 align="center" style="color: red">No puede eliminar una tarjeta con viajes pendientes.</h5><?php
                                       }
+                                      if (!empty($_GET['vehiculo'])){
+                                          ?><br><h5 align="center" style="color: green">¡Vehiculo agregado con exito!</h5><?php
+                                      }
                                       ?>
+                                    
                                       <div class="jumbotron">
                                         <div class="row">
                                             <div class="col-md-4 col-xs-12 col-sm-4 col-lg-3">

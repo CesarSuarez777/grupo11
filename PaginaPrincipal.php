@@ -24,6 +24,9 @@
             
           exit;
           }
+          
+          $id = $_SESSION['id'];
+                  
           $hoy = new DateTime('today');
           
           $viajes = mysqli_query($link, "SELECT * FROM viajes"); 
@@ -107,14 +110,14 @@
                                     }
                                     $puntos = $puntos - $conductor[9];
                                     ?>
-                                    <tr>
+                                    <tr style="background-color: <?php if ($row[4]==$id) { echo "#ffffd9";} ?> ">
                                         <td>
                                         <div class="media">                                           
                                             <div class="media-body">
                                                 <img src="Imagenes/VIAJE.png" height="20"><font size='5' color='black'> <?php echo"$origen[0] - $destino[0]" ?></font>&nbsp;<img src="Imagenes/reloj.png" height="15"><strong style="font-size: 13px"> <?php $fecha1 = new DateTime("$row[1] . $row[2]");$fecha2 = new DateTime($row[5]);$diferencia = $fecha2->diff($fecha1);$agregar=0;if($diferencia->d>0){$agregar=$diferencia->d*24;}$horas=$diferencia->h+$agregar;echo "$horas horas";if(($diferencia->i)!=0){echo" y $diferencia->i minutos";}?></strong><br>
                                                 <img src="Imagenes/CONDUCTOR.png" height="28"><font size='4'><a href="verPerfil.php?id=<?php echo $conductor[7]?>"> <?php echo "$conductor[0] $conductor[1]"?></a></font><font size='2' color='<?php if ($puntos>=0){echo "green";}else{echo "red";}?>'><strong color='<?php if($puntos>=0){echo "green";}else{echo "red";} ?>'>&nbsp;&nbsp;<?php echo $puntos?></strong> puntos</font><br>  
                                             </div>
-                                        </div></td>
+                                        </div> </td>
                                         <td style="text-align: center">                                    
                                         <?php $fechaS = new DateTime($row[1]); echo $fechaS->format('d-m-Y');?>
                                         </td>
