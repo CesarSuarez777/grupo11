@@ -46,6 +46,16 @@
                 $puntos=$puntos+$cal[0];
             }
             
+            if(isset($_POST['preguntar'])){
+                $comentario=$_POST['comentario'];
+                if(!empty($comentario)){
+                    $ahora = new DateTime();
+                    $hoy = $ahora->format('Y-m-d H:i:s');
+                    mysqli_query($link, "INSERT INTO comentarios (IDuser, IDviaje, Contenido,fecha) VALUES ($iduser,$idviaje,'$comentario','$hoy')");
+                    header("Location: verViaje.php?id=$idviaje&pregunto=true");
+                }
+            }
+            
             $puntos = $puntos - $nombreUser[3];
             
             $postulados = mysqli_query($link, "SELECT IDusuario from postulados_usuarios_viajes where IDviaje=$idviaje AND IDusuario=$iduser");
@@ -121,6 +131,12 @@
                              if (!empty($_GET['exito'])){?>
                              <h4 style="color: green;text-align: center" >¡USTED SE HA POSTULADO CON EXITO! </h4><br>
                           <?php }
+                            if (!empty($_GET['respondio'])){?>
+                             <h4 style="color: green;text-align: center" >RESPUESTA GUARDADA. </h4><br>
+                          <?php }
+                            if ((!empty($_GET['pregunto']))&&(!isset($_POST['preguntar']))){?>
+                             <h4 style="color: green;text-align: center" >PREGUNTA ENVIADA. </h4><br>
+                          <?php }
                              if (!empty($_GET['yaPoseeViaje'])){?>
                              <h4 style="color: red;text-align: center" >USTED TIENE UN VIAJE PROGRAMADO PARA ESA FECHA. </h4><br>
                           <?php }
@@ -155,11 +171,62 @@
                                         <?php }?>  
                                         <br>
                                     </div>
+                                  <?php if($row[4]!=$iduser){ ?>
+                                  <form method="POST" action="">
+                                    <div class="form-group">
+                                        <h3>Haz una pregunta:</h3>
+                                        <?php if(isset($_POST['preguntar'])){
+                                            if(empty($comentario)){
+                                                ?> <br><font size="2" color="red" face="Univers-Light-Normal">No puede hacer preguntas vacías.</font><?php 
+                                            }
+                                        }
+                                        ?>
+                                        <textarea class="form-control" rows="4" id="comentario" name="comentario"></textarea>
+                                    </div>             
+                                      <button class="btn btn-success btn-block" type="submit" name="preguntar" onclick="return confirm('¿Estás seguro de enviar la pregunta?');">Enviar pregunta</button>    
+                                 </form>
+                                 <br>
+                                 <?php }?>
+                                <h3>Preguntas:</h3>
+                                <?php
+                                    $comentarios = mysqli_query($link,"SELECT * FROM comentarios where IDviaje=$idviaje");
+                                    $owner = mysqli_query($link, "SELECT nombre,apellido,ID FROM viajes,usuarios where IDConductor=ID and IDviaje=$idviaje");
+                                    $own = $owner->fetch_array(MYSQLI_NUM);
+                                    while($comen = $comentarios ->fetch_array(MYSQL_NUM)){
+                                        $usuario = mysqli_query($link,"SELECT nombre,apellido,ID FROM usuarios where ID=$comen[1]");
+                                        $usu = $usuario ->fetch_array(MYSQLI_NUM);
+                                        ?>
+                                        <div class="container-fluid" style="background-color:white">
+                                            <div><span style="float:right"><span style="font-weight:bold"> <?php echo $comen[5]?></span></span><a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usu[2];?>"><?php echo $usu[0] . " " . $usu[1]; ?></a></div>
+                                            <p style="margin-left: 10px"><?php echo $comen[3]; ?></p>
+                                            <br>
+                                        </div>
+                                        <?php if (!empty($comen[4])){?>
+                                            <div style="margin-left:40px">
+                                                <h6>Respuesta</h6>
+                                            <div class="container-fluid" style="background-color: white">
+                                                <div><a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $own[2];?>"><?php echo $own[0] . " " . $own[1]; ?></a></div>
+                                                <p style="margin-left: 10px"><?php echo $comen[4]; ?> </p>
+                                                <br>
+                                            </div>
+                                            </div>
+                                        <?php }else{
+                                            if($row[4]=$iduser){
+                                                ?><br><div class="container"><a class="btn btn-success btn-block" href="responder_comentario.php?id=<?php echo $comen[0];?>" >Responder</a></div><?php
+                                            }
+                                        }
+?>
+                                         <hr style="height:3px; color:#999999" />
+                                        <?PHP
+                                    }
+                                ?>
+                                <br>
                               </div>
+                             </div>
                             </div>
 			</div>
                      </div>
-                </div>
+
 			<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         	<input type="submit" value="" />  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         	<script src="js/bootstrap.min.js"></script>
