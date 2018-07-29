@@ -107,12 +107,13 @@
           <div class="row">
               <div class="col-2 bg-white">
                   <div class="container-fluid">
+                      <br>
                       <a href='crear_viaje.php' class="btn btn-block btn-outline-danger btn-lg"><font size='5'>Crear viaje</font></a><br>
                       <br>
                       <h3 style="color:red">Ordenar por:</h3>
                       <div class="form-group">
-                        <select name="forma" onchange="location = this.value;">
-                            <option value="PaginaPrincipal.php?ordenar=1&form=<?php echo $forma;?>" <?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==1) {echo "selected";}} ?>>Fecha</option>
+                          <select name="forma" onchange="location = this.value;">
+                          <option value="PaginaPrincipal.php?ordenar=1&form=<?php echo $forma;?>" <?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==1) {echo "selected";}} ?>>Fecha</option>
                           <option value="PaginaPrincipal.php?ordenar=2&form=<?php echo $forma;?>"<?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==2) {echo "selected";}} ?> >Precio</option>
                           <option value="PaginaPrincipal.php?ordenar=3&form=<?php echo $forma;?>"<?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==3) {echo "selected";}} ?> >Ciudad de origen</option>
                           <option value="PaginaPrincipal.php?ordenar=4&form=<?php echo $forma;?>"<?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==4) {echo "selected";}} ?>>Ciudad de destino</option>

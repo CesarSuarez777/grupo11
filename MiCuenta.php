@@ -104,7 +104,9 @@
 				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Mis datos personales</font></a>
 				    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-vehiculo" role="tab" aria-controls="nav-profile" aria-selected="false"><font color="#f87678">Mis vehiculos</font></a>
 				    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-tarjeta" role="tab" aria-controls="nav-contact" aria-selected="false"><font color="#f87678">Mi tarjeta</font></a>
-				  </div>
+                                    <a class="nav-item nav-link" id="nav-trans-tab" data-toggle="tab" href="#nav-trans" role="tab" aria-controls="nav-trans" aria-selected="false"><font color="#f87678">Mis transacciones</font></a>
+
+                                  </div>
 				</nav>
 				<div class="tab-content" id="nav-tabContent">
 				<div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
@@ -159,12 +161,12 @@
                              <h1>Calificaciones</h1>
                              <nav>
                                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Calficaciones como conductor</font></a>
-                                  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false"><font color="#f87678">Calificaciones como acompañante</font></a>
+                                 <a class="nav-item nav-link active" id="nav-home2-tab" data-toggle="tab" href="#nav-home2" role="tab" aria-controls="nav-home2" aria-selected="true"><font color="#f87678">Calficaciones como conductor</font></a>
+                                  <a class="nav-item nav-link" id="nav-profile2-tab" data-toggle="tab" href="#nav-profile2" role="tab" aria-controls="nav-profile2" aria-selected="false"><font color="#f87678">Calificaciones como acompañante</font></a>
                                 </div>
                               </nav>
                               <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="tab-pane fade show active" id="nav-home2" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <h3 align="right" style="color: #cccccc"><?php echo mysqli_num_rows($calificaciones);?> Comentarios</h3>
                              <?php while ($cal = $calificaciones ->fetch_array(MYSQLI_NUM)) {
                                 $usuariocalif = mysqli_query($link, "SELECT nombre,apellido,ID FROM calificaciones,usuarios where IDcalif=$cal[5] AND IDorigen=ID");
@@ -184,7 +186,7 @@
                                  </div>
                              </div><hr style="height:3px; color:#999999" />
                              <?PHP }?></div>
-                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <div class="tab-pane fade" id="nav-profile2" role="tabpanel" aria-labelledby="nav-profile-tab">
                                 <h3 align="right" style="color: #cccccc"><?php echo mysqli_num_rows($calificacionesA);?> Comentarios</h3>    
                                 <?php while ($calA = $calificacionesA ->fetch_array(MYSQLI_NUM)) {
                                 $usuariocalifA = mysqli_query($link, "SELECT nombre,apellido,ID FROM calificaciones,usuarios where IDcalif=$calA[5] AND IDorigen=ID");
@@ -294,8 +296,35 @@
                                       }
                                       ?>
                                     </div>
+                                    <div class="tab-pane fade" id="nav-trans" role="tabpanel" aria-labelledby="nav-trans-tab"> 
+                                    <?php
+                                        $pagos = mysqli_query($link, "SELECT * FROM pagos where (IDusuario_destino=$IDusuario OR IDusuario_origen=$IDusuario) AND deuda=false ORDER BY fecha desc");
+                                        ?>
+                                            <h5 style="margin-left:300px"><img src="Imagenes/Verde.jpg" height="17x17"><font size="3" face="Georgia">     Cobro   </font><img src="Imagenes/Rojo.jpg" height="17x17"><font size="3" face="Georgia">     Pago   </font></h5>                                    
+                                          <table class="table table-sm table-borderless">
+                                          <thead class='thead-light'>
+                                          <tr style='border-bottom: 2px solid #f17376'>
+                                            <th scope="col"><font size='5'>Monto</font></th>
+                                            <th scope="col"><font size='5'>Fecha</font></th>
+                                            <th scope="col"><font size='5'>Numero de transacción</font></th>
+                                          </tr>
+                                          </thead>
+                                          <tbody><?php
+                                          while($p = $pagos ->fetch_array(MYSQLI_NUM)){                                              
+                                          ?>
+                                          <tr style='margin-top: 30px;background-color:<?php if($p[1]==$IDusuario){echo "8fe59d"; }else{echo "ffb3b8";}?>'>
+                                            <td><font face='georgia'><?php if($p[1]==$IDusuario){echo "+";}else{echo "-";} echo "$" . $p[3]; ?></font></td>
+                                            <td><font face='georgia'><?php echo $p[4]; ?></font></td>
+                                            <td><font face='georgia'><?php echo $p[0]; ?></font></td>
+                                          </tr>
+                                          <?php
+                                          
+                                          }?>
+                                        </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                  </div>
+                              </div>
                             </div>
                            
 			<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
