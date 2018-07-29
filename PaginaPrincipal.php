@@ -28,8 +28,36 @@
           $id = $_SESSION['id'];
                   
           $hoy = new DateTime('today');
+          $ordenamiento=1;
+          $forma='a';
           
-          $viajes = mysqli_query($link, "SELECT * FROM viajes"); 
+          if (!empty($_GET['ordenar'])){
+              $ordenamiento = $_GET['ordenar'];
+          }
+          
+          if (!empty($_GET['form'])){
+              $forma=$_GET['form'];
+          }
+          
+          
+          switch ($ordenamiento) {
+                case 1:
+                    if($forma=='d'){$viajes = mysqli_query($link,"SELECT * FROM viajes ORDER BY fecha desc,hora desc");}
+                    else{$viajes = mysqli_query($link,"SELECT * FROM viajes ORDER BY fecha,hora");}
+                    break;
+                case 2:
+                    if($forma=='d'){$viajes = mysqli_query($link,"SELECT * FROM viajes ORDER BY precio desc");}
+                    else{$viajes = mysqli_query($link,"SELECT * FROM viajes ORDER BY precio");}
+                    break;
+                case 3:
+                    if($forma=='d'){$viajes = mysqli_query($link,"SELECT * FROM viajes,ciudades where IDOrigen=IDCiudad ORDER BY nombre desc");}
+                    else{$viajes = mysqli_query($link,"SELECT * FROM viajes,ciudades where IDOrigen=IDCiudad ORDER BY nombre ");}
+                    break;
+                case 4:
+                    if($forma=='d'){$viajes = mysqli_query($link,"SELECT * FROM viajes,ciudades where IDDestino=IDCiudad ORDER BY nombre desc");}
+                    else{$viajes = mysqli_query($link,"SELECT * FROM viajes,ciudades where IDDestino=IDCiudad ORDER BY nombre");}
+                    break;
+            }
           
         ?>
       
@@ -79,10 +107,28 @@
           <div class="row">
               <div class="col-2 bg-white">
                   <div class="container-fluid">
-                      <a href='crear_viaje.php' class="btn btn-block btn-outline-danger btn-lg"><font size='5'>Crear viaje</font></a> 
+                      <a href='crear_viaje.php' class="btn btn-block btn-outline-danger btn-lg"><font size='5'>Crear viaje</font></a><br>
+                      <br>
+                      <h3 style="color:red">Ordenar por:</h3>
+                      <div class="form-group">
+                        <select name="forma" onchange="location = this.value;">
+                            <option value="PaginaPrincipal.php?ordenar=1&form=<?php echo $forma;?>" <?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==1) {echo "selected";}} ?>>Fecha</option>
+                          <option value="PaginaPrincipal.php?ordenar=2&form=<?php echo $forma;?>"<?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==2) {echo "selected";}} ?> >Precio</option>
+                          <option value="PaginaPrincipal.php?ordenar=3&form=<?php echo $forma;?>"<?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==3) {echo "selected";}} ?> >Ciudad de origen</option>
+                          <option value="PaginaPrincipal.php?ordenar=4&form=<?php echo $forma;?>"<?php if (!empty($_GET['ordenar'])){if($_GET['ordenar']==4) {echo "selected";}} ?>>Ciudad de destino</option>
+                        </select>   
+                      </div>
+                      <h3 style="color:red">De forma:</h3>
+                      <div class="form-group">
+                        <select name="forma2" onchange="location = this.value;">
+                          <option value="PaginaPrincipal.php?ordenar=<?php echo $ordenamiento;?>&form=a" <?php if (!empty($_GET['form'])){if($_GET['form']=='a') {echo "selected";}} ?>>Acendente</option>
+                          <option value="PaginaPrincipal.php?ordenar=<?php echo $ordenamiento;?>&form=d"<?php if (!empty($_GET['form'])){if($_GET['form']=='d') {echo "selected";}} ?> >Descendente</option>
+                        </select>   
+                      </div>
                   </div>
               </div>
               <div class="col-10 ">
+                  
                         <div style="margin-right: 30px">
                             <table class="table table-hover">
                                 <thead>

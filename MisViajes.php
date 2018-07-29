@@ -79,7 +79,7 @@
 				  <div class="nav nav-tabs" id="nav-tab" role="tablist">
 				    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true"><font color="#f87678">Mis viajes como conductor</font></a>
 				    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-vehiculo" role="tab" aria-controls="nav-profile" aria-selected="false"><font color="#f87678">Mis viajes como acompañante</font></a> 
-                                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><font color="#f87678">Mis transacciones</font></a>
+                                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><font color="#f87678">Mis calificaciones pendientes</font></a>
 
 				  </div>
 				</nav>
@@ -92,8 +92,10 @@
                                             ?><h5 align="center" style="color: green">Se ha eliminado su solicitud.</h5><?php
                                             }if (!empty($_GET['inhabilitado'])) {
                                             ?><br><h5 align="center" style="color: red">No puede editar un viaje con solicitudes pendientes o aceptadas.</h5>
-                                            <?php }
-                                            ?>
+                                            <?php }if (!empty($_GET['calificado'])) {
+                                            ?><br><h5 align="center" style="color: green">¡Usuario calificado con éxito!</h5>
+                                            <?php
+                                            }?>
                                             <h5 style="margin-left:380px"><img src="Imagenes/Amarillo.jpg" height="17x17"><font size="3" face="Georgia">     Viaje pendiente   </font><img src="Imagenes/Celeste.jpg" height="17x17"><font size="3" face="Georgia">     Viaje realizado</font></h5>                                   
                                             <table class="table table-sm table-borderless">
                                                  <thead class='thead-light'>
@@ -174,7 +176,46 @@
                                                </tbody>
                                         </table>
                                   </div>
-                                  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                        <?php $calificacionesPendientes = mysqli_query($link, "SELECT * from calificaciones where IDorigen=$id and calificacion=0");
+                                              if (mysqli_num_rows($calificacionesPendientes)>0){?>
+                                        <table class="table table-sm table-borderless">
+                                               <thead class='thead-light'>
+                                                 <tr style='border-bottom: 2px solid #f17376'>
+                                                   <th scope="color"><font size='5'>Califico a</font></th>
+                                                   <th scope="col"><font size='5'>En su rol de</font></th>
+                                                   <th scope="col"><font size='5'>Por el viaje a</font></th>
+                                                   <th scope="col"><font size='5'>En la fecha</font></th>
+                                                   <th scope='col'></th>
+                                                 </tr>
+                                               </thead>
+                                               <tbody>
+                                                 <?php 
+                                                 while($calif = $calificacionesPendientes->fetch_array(MYSQLI_NUM)) {
+                                                     $usuariocalif = mysqli_query($link, "SELECT nombre,apellido FROM usuarios where ID=$calif[1]");
+                                                     $usu = $usuariocalif -> fetch_array(MYSQLI_NUM);
+                                                     
+                                                     $viaje = mysqli_query($link,"SELECT IDDestino,fecha,hora from viajes where IDviaje=$calif[7]");
+                                                     $viaj = $viaje -> fetch_array(MYSQLI_NUM);     
+                                                     $destino = mysqli_query($link, "SELECT * FROM ciudades where IDCiudad=$viaj[0]");
+                                                     $destino = $destino->fetch_array(MYSQLI_NUM);                                                    
+                                                 ?>
+                                                 <tr style='margin-top: 30px'>
+                                                   <td><a href="verPerfil.php?id=<?php echo $calif[1];?>"><font face='georgia'><?php echo $usu[0] . " " . $usu[1] ?></font></a></td>
+                                                   <td><font face='georgia'><?php if($calif[7]==0){ echo "Acompañante"; } else {echo "Conductor";}  ?></font></td>
+                                                   <td><font face='georgia'><?php echo $destino[0];?></font></td>
+                                                   <td><font face='georgia'><?php echo $viaj[1] . " " . $viaj[2];?></font></td>
+                                                   <td><a href="calificar_viaje.php?id=<?php echo $calif[5];?>" class="btn btn-outline-danger btn-block" style="margin-right: 20"><font face='georgia'>Calificar</font></a></td>
+                                                 </tr>
+                                                 <?php
+
+                                                 }}else{
+                                                     ?><br><h4 style="color: green;text-align: center" >USTED NO POSEE CALIFICACIONES PENDIENTES. </h4><?php
+                                                 }
+?>
+                                               </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                        </div>
                 </div>

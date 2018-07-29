@@ -34,7 +34,7 @@
         exit();
     }
     
-    $horaViajeIinicio = new DateTime($viaje[0] . $viaje[1]);
+    $horaViajeInicio = new DateTime($viaje[0] . $viaje[1]);
     $horaViajeFin = new DateTime($viaje[3]);
     
     $viajes = mysqli_query($link, "SELECT fecha,hora,llegada FROM viajes where IDconductor=$IDusuario ");
@@ -44,15 +44,18 @@
         $fechaFinViaje = new DateTime($cadaViaje[2]);
 
         if(($horaViajeInicio > $fechaDeViaje)&&($horaViajeIinicio < $fechaFinViaje)){
+            echo "entro";
             header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
             exit();
         }
 
         if(($horaViajeFin >= $fechaDeViaje) && ($horaViajeFin <= $fechaFinViaje)){
+            echo "entro2";
             header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
             exit();
         }
         if (($horaViajeIinicio <= $fechaDeViaje) && ($horaViajeFin >= $fechaFinViaje)) {
+            echo "entro3";
             header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
             exit();
         }
@@ -65,16 +68,18 @@
             $fechaDeViajeA = new DateTime($cadaViajeA[0] . $cadaViajeA[1]);
             $fechaFinViajeA = new DateTime($cadaViajeA[2]);
 
-            if(($horaViajeInicio > $fechaDeViajeA)&&($horaViajeIinicio < $fechaFinViajeA)){
+            if(($horaViajeInicio >= $fechaDeViajeA)&&($horaViajeInicio <= $fechaFinViajeA)){
                 header("Location: verViaje.php?id=$idviaje&yaPoseeViajeA=true");
                 exit();
             }
+            
+            echo "paso";
 
             if(($horaViajeFin >= $fechaDeViajeA) && ($horaViajeFin <= $fechaFinViajeA)){
                 header("Location: verViaje.php?id=$idviaje&yaPoseeViajeA=true");
                 exit();
             }
-            if (($horaViajeIinicio <= $fechaDeViajeA) && ($horaViajeFin >= $fechaFinViajeA)) {
+            if (($horaViajeInicio <= $fechaDeViajeA) && ($horaViajeFin >= $fechaFinViajeA)) {
                 header("Location: verViaje.php?id=$idviaje&yaPoseeViajeA=true");
                 exit();
             }
