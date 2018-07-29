@@ -31,7 +31,7 @@
             $tarjetas = mysqli_query($link, "SELECT * FROM tarjetas where IDtarjeta=$IDusuario");
 
 
-            $ciudades = mysqli_query($link,"SELECT * FROM ciudades");
+            $ciudades = mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");
 
             $calificacionPendientes = false;
             $calificaciones = mysqli_query($link,"SELECT * FROM calificaciones where IDorigen=$IDusuario");

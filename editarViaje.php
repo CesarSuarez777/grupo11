@@ -41,7 +41,13 @@
             
             $viaje = mysqli_query($link,"SELECT * FROM viajes where IDviaje='$idviaje'");
             $viaje = $viaje->fetch_array(MYSQLI_NUM);
-            $ciudades = mysqli_query($link,"SELECT * FROM ciudades");
+            if (!isset($_POST['apreto editar'])){
+                $origen = mysqli_query($link, "SELECT nombre FROM ciudades where IDCiudad=$viaje[6]");
+                $destino = mysqli_query($link, "SELECT nombre FROM ciudades where IDCiudad=$viaje[7]");
+                $ori = $origen->fetch_array(MYSQLI_NUM);
+                $des = $destino->fetch_array(MYSQLI_NUM);
+            }
+            $ciudades = mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");
             $vehiculos = mysqli_query($link, "SELECT * FROM vehiculos where IDuser='$IDusuario'");
             
             if (isset($_POST['apreto_editar'])){
@@ -61,6 +67,11 @@
                         $yaPoseeViajeDuranteFin=false;
                         $coincidenCiudades =false;
                         $fechaFinMenorInicio =false;
+                        
+                        $origen = mysqli_query($link, "SELECT nombre FROM ciudades where IDCiudad=$IDOrigen");
+                        $destino = mysqli_query($link, "SELECT nombre FROM ciudades where IDCiudad=$IDDestino");
+                        $ori = $origen->fetch_array(MYSQLI_NUM);
+                        $des = $destino->fetch_array(MYSQLI_NUM);
                         
                         $hoy = new DateTime('+2 days');
                         $fechaCreada = new DateTime("$fecha . $hora");
@@ -186,7 +197,8 @@
                                                 <div class="input-group-prepend">
                                                   <label class="input-group-text" for="inputGroupSelect01">Origen</label>
                                                 </div>
-                                                <select class="custom-select"  placeholder='vehiculo' name='IDorigen' id="inputGroupSelect01">
+                                                <select class="custom-select"  placeholder='vehiculo' name='IDorigen' id="inputGroupSelect01"> 
+                                                  <option value="<?php if (isset($_POST['apreto_editar'])) {if (!$coincidenCiudades) {echo $IDOrigen;}else{echo $viaje[6];}}else{echo $viaje[6];}?>" selected> <?php echo $ori[0];?></option>
                                                   <?php while($fila1 = $ciudades->fetch_array(MYSQL_NUM)){?>
                                                   <option value="<?php echo $fila1[1]?>"><?php echo $fila1[0] ?></option>
                                                   <?php }?>
@@ -200,6 +212,7 @@
                                                   <label class="input-group-text" for="inputGroupSelect01">Destino</label>
                                                 </div>
                                                 <select class="custom-select" placeholder='vehiculo' name='IDDestino' id="inputGroupSelect01">
+                                                  <option value="<?php if (isset($_POST['apreto_editar'])) {if (!$coincidenCiudades) {echo $IDDestino;}else{echo $viaje[7];}}else{echo $viaje[7];}?>" selected> <?php echo $des[0];?></option>
                                                   <?php mysqli_data_seek($ciudades,0);while($fila3 = $ciudades->fetch_array(MYSQL_NUM)){?>
                                                     <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
                                                   <?php }?>
