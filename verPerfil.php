@@ -49,37 +49,54 @@
   	?>
         <header>
             <nav>
-		 <ul>
+         <ul>
                     <div class="row" position="fixed">
                         <div class="col-2">
-                            <p>
                                 <a href="PaginaPrincipal.php">
                                 <img href="PaginaPrincipal.php" src="Logo.jpg" alt="Imagen no disponible"  class="rounded mx-auto d-block" height="120x120">
                                 </a>
-                            </p>
-                            
                         </div>
                         <div class="col-8">
                             <div class="row" position="fixed">
                                 <div class="col-10">
                                     <br>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                    <form action="PaginaPrincipal.php" method="POST" accept-charset="utf-8">
+                                      <div class="input-group">
+                                        <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                            </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDOrigen' id="inputGroupSelect01">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>
                                         </div>
-                                      <input type="text" face="Univers-Light-Normal" class="form-control" placeholder="La Plata" aria-label="La Plata" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                        <div style="width:38%;margin-left:10px" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Fecha</font></span>
+                                            </div>
+                                          <input  type="date" face="Univers-Light-Normal" name="fecha" class="form-control" aria-label="La Plata" aria-describedby="basic-addon1">
                                         </div>
-                                    <input type="text" class="form-control" face="Univers-Light-Normal" placeholder="Berisso" aria-label="Berisso" aria-describedby="basic-addon1">
-                                    </div>
+                                      </div>
+                                      <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                          <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                          </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDDestino' id="inputGroupSelect02">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>                                    
+                                          </div>
                                 </div>
                                 <div class="col-2">
                                     <br>
-                                    <button class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
+                                    <button type="submit" name="apreto_ir" href="" class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
                                 </div>
+                              </form>
                             </div>
                         </div>
                         <div class="col-2">
@@ -89,7 +106,7 @@
                         </div>     
                     </div>
                  </ul>
-            </nav>        
+            </nav>      
         </header>
 		<div class="row" position="fixed">
 			<div class="col-2">
@@ -128,7 +145,7 @@
                                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
                                 <h3 align="right" style="color: #cccccc"><?php echo mysqli_num_rows($calificaciones);?> Comentarios</h3>
                              <?php while ($cal = $calificaciones ->fetch_array(MYSQLI_NUM)) {
-                                $usuariocalif = mysqli_query($link, "SELECT nombre,apellido,ID FROM calificaciones,usuarios where IDcalif=$cal[5] AND IDorigen=ID");
+                                $usuariocalif = mysqli_query($link, "SELECT nombre,apellido,ID,borrado FROM calificaciones,usuarios where IDcalif=$cal[5] AND IDorigen=ID");
                                 $usu = $usuariocalif -> fetch_array(MYSQLI_NUM);
                              ?>
                              <div class="container-fluid">
@@ -137,7 +154,11 @@
                                          <img height="70x70" src="Imagenes/<?php if($cal[4]==1){echo "like.png";}else{ echo "unlinke.png";} ?>">
                                      </div>
                                      <div class="col-7">
-                                         <div><span style="float:right"><span style="font-weight:bold"> <?php echo $cal[3]?></span></span><a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usu[2];?>"><?php echo $usu[0] . " " . $usu[1]; ?></a></div>
+                                         <div><span style="float:right"><span style="font-weight:bold"> <?php $fc = new DateTime($cal[8]); echo $fc->format('d-m-Y H:i:s')?></span></span>
+                                            <?php if(!$usu[3]){ ?>
+                                                <a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usu[2];?>"><?php echo $usu[0] . " " . $usu[1]; ?></a>
+                                              <?php } else{ ?> <strong> <?php echo $usu[0] . " " . $usu[1]; ?> </strong> <?php }?>
+                                        </div>
                                          <p style="margin-left: 10px"><?php echo $cal[2]; ?></p>
                                      </div>
                                      <div class="col-4"> 
@@ -148,7 +169,7 @@
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                                 <h3 align="right" style="color: #cccccc"><?php echo mysqli_num_rows($calificacionesA);?> Comentarios</h3>    
                                 <?php while ($calA = $calificacionesA ->fetch_array(MYSQLI_NUM)) {
-                                $usuariocalifA = mysqli_query($link, "SELECT nombre,apellido,ID FROM calificaciones,usuarios where IDcalif=$calA[5] AND IDorigen=ID");
+                                $usuariocalifA = mysqli_query($link, "SELECT nombre,apellido,ID,borrado FROM calificaciones,usuarios where IDcalif=$calA[5] AND IDorigen=ID");
                                 $usuA = $usuariocalifA -> fetch_array(MYSQLI_NUM);
                              ?>
                              <div class="container-fluid">
@@ -157,8 +178,12 @@
                                          <img height="70x70" src="Imagenes/<?php if($calA[4]==1){echo "like.png";}else{ echo "unlinke.png";} ?>">
                                      </div>
                                      <div class="col-7">
-                                         <div><span style="float:right"><span style="font-weight:bold"> <?php echo $calA[3]?></span></span><a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usuA[2];?>"><?php echo $usuA[0] . " " . $usuA[1]; ?></a></div>
-                                         <p style="margin-left: 10px"><?php echo $calA[2]; ?></p>
+                                         <div><span style="float:right"><span style="font-weight:bold"> <?php echo $calA[3]?></span></span>
+                                            <?php if(!$usu[3]){ ?>
+                                                <a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usuA[2];?>"><?php echo $usuA[0] . " " . $usuA[1]; ?></a>
+                                              <?php } else{ ?> <strong> <?php echo $usuA[0] . " " . $usuA[1]; ?> </strong> <?php }?>
+                                            </div>
+                                    <p style="margin-left: 10px"><?php echo $calA[2]; ?></p>
                                      </div>
                                      <div class="col-4"> 
                                      </div>

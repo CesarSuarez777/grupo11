@@ -43,23 +43,43 @@
                             <div class="row" position="fixed">
                                 <div class="col-10">
                                     <br>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                    <form action="PaginaPrincipal.php" method="POST" accept-charset="utf-8">
+                                      <div class="input-group">
+                                        <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                            </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDOrigen' id="inputGroupSelect01">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>
                                         </div>
-                                      <input type="text" face="Univers-Light-Normal" class="form-control" placeholder="La Plata" aria-label="La Plata" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                        <div style="width:38%;margin-left:10px" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Fecha</font></span>
+                                            </div>
+                                          <input  type="date" face="Univers-Light-Normal" name="fecha" class="form-control" aria-label="La Plata" aria-describedby="basic-addon1">
                                         </div>
-                                    <input type="text" class="form-control" face="Univers-Light-Normal" placeholder="Berisso" aria-label="Berisso" aria-describedby="basic-addon1">
-                                    </div>
+                                      </div>
+                                      <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                          <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                          </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDDestino' id="inputGroupSelect02">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>                                    
+                                          </div>
                                 </div>
                                 <div class="col-2">
                                     <br>
-                                    <button class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
+                                    <button type="submit" name="apreto_ir" href="" class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
                                 </div>
+                              </form>
                             </div>
                         </div>
                         <div class="col-2">
@@ -128,13 +148,14 @@
                                                    <td><font face='georgia'><?php $createDate2 = new DateTime($row[5]);echo $createDate2->format('d-m-Y H:i'); ?></font></td>
                                                    <td><font face='georgia'><?php echo '$' . $valor; ?></font></td>
                                                    <td><font face='georgia'><?php echo $vehiculoSelec[0]; ?></font></td>
-                                                   <td><a href='<?php echo "verSolicitudes.php?id=$row[0]"; ?>'>Ver solicitudes</a><span> | </span>
+                                                   <td><?php if($hoy<$createDate){?><a href='<?php echo "verSolicitudes.php?id=$row[0]"; ?>'>Ver solicitudes</a><span> | </span>
                                                        <a href='<?php echo "editarViaje.php?id=$row[0]"; ?>'>Editar</a><span> | </span>
-                                                       <a onclick="return confirm('Si posee acompañantes confirmados, entonces se le decrementara un punto de calificación ¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$row[0]"; ?>'>Eliminar</a></td>   
-                                                 </tr>
-                                                 <?php
+                                                       <a onclick="return confirm('Si posee acompañantes confirmados, entonces se le decrementara un punto de calificación ¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$row[0]"; ?>'>Eliminar</a></td> <?php }?>
+                                                    <?php
 
-                                                 }?>
+                                                    }?>
+                                                    </tr>
+                                                   
                                                </tbody>
                                              </table>
                                      
@@ -166,7 +187,7 @@
                                                    <td><font face='georgia'><?php echo $createDate3 ->format('d-m-Y H:i');?></font></td>
                                                    <td><font face='georgia'><?php $createDate4 = new DateTime($fila[9]);echo $createDate4->format('d-m-Y H:i'); ?></font></td>
                                                    <td><font face='georgia'><?php echo '$' . round($fila[12],2); ?></font></td>
-                                                   <td><a href="VerViaje?id=<?php echo $fila[1];?>">Detalle</a>
+                                                   <td><a href="verViaje.php?id=<?php echo $fila[1];?>">Detalle</a>
                                                        <?php if((($fila[2]==1)&&($hoy>$createDate3))or $fila[2]==-1){}else{?><span> | </span><a onclick="return confirm('ADVERTENCIA: si usted ya se encuentra aceptado en el viaje se descontará 1 punto a su calificación');" href='eliminarSolicitudAco.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>'>Eliminar solicitud</a> <?php }?>   
                                                    </td>   
                                                  </tr>
@@ -202,7 +223,7 @@
                                                  ?>
                                                  <tr style='margin-top: 30px'>
                                                    <td><a href="verPerfil.php?id=<?php echo $calif[1];?>"><font face='georgia'><?php echo $usu[0] . " " . $usu[1] ?></font></a></td>
-                                                   <td><font face='georgia'><?php if($calif[7]==0){ echo "Acompañante"; } else {echo "Conductor";}  ?></font></td>
+                                                   <td><font face='georgia'><?php if($calif[6]==0){ echo "Acompañante"; } else {echo "Conductor";}  ?></font></td>
                                                    <td><font face='georgia'><?php echo $destino[0];?></font></td>
                                                    <td><font face='georgia'><?php echo $viaj[1] . " " . $viaj[2];?></font></td>
                                                    <td><a href="calificar_viaje.php?id=<?php echo $calif[5];?>" class="btn btn-outline-danger btn-block" style="margin-right: 20"><font face='georgia'>Calificar</font></a></td>

@@ -33,7 +33,7 @@
             $destino = mysqli_query($link, "SELECT nombre FROM ciudades where IDCiudad=$row[7]");
             $destino = $destino ->fetch_array(MYSQLI_NUM);
             
-            $nombreUser = mysqli_query($link,"SELECT nombre,apellido,ID,penalizacion FROM usuarios where ID=$row[4]");
+            $nombreUser = mysqli_query($link,"SELECT nombre,apellido,ID,penalizacion,borrado FROM usuarios where ID=$row[4]");
             $nombreUser = $nombreUser ->fetch_array(MYSQLI_NUM);
             
             $vehiculos = mysqli_query($link, "SELECT marca,modelo FROM vehiculos where IDvehiculo='$row[3]'");
@@ -64,38 +64,55 @@
 
   	?>
         <header>
-            <nav>
-		 <ul>
+          <nav>
+     <ul>
                     <div class="row" position="fixed">
                         <div class="col-2">
-                            <p>
                                 <a href="PaginaPrincipal.php">
                                 <img href="PaginaPrincipal.php" src="Logo.jpg" alt="Imagen no disponible"  class="rounded mx-auto d-block" height="120x120">
                                 </a>
-                            </p>
-                            
                         </div>
                         <div class="col-8">
                             <div class="row" position="fixed">
                                 <div class="col-10">
                                     <br>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                    <form action="PaginaPrincipal.php" method="POST" accept-charset="utf-8">
+                                      <div class="input-group">
+                                        <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                            </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDOrigen' id="inputGroupSelect01">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>
                                         </div>
-                                      <input type="text" face="Univers-Light-Normal" class="form-control" placeholder="La Plata" aria-label="La Plata" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                        <div style="width:38%;margin-left:10px" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Fecha</font></span>
+                                            </div>
+                                          <input  type="date" face="Univers-Light-Normal" name="fecha" class="form-control" aria-label="La Plata" aria-describedby="basic-addon1">
                                         </div>
-                                    <input type="text" class="form-control" face="Univers-Light-Normal" placeholder="Berisso" aria-label="Berisso" aria-describedby="basic-addon1">
-                                    </div>
+                                      </div>
+                                      <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                          <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                          </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDDestino' id="inputGroupSelect02">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>                                    
+                                          </div>
                                 </div>
                                 <div class="col-2">
                                     <br>
-                                    <button class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
+                                    <button type="submit" name="apreto_ir" href="" class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
                                 </div>
+                              </form>
                             </div>
                         </div>
                         <div class="col-2">
@@ -105,7 +122,7 @@
                         </div>     
                     </div>
                  </ul>
-            </nav>        
+            </nav>      
         </header>
       <br>
       <bR>
@@ -159,7 +176,11 @@
                                             <strong>$<?php echo round($row[8],2);?></strong></p>
                                     </div>
                                       <ul class="list-group list-group-flush text-center" >
-                                          <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/CONDUCTOR.png'><a href="verPerfil.php?id=<?php echo $row[4];?>"><?php echo '    ' . $nombreUser[0] . ' ' . $nombreUser[1]; ?></a><img style="margin-left:15px" height="25x25" src="Imagenes/<?php if($puntos>=0){echo "like.png";}else{echo "unlinke.jpg";}?>"><font style="color: <?php if ($puntos>=0){echo "green";}else{echo "red";}?>"> <?php echo '   ' . $puntos;?></font></li>
+                                          <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/CONDUCTOR.png'>
+                                            <?php if(!$nombreUser[4]){ ?>
+                                                <a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $row[4];?>"><?php echo $nombreUser[0] . " " . $nombreUser[1]; ?></a>
+                                              <?php } else{ ?> <strong> <?php echo $nombreUser[0] . " " . $nombreUser[1]; ?> </strong> <?php }?>
+                                            <img style="margin-left:15px" height="25x25" src="Imagenes/<?php if($puntos>=0){echo "like.png";}else{echo "unlinke.jpg";}?>"><font style="color: <?php if ($puntos>=0){echo "green";}else{echo "red";}?>"> <?php echo '   ' . $puntos;?></font></li>
                                         <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/calendario.png'><?php echo '     ' . $row[1]. ' a las ' . substr($row[2], 0, 5);?></li> 
                                         <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src="Imagenes/reloj.png"><?php $fecha1 = new DateTime("$row[1] . $row[2]");$fecha2 = new DateTime($row[5]);$diferencia = $fecha2->diff($fecha1);$agregar=0;if($diferencia->d>0){$agregar=$diferencia->d*24;}$horas=$diferencia->h+$agregar;echo "   $horas horas";if(($diferencia->i)!=0){echo" y $diferencia->i minutos";}?></li>
                                         <li class="list-group-item" style="font-size: 25"><i class="icon-ok text-danger"></i><img height="30x30" src='Imagenes/AUTO.png'><?php echo '     ' . $vehiculos[0] . ' '.$vehiculos[1] ;?></li>
@@ -193,11 +214,15 @@
                                     $owner = mysqli_query($link, "SELECT nombre,apellido,ID FROM viajes,usuarios where IDConductor=ID and IDviaje=$idviaje");
                                     $own = $owner->fetch_array(MYSQLI_NUM);
                                     while($comen = $comentarios ->fetch_array(MYSQL_NUM)){
-                                        $usuario = mysqli_query($link,"SELECT nombre,apellido,ID FROM usuarios where ID=$comen[1]");
+                                        $usuario = mysqli_query($link,"SELECT nombre,apellido,ID,borrado FROM usuarios where ID=$comen[1]");
                                         $usu = $usuario ->fetch_array(MYSQLI_NUM);
                                         ?>
                                         <div class="container-fluid" style="background-color:white">
-                                            <div><span style="float:right"><span style="font-weight:bold"> <?php echo $comen[5]?></span></span><a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usu[2];?>"><?php echo $usu[0] . " " . $usu[1]; ?></a></div>
+                                            <div><span style="float:right"><span style="font-weight:bold"> <?php echo $comen[5]?></span></span>
+                                              <?php if(!$usu[3]){ ?>
+                                                <a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usu[2];?>"><?php echo $usu[0] . " " . $usu[1]; ?></a>
+                                              <?php } else{ ?> <strong> <?php echo $usu[0] . " " . $usu[1]; ?> </strong> <?php }?>
+                                            </div>
                                             <p style="margin-left: 10px"><?php echo $comen[3]; ?></p>
                                             <br>
                                         </div>
@@ -211,7 +236,7 @@
                                             </div>
                                             </div>
                                         <?php }else{
-                                            if($row[4]=$iduser){
+                                            if($row[4]==$iduser){
                                                 ?><br><div class="container"><a class="btn btn-success btn-block" href="responder_comentario.php?id=<?php echo $comen[0];?>" >Responder</a></div><?php
                                             }
                                         }

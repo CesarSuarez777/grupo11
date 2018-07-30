@@ -60,7 +60,9 @@
                         $miVehiculo = mysqli_query($link, "SELECT Asientos FROM vehiculos where IDvehiculo=$IDVehiculo");
                         $miVehiculo = $miVehiculo -> fetch_array(MYSQLI_NUM);
                         $precio = $_POST['precio'];
-                        $duracion = $_POST['duracion'];
+                        $duracion1 = $_POST['duracion1'];
+                        $duracion2 = $_POST['duracion2'];
+                        $duracion = new DateTime (" $duracion1 . $duracion2");
                         $fechaIncorrecta=false;
                         $precioBajo=false;
                         $yaPoseeViaje=false;
@@ -75,7 +77,7 @@
                         
                         $hoy = new DateTime('+2 days');
                         $fechaCreada = new DateTime("$fecha . $hora");
-                        $fechaCreadaFinViaje = new DateTime($duracion);
+                        $fechaCreadaFinViaje = $duracion;
                         $fechaCreada -> format('Y-m-d H:i:s');
                         $fechaCreadaFinViaje -> format('Y-m-d H:i:s');
                         
@@ -120,6 +122,7 @@
                             }
                             
                             if(!$fechaIncorrecta && !$precioBajo && !$yaPoseeViajeDuranteFin && !$coincidenCiudades && !$fechaFinMenorInicio){
+                                $duracion = $duracion ->format('Y-m-d H:i:s');
                                 $edicion = mysqli_query($link, "UPDATE viajes SET fecha='$fecha',hora='$hora',IDvehiculo=$IDVehiculo,llegada='$duracion',IDOrigen=$IDOrigen,IDDestino=$IDDestino,Precio=$precio where IDviaje=$idviaje"  );
                                 if ($edicion){
                                     header('Location: MisViajes.php?editado=true');
@@ -133,47 +136,64 @@
         ?>
         <header>
             <nav>
-		 <ul>
+         <ul>
                     <div class="row" position="fixed">
                         <div class="col-2">
-                            <p>
                                 <a href="PaginaPrincipal.php">
                                 <img href="PaginaPrincipal.php" src="Logo.jpg" alt="Imagen no disponible"  class="rounded mx-auto d-block" height="120x120">
                                 </a>
-                            </p>
-                            
                         </div>
                         <div class="col-8">
                             <div class="row" position="fixed">
                                 <div class="col-10">
                                     <br>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                    <form action="PaginaPrincipal.php" method="POST" accept-charset="utf-8">
+                                      <div class="input-group">
+                                        <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                            </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDOrigen' id="inputGroupSelect01">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>
                                         </div>
-                                      <input type="text" face="Univers-Light-Normal" class="form-control" placeholder="La Plata" aria-label="La Plata" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                        <div style="width:38%;margin-left:10px" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Fecha</font></span>
+                                            </div>
+                                          <input  type="date" face="Univers-Light-Normal" name="fecha" class="form-control" aria-label="La Plata" aria-describedby="basic-addon1">
                                         </div>
-                                    <input type="text" class="form-control" face="Univers-Light-Normal" placeholder="Berisso" aria-label="Berisso" aria-describedby="basic-addon1">
-                                    </div>
+                                      </div>
+                                      <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                          <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                          </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDDestino' id="inputGroupSelect02">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>                                    
+                                          </div>
                                 </div>
                                 <div class="col-2">
                                     <br>
-                                    <button class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
+                                    <button type="submit" name="apreto_ir" href="" class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
                                 </div>
+                              </form>
                             </div>
                         </div>
                         <div class="col-2">
                             <br>
-                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">    <?php echo $_SESSION['nombre']; ?></font></a><br>
+                            <a href="MiCuenta.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/Usuario.png" height="15x15"><font size="3" face="Univers-Light-Normal">     <?php echo $_SESSION['nombre']; ?></font></a><br>
                             <a href="MisViajes.php" class="btn btn-outline-danger btn-block"><img src="Imagenes/MisViajes.png" height="17x17"><font size="3" face="Univers-Light-Normal">     Mis viajes</font></a>
                         </div>     
                     </div>
                  </ul>
-            </nav>        
+            </nav>      
         </header>
 		<div class="row">
 			<div class="col-2">
@@ -241,11 +261,18 @@
                                                     <input required type="text" class="form-control" name="precio" value="<?php if (isset($_POST['apreto_editar'])) {if (!$precioBajo) {echo $precio;}else {echo $viaje[8];}}else{echo $viaje[8];} ?>">
                                                 </div>
                                             </div>
-                                           <div class="form-group">
-                                                <label for="amount" class="col-sm-3 control-label">Fecha y horario de llegada</label>
+                                            <div class="form-group">
+                                                <label for="amount" class="col-sm-3 control-label">Fecha de llegada</label>
                                                 <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if ($fechaFinMenorInicio) {echo "La fecha de fin de viaje debe ser posterior a la de inicio";}} ?></font>
                                                 <div class="col-sm-9">
-                                                    <input required type="datetime-local" class="form-control" name="duracion" value="<?php if (isset($_POST['apreto_editar'])) {if (!$fechaFinMenorInicio && !$fechaIncorrecta) {echo $duracion;}else{echo $viaje[5];}}else {echo $viaje[5];} ?>">
+                                                    <input required type="date" class="form-control" name="duracion1" value="<?php if (isset($_POST['apreto_editar'])) {if (!$fechaFinMenorInicio && !$fechaIncorrecta) {echo $duracion1;}else{$fechallega = new DateTime("$viaje[5]"); echo $fechallega->format('Y-m-d');}}else {$fechallega = new DateTime("$viaje[5]"); echo $fechallega->format('Y-m-d');} ?>">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="amount" class="col-sm-3 control-label">Horario de llegada</label>
+                                                <font size="2"  color="red" face="Univers-Light-Normal"><?php if(isset($_POST['apreto_editar'])){if ($fechaFinMenorInicio) {echo "La fecha de fin de viaje debe ser posterior a la de inicio";}} ?></font>
+                                                <div class="col-sm-9">
+                                                    <input required type="time" class="form-control" name="duracion2" value="<?php if (isset($_POST['apreto_editar'])) {if (!$fechaFinMenorInicio && !$fechaIncorrecta) {echo $duracion2;}else{$hllega = new DateTime($viaje[5]); echo $hllega->format('H:i:s');}}else {$hllega = new DateTime($viaje[5]); echo $hllega->format('H:i:s');} ?>">
                                                 </div>
                                             </div>
                                               <br>

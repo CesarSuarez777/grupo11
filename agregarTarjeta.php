@@ -63,6 +63,10 @@
 
                         if(!$formatoInvalido && !$tarjetaVencida && !$formatoCodigo){
                             $sql = "INSERT INTO tarjetas(numero,marca,fecha_vencimiento,titular,codigo,IDtarjeta) VALUES($numero,'$marca','$result','$titular',$codigoSeguridad,$IDusuario)";
+                            $hoy = new DateTime('today');
+                            $hoy = $hoy->format('Y-m-d');
+                            mysqli_query($link,"UPDATE usuarios SET deuda=0 where ID=$IDusuario");
+                            mysqli_query($link,"UPDATE pagos SET deuda=0,fecha='$hoy' where IDusuario_origen=$IDusuario AND deuda=1");
                             
                             if (mysqli_query($link, $sql)){
                                 header("Location: MiCuenta.php?tarjeta=true");
@@ -88,23 +92,43 @@
                             <div class="row" position="fixed">
                                 <div class="col-10">
                                     <br>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                    <form action="PaginaPrincipal.php" method="POST" accept-charset="utf-8">
+                                      <div class="input-group">
+                                        <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Origen</font></span>
+                                            </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDOrigen' id="inputGroupSelect01">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>
                                         </div>
-                                      <input type="text" face="Univers-Light-Normal" class="form-control" placeholder="La Plata" aria-label="La Plata" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group input-group-prepend mb-3">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                        <div style="width:38%;margin-left:10px" class="input-group input-group-prepend mb-3">
+                                            <div class="input-group-prepend">
+                                                <span  class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Fecha</font></span>
+                                            </div>
+                                          <input  type="date" face="Univers-Light-Normal" name="fecha" class="form-control" aria-label="La Plata" aria-describedby="basic-addon1">
                                         </div>
-                                    <input type="text" class="form-control" face="Univers-Light-Normal" placeholder="Berisso" aria-label="Berisso" aria-describedby="basic-addon1">
-                                    </div>
+                                      </div>
+                                      <div style="width:60%" class="input-group input-group-prepend mb-3">
+                                          <div class="input-group-prepend">
+                                              <span class="input-group-text" id="basic-addon1"><font size="3" face="Univers-Light-Normal">Destino</font></span>
+                                          </div>
+                                            <select style="height: 40px" class="custom-select" placeholder='vehiculo' name='IDDestino' id="inputGroupSelect02">
+                                                    <option value="" selected></option>
+                                                    <?php $citys=mysqli_query($link,"SELECT * FROM ciudades ORDER BY nombre");while($fila3 = $citys->fetch_array(MYSQL_NUM)){?>
+                                                    <option value="<?php echo $fila3[1]?>"><?php echo $fila3[0] ?></option>
+                                                    <?php }?>
+                                            </select>                                    
+                                          </div>
                                 </div>
                                 <div class="col-2">
                                     <br>
-                                    <button class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
+                                    <button type="submit" name="apreto_ir" href="" class="btn btn-outline-danger btn-lg btn-block btn-lg"><font size="5" face="Univers-Light-Normal">Ir</font></button><br>
                                 </div>
+                              </form>
                             </div>
                         </div>
                         <div class="col-2">

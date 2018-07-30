@@ -11,7 +11,7 @@
 	$username = $_POST['correo'];
 	$pass = $_POST['contraseña'];
 
-	$sql = "SELECT * FROM $tbl_name WHERE email='$username' and clave='$pass'";
+	$sql = "SELECT * FROM $tbl_name WHERE email='$username' and clave='$pass' and borrado=0";
 
 	$result = mysqli_query($conexion, $sql);
         $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
