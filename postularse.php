@@ -43,20 +43,20 @@
         $fechaDeViaje = new DateTime($cadaViaje[0] . $cadaViaje[1]);
         $fechaFinViaje = new DateTime($cadaViaje[2]);
 
-        if(($horaViajeInicio > $fechaDeViaje)&&($horaViajeIinicio < $fechaFinViaje)){
+        if(($horaViajeInicio > $fechaDeViaje)&&($horaViajeInicio < $fechaFinViaje)){
             echo "entro";
-            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
+            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true1");
             exit();
         }
 
         if(($horaViajeFin >= $fechaDeViaje) && ($horaViajeFin <= $fechaFinViaje)){
             echo "entro2";
-            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
+            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true2");
             exit();
         }
-        if (($horaViajeIinicio <= $fechaDeViaje) && ($horaViajeFin >= $fechaFinViaje)) {
+        if (($horaViajeInicio <= $fechaDeViaje) && ($horaViajeFin >= $fechaFinViaje)) {
             echo "entro3";
-            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true");
+            header("Location: verViaje.php?id=$idviaje&yaPoseeViaje=true3");
             exit();
         }
     }

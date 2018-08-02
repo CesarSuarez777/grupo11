@@ -1,7 +1,0 @@
-Recuperar Password - Sistema de Usuarios
- 
-Hola, Maria Lujan
- 
-Se ha solicitado un reinicio de contraseña. 
- 
-Para restaurar la contraseña, visita la siguiente dirección: http://localhost/grupo11/cambia_pass.php?user_id=99&token=AKLSGNASLKGANSGKLANSL�KDNASKLD506

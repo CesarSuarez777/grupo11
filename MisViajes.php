@@ -115,7 +115,9 @@
                                             <?php }if (!empty($_GET['calificado'])) {
                                             ?><br><h5 align="center" style="color: green">¡Usuario calificado con éxito!</h5>
                                             <?php
-                                            }?>
+                                            }if (!empty($_GET['viaje'])) {
+                                            ?><h5 align="center" style="color: green">¡Viaje agregado con éxito!</h5>
+                                          <?php } ?>
                                             <h5 style="margin-left:380px"><img src="Imagenes/Amarillo.jpg" height="17x17"><font size="3" face="Georgia">     Viaje pendiente   </font><img src="Imagenes/Celeste.jpg" height="17x17"><font size="3" face="Georgia">     Viaje realizado</font></h5>                                   
                                             <table class="table table-sm table-borderless">
                                                  <thead class='thead-light'>
@@ -149,6 +151,7 @@
                                                    <td><font face='georgia'><?php echo '$' . $valor; ?></font></td>
                                                    <td><font face='georgia'><?php echo $vehiculoSelec[0]; ?></font></td>
                                                    <td><?php if($hoy<$createDate){?><a href='<?php echo "verSolicitudes.php?id=$row[0]"; ?>'>Ver solicitudes</a><span> | </span>
+                                                        <a href='<?php echo "verViaje.php?id=$row[0]"; ?>'>Ver viaje</a><span> | </span>
                                                        <a href='<?php echo "editarViaje.php?id=$row[0]"; ?>'>Editar</a><span> | </span>
                                                        <a onclick="return confirm('Si posee acompañantes confirmados, entonces se le decrementara un punto de calificación ¿Estás seguro?');" href='<?php echo "eliminarViaje.php?id=$row[0]"; ?>'>Eliminar</a></td> <?php }?>
                                                     <?php

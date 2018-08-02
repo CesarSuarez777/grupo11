@@ -131,7 +131,7 @@
                                                    <td><font face='georgia'><?php echo calcularEdad($fila[8]) . 'años'; ?></font></td>
                                                    <td ><font face='georgia' style="color: <?php if ($puntos>=0){echo "green";}else{echo "red";}?>"><?php echo $puntos?> puntos</font></td>
                                                    <td style="text-align:right"><?php if(($fila[2]==0)){?>
-                                                       <a href="aceptarPostulado.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>" class='btn  btn-success' style="font-size:14">Aceptar solicitud</a><span>  </span><a href="rechazarPostulado.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>" class='btn btn-danger' style="font-size:14">Rechazar solicitud</a>
+                                                       <a href="aceptarPostulado.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>" class='btn  btn-success' style="font-size:14">Aceptar solicitud</a><span>  </span><a href="cancelarPostulado.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>" class='btn btn-danger' style="font-size:14">Rechazar solicitud</a>
                                                    <?php  
                                                    }else {if($fila[2]==1){?>
                                                        <a  href="cancelarPostulado.php?idV=<?php echo $fila[1];?>&idU=<?php echo $fila[0];?>"class='btn btn-danger' style="font-size:14;width: 270px; height:35px">Cancelar solicitud</a>

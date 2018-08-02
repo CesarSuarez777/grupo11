@@ -113,9 +113,9 @@
                                 $sql = "INSERT INTO `viajes` (`fecha`, `hora`, `IDvehiculo`, `IDconductor`, `llegada`, `IDOrigen`, `IDDestino`, `Precio`,asientos_disponibles) VALUES ('$fecha', '$hora', $IDVehiculo, $IDConductor, '$duracion', $IDOrigen, $IDDestino, $pre,$miVehiculo[0]);";
                             
                                 if (mysqli_query($link, $sql)){
-                                     header("Location: MiCuenta.php?vehiculo=true");
+                                     header("Location: MisViajes.php?viaje=true");
                                 } else { 
-                                  header("Location: MiCuenta.php?vehiculo=false");
+                                  header("Location: MisViajes.php?viaje=false");
                                 }
                             }
                         }

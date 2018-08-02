@@ -198,7 +198,7 @@
                                          <img height="70x70" src="Imagenes/<?php if($cal[4]==1){echo "like.png";}else{ echo "unlinke.png";} ?>">
                                      </div>
                                      <div class="col-7">
-                                         <div><span style="float:right"><span style="font-weight:bold"> <?php echo $cal[3]?></span></span>
+                                         <div><span style="float:right"><span style="font-weight:bold"> <?php $hora = new DateTime ("$cal[8]"); echo $hora ->format('d-m-Y H:i');?></span></span>
                                             <?php if(!$usu[3]){ ?>
                                                 <a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usu[2];?>"><?php echo $usu[0] . " " . $usu[1]; ?></a>
                                               <?php } else{ ?> <strong> <?php echo $usu[0] . " " . $usu[1]; ?> </strong> <?php }?>
@@ -213,8 +213,8 @@
                                 <div class="tab-pane fade" id="nav-profile2" role="tabpanel" aria-labelledby="nav-profile-tab">
                                 <h3 align="right" style="color: #cccccc"><?php echo mysqli_num_rows($calificacionesA);?> Comentarios</h3>    
                                 <?php while ($calA = $calificacionesA ->fetch_array(MYSQLI_NUM)) {
-                                $usuariocalifA = mysqli_query($link, "SELECT nombre,apellido,ID,borrado FROM calificaciones,usuarios where IDcalif=$calA[5] AND IDorigen=ID");
-                                $usuA = $usuariocalifA -> fetch_array(MYSQLI_NUM);
+                                    $usuariocalifA = mysqli_query($link, "SELECT nombre,apellido,ID,borrado FROM calificaciones,usuarios where IDcalif=$calA[5] AND IDorigen=ID");
+                                    $usuA = $usuariocalifA -> fetch_array(MYSQLI_NUM);
                              ?>
                              <div class="container-fluid">
                                  <div class="row">
@@ -222,9 +222,9 @@
                                          <img height="70x70" src="Imagenes/<?php if($calA[4]==1){echo "like.png";}else{ echo "unlinke.png";} ?>">
                                      </div>
                                      <div class="col-7">
-                                         <div><span style="float:right"><span style="font-weight:bold"> <?php echo $calA[3]?></span></span>
-                                            <?php if(!$usu[3]){ ?>
-                                                <a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usuA[2];?>"><?php echo $usuA[0] . " " . $usu[1]; ?></a>
+                                         <div><span style="float:right"><span style="font-weight:bold"> <?php $hora = new DateTime ("$calA[8]"); echo $hora ->format('d-m-Y H:i'); ?></span></span>
+                                            <?php if(!$usuA[3]){ ?>
+                                                <a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usuA[2];?>"><?php echo $usuA[0] . " " . $usuA[1]; ?></a>
                                             <?php } else{ ?> <strong> <?php echo $usuA[0] . " " . $usuA[1]; ?> </strong> <?php }?>
                                         </div>
                                          <p style="margin-left: 10px"><?php echo $calA[2]; ?></p>

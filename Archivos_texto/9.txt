@@ -1,7 +1,0 @@
-Recuperar Password - Sistema de Usuarios
- 
-Hola, Amelia Patricia Macarena
- 
-Se ha solicitado un reinicio de contraseña. 
- 
-Para restaurar la contraseña, visita la siguiente dirección: http://localhost/grupo11/cambia_pass.php?user_id=9&token=64

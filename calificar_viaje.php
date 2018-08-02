@@ -40,7 +40,7 @@
                 if(isset($_POST['apreto_unlike'])){
                     $comentario = $_POST['comentario'];
                     if (!empty($comentario)){
-                        if (mysqli_query($link, "UPDATE calificaciones SET comentario=$comentario,calificacion=-1,fechaCal='$ahora' where IDcalif=$idc")){
+                        if (mysqli_query($link, "UPDATE calificaciones SET comentario='$comentario',calificacion=-1,fechaCal='$ahora' where IDcalif=$idc")){
                             header("Location: MisViajes.php?calificado=true");
                             exit();
                         } 

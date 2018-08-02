@@ -178,8 +178,8 @@
                                          <img height="70x70" src="Imagenes/<?php if($calA[4]==1){echo "like.png";}else{ echo "unlinke.png";} ?>">
                                      </div>
                                      <div class="col-7">
-                                         <div><span style="float:right"><span style="font-weight:bold"> <?php echo $calA[3]?></span></span>
-                                            <?php if(!$usu[3]){ ?>
+                                         <div><span style="float:right"><span style="font-weight:bold"> <?php $hora = new DateTime ("$calA[8]"); echo $hora ->format('d-m-Y H:i')?></span></span>
+                                            <?php if(!$usuA[3]){ ?>
                                                 <a style="font-weight: bold"  href="verPerfil.php?id=<?php echo $usuA[2];?>"><?php echo $usuA[0] . " " . $usuA[1]; ?></a>
                                               <?php } else{ ?> <strong> <?php echo $usuA[0] . " " . $usuA[1]; ?> </strong> <?php }?>
                                             </div>
